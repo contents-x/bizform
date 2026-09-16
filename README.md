@@ -11,3 +11,10 @@
 ## 制作・更新ルール
 
 料金・件数・契約条件、サンプルと実例の区別、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
+
+## 公開
+
+- GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
+- 公開ブランチは `main` とする。
+- 独自ドメインは `bizform.contentsx.jp`。正本は `dist/CNAME` とする。
+- `main` への反映前に、内部リンク、画像参照、JavaScript、サイトマップを検証する。
