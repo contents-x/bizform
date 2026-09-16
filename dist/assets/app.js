@@ -7,7 +7,7 @@ const header = `
   <header class="site-header">
     <div class="container header-inner">
       <a class="logo" href="${base}/" aria-label="ビズフォーム トップ">
-        <span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span>
+        <span class="logo-mark" aria-hidden="true">B</span><span>bizform</span>
       </a>
       <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
         <a href="${base}/service/"${active('/service/')}>サービス内容</a>
@@ -19,7 +19,7 @@ const header = `
       <button class="menu-button" type="button" aria-label="メニューを開く" aria-controls="global-nav" aria-expanded="false"><span></span></button>
       <div class="header-actions">
         <a class="button button-secondary" href="${base}/resources/">資料を見る</a>
-        <a class="button button-primary" href="${base}/contact/">導入を相談する</a>
+        <a class="button button-primary" href="${base}/contact/">無料で相談する</a>
       </div>
     </div>
   </header>`;
@@ -29,7 +29,7 @@ const footer = `
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span></a>
+          <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>bizform</span></a>
           <p>企業ごとの文面作成から送信運用まで。新規開拓の実務を前に進めるフォーム営業代行です。</p>
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="${base}/service/">サービス内容</a><a href="${base}/pricing/">料金・契約条件</a><a href="${base}/examples/">文面・運用サンプル</a><a href="${base}/use-cases/">活用シーン</a></div>
