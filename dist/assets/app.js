@@ -12,7 +12,7 @@ const header = `
       <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
         <a href="${base}/service/"${active('/service/')}>サービス内容</a>
         <a href="${base}/pricing/"${active('/pricing/')}>料金</a>
-        <a href="${base}/examples/"${active('/examples/')}>文面・運用サンプル</a>
+        <a href="${base}/examples/"${active('/examples/')}>文面サンプル</a>
         <a href="${base}/use-cases/"${active('/use-cases/')}>活用シーン</a>
         <a href="${base}/faq/"${active('/faq/')}>よくある質問</a>
       </nav>
