@@ -9,13 +9,20 @@
   --sv-line: var(--line);
   --sv-muted: var(--muted);
   --sv-green: var(--green);
-  --sv-shadow: 0 18px 50px rgba(6, 58, 82, .1);
+  --sv-shadow: 0 18px 50px rgba(7, 30, 69, .1);
 }
 
 .service-page { color: var(--sv-ink); background: #fff; }
 .service-page img { height: auto; }
 
 .sv-container { width: min(calc(100% - 64px), 1340px); margin-inline: auto; }
+/* The service page body is 1340px wide, so its header must match the body,
+   not the 1180px default, or the header sits 160px narrower than everything
+   below it. This sets width only — colour still comes from the shared rules. */
+.service-page .header-inner { width: min(calc(100% - 64px), 1340px); }
+/* The service page body is 1340px wide, so its header must match the body,
+   not the 1180px default, or the header misaligns with the content below. */
+.service-page .header-inner { width: min(calc(100% - 64px), 1340px); }
 .sv-section { position: relative; overflow: hidden; padding: 100px 0; }
 .sv-kicker, .sv-section-label { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; color: var(--sv-blue); font-size: .75rem; font-weight: 900; letter-spacing: .22em; }
 .sv-kicker::after, .sv-section-label > span { content: ""; display: block; width: 52px; height: 1px; background: currentColor; }
@@ -64,7 +71,7 @@
 .sv-hero-process::before { content: ""; position: absolute; top: 17px; left: 9%; right: 9%; height: 72px; border-top: 1px solid #1b4d9d; border-radius: 50%; }
 .sv-process-caption { position: absolute; z-index: 2; top: 0; left: 50%; padding: 0 15px; margin: 0; color: #1d4e9b; background: rgba(246,251,255,.9); font-size: .72rem; font-weight: 800; transform: translateX(-50%); white-space: nowrap; }
 .sv-hero-process ol { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; padding: 0; margin: 36px 0 0; list-style: none; }
-.sv-hero-process li { position: relative; min-height: 254px; padding: 34px 14px 18px; border: 1px solid rgba(207,226,243,.9); border-radius: 12px; background: rgba(255,255,255,.88); box-shadow: 0 16px 40px rgba(6,58,82,.07); text-align: center; }
+.sv-hero-process li { position: relative; min-height: 254px; padding: 34px 14px 18px; border: 1px solid rgba(207,226,243,.9); border-radius: 12px; background: rgba(255,255,255,.88); box-shadow: 0 16px 40px rgba(7,30,69,.07); text-align: center; }
 .sv-hero-process li:not(:last-child)::after { content: "→"; position: absolute; top: 48%; right: -15px; z-index: 3; color: var(--sv-blue); font-size: 1.35rem; }
 .sv-step-number { position: absolute; top: -15px; left: 50%; display: grid; place-items: center; width: 31px; height: 31px; border: 3px solid #e1e9f6; border-radius: 50%; color: #fff; background: linear-gradient(135deg,#0f3c88,#154ca3); font-weight: 800; transform: translateX(-50%); }
 .sv-hero-process .sv-line-icon { width: 58px; height: 58px; margin: 0 auto 10px; }
