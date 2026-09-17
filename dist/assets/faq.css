@@ -244,8 +244,13 @@
 .faq-content-background {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(247,250,255,.62), #f7faff 930px), url('/assets/images/asset_faq_soft_office_background.png') center top / 100% auto no-repeat;
-  opacity: .78;
+  background-image:
+    linear-gradient(rgba(247,250,255,.72), rgba(247,250,255,.72)),
+    url('/assets/images/asset_faq_soft_office_background.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .faq-groups {
@@ -518,7 +523,7 @@
   .faq-category-card h3 { font-size: 1.05rem; }
   .faq-category-card p { font-size: .875rem; }
   .faq-content { padding: 78px 0 82px; }
-  .faq-content-background { background-size: auto 680px; background-position: 60% top; }
+  .faq-content-background { background-position: 62% center; }
   .faq-group { scroll-margin-top: 82px; }
   .faq-group + .faq-group { margin-top: 70px; padding-top: 70px; }
   .faq-group-heading { grid-template-columns: 40px 66px minmax(0, 1fr); gap: 13px; margin-bottom: 26px; }
