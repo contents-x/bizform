@@ -57,7 +57,8 @@
 .sv-hero::before { content: ""; position: absolute; left: -10%; bottom: -27%; width: 68%; height: 44%; border-radius: 50%; background: rgba(226,242,255,.78); transform: rotate(6deg); }
 .sv-hero-container { position: relative; width: min(calc(100% - 52px), 1380px); min-height: 805px; margin-inline: auto; padding: 76px 0 72px; }
 .sv-hero-copy { position: relative; z-index: 2; width: 49%; max-width: 650px; }
-.sv-hero-copy h1 { margin: 0; font-size: clamp(3.35rem,5.3vw,5.05rem); font-weight: 900; line-height: 1.28; letter-spacing: -.065em; }
+.sv-hero-copy h1 { margin: 0; font-size: clamp(3.2rem,4.8vw,4.5rem); font-weight: 900; line-height: 1.28; letter-spacing: -.065em; }
+.sv-heading-line { display: inline-block; white-space: nowrap; }
 .sv-hero-copy > p:not(.sv-kicker) { margin: 24px 0 0; color: #354f6d; font-size: 1.05rem; line-height: 1.9; }
 .sv-hero-copy .sv-actions { margin-top: 36px; }
 .sv-hero-points { display: flex; gap: 0; padding: 0; margin: 42px 0 0; list-style: none; }
@@ -128,7 +129,7 @@
 /* Target */
 .sv-target { background: #fff; }
 .sv-target-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.08fr); gap: 42px; align-items: center; }
-.sv-target-copy .sv-heading h2 { font-size: clamp(2.45rem,3.7vw,3.65rem); }
+.sv-target-copy .sv-heading h2 { font-size: clamp(2.35rem,3.25vw,3.15rem); }
 .sv-subtitle { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; font-size: .85rem; font-weight: 900; }
 .sv-subtitle::before { content: ""; width: 3px; height: 18px; background: var(--sv-blue); }
 .sv-subtitle::after { content: ""; flex: 1; height: 1px; background: #8db9ed; }
@@ -314,8 +315,10 @@
   .sv-handnote { font-size: 1.25rem; }
   .sv-hero { background-position: 65% center; }
   .sv-hero-container { padding-top: 46px; }
-  .sv-hero-copy h1 { font-size: clamp(2.5rem,11.7vw,3.55rem); line-height: 1.35; }
+  .sv-hero-copy h1 { font-size: clamp(1.95rem,8.6vw,2.3rem); line-height: 1.35; }
   .sv-hero-copy h1 br { display: none; }
+  .sv-heading-line { display: inline; white-space: normal; }
+  .sv-hero-copy .sv-heading-line { display: inline-block; white-space: nowrap; }
   .sv-hero-copy > p:not(.sv-kicker) { font-size: 1rem; }
   .sv-hero-copy > p br { display: none; }
   .sv-hero-points { display: grid; grid-template-columns: 1fr; gap: 12px; }

@@ -10,7 +10,7 @@
 
 ## 制作・更新ルール
 
-料金・件数・契約条件、サンプルと実例の区別、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
+料金・件数・契約条件、サンプルと実例の区別、スマートフォンの表示・操作、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
 
 ## 公開
 
