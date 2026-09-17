@@ -1,11 +1,13 @@
 .faq-page {
-  --faq-navy: #071e45;
-  --faq-blue: #1265e8;
-  --faq-blue-dark: #0d4fb8;
-  --faq-pale: #f3f8ff;
-  --faq-pale-deep: #e8f2ff;
-  --faq-border: #d7e5f5;
-  --faq-muted: #566c88;
+  /* Page aliases resolve to the shared brand tokens in style.css.
+     Do not hardcode colours here; add a token there instead. */
+  --faq-navy: var(--brand-navy);
+  --faq-blue: var(--brand-blue);
+  --faq-blue-dark: var(--brand-blue-dark);
+  --faq-pale: var(--pale-blue-2);
+  --faq-pale-deep: var(--pale-blue);
+  --faq-border: var(--line);
+  --faq-muted: var(--muted);
   background: #fff;
 }
 
