@@ -966,21 +966,31 @@ details[open] summary::after { content: "−"; }
 .uc-kicker::before { content: ""; width: 38px; height: 2px; background: currentColor; }
 .uc-card-label { margin: 0 0 12px; color: var(--uc-blue-strong); font-size: .72rem; font-weight: 900; letter-spacing: .18em; }
 
-.uc-hero { position: relative; min-height: 855px; overflow: hidden; background: linear-gradient(135deg,#fff 0%,#f8fcff 46%,#edf7ff 100%); }
-.uc-hero::before { content: ""; position: absolute; left: -18%; bottom: -270px; width: 930px; height: 510px; border-radius: 50%; background: rgba(216,236,253,.62); transform: rotate(-8deg); }
-.uc-hero-photo { position: absolute; top: 0; right: 0; width: 68%; height: 100%; background: linear-gradient(90deg,#fff 0%,rgba(255,255,255,.83) 20%,rgba(255,255,255,.08) 72%),url('/assets/images/asset_usecases_office_background.png') center right / cover no-repeat; opacity: .86; }
-.uc-hero-inner { position: relative; z-index: 1; padding: 25px 0 72px; }
-.uc-breadcrumbs { display: flex; gap: 8px; margin-bottom: 55px; color: #8294a7; font-size: .78rem; }
-.uc-breadcrumbs a:hover { color: var(--uc-blue-strong); }
-.uc-hero-copy { max-width: 660px; }
-.uc-hero-copy h1 { margin: 0; color: var(--uc-deep); font-family: "Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif; font-size: clamp(3.25rem,5.5vw,5.4rem); line-height: 1.2; letter-spacing: -.065em; }
-.uc-hero-copy h1 em { color: var(--uc-blue-strong); font-style: normal; }
-.uc-hero-lead { margin: 23px 0 0; color: #536d88; font-size: 1.05rem; line-height: 1.9; }
-.uc-challenge-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; width: min(100%,1050px); margin-top: 62px; }
-.uc-challenge-grid article { position: relative; display: grid; grid-template-columns: 60px 1fr; align-items: center; gap: 15px; min-height: 124px; padding: 22px 24px; overflow: hidden; border: 1px solid rgba(207,224,240,.92); border-radius: 17px; background: rgba(255,255,255,.94); box-shadow: 0 14px 36px rgba(26,75,120,.075); }
-.uc-challenge-grid article > span { position: absolute; top: 10px; right: 13px; color: #bad0e4; font-size: .67rem; font-weight: 900; letter-spacing: .1em; }
-.uc-challenge-grid svg { width: 55px; height: 55px; padding: 11px; border-radius: 50%; fill: none; stroke: var(--uc-blue-strong); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; background: var(--uc-soft); }
-.uc-challenge-grid h2 { margin: 0; color: var(--uc-deep); font-size: 1rem; line-height: 1.55; letter-spacing: .01em; }
+.uc-hero { position: relative; min-height: 980px; overflow: hidden; background: #f5faff; }
+.uc-hero::before { content: ""; position: absolute; z-index: 1; left: -15%; bottom: -340px; width: 980px; height: 510px; border-radius: 50%; background: rgba(213,235,253,.7); transform: rotate(-8deg); }
+.uc-hero-photo { position: absolute; inset: 0; background: linear-gradient(90deg,#fff 0%,rgba(255,255,255,.94) 23%,rgba(255,255,255,.5) 52%,rgba(245,250,255,.08) 100%),url('/assets/images/asset_usecases_office_background.png') center right / cover no-repeat; }
+.uc-hero-inner { position: relative; z-index: 2; padding: 76px 0 68px; }
+.uc-hero-copy { max-width: 820px; }
+.uc-hero-copy h1 { margin: 0; color: var(--uc-deep); font-family: "Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif; font-size: clamp(3.1rem,4.4vw,4.25rem); font-weight: 700; line-height: 1.24; letter-spacing: -.06em; }
+.uc-hero-copy h1 span { white-space: nowrap; }
+.uc-hero-lead { margin: 24px 0 0; color: #3f5874; font-size: 1rem; line-height: 1.95; }
+.uc-hero-note { position: absolute; top: 60px; right: 10px; color: #4d82d7; font-size: .82rem; line-height: 1.8; letter-spacing: .12em; }
+.uc-hero-note strong { display: block; font-weight: 700; }
+.uc-hero-note span { display: block; margin-top: 12px; color: #91b2df; font-size: .64rem; font-weight: 900; letter-spacing: .22em; line-height: 1.55; }
+.uc-challenge-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; width: min(100%,1120px); margin: 62px auto 0; }
+.uc-challenge-grid article { position: relative; display: flex; flex-direction: column; min-height: 390px; padding: 23px 25px 22px; overflow: hidden; border: 1px solid rgba(207,224,240,.88); border-radius: 14px; background: rgba(255,255,255,.95); box-shadow: 0 16px 38px rgba(28,77,122,.08); }
+.uc-challenge-number { position: relative; z-index: 2; display: flex; align-items: center; gap: 16px; margin: 0; color: #3b83e8; font-size: .72rem; font-weight: 900; letter-spacing: .08em; }
+.uc-challenge-number::after { content: ""; width: 34px; height: 1px; background: #82b1ef; }
+.uc-challenge-image { position: absolute; z-index: 0; top: 22px; right: -16px; width: 82%; height: 178px; pointer-events: none; }
+.uc-challenge-image::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(180deg,rgba(255,255,255,0),#fff 88%); }
+.uc-challenge-image img { width: 100%; height: 100%; object-fit: contain; object-position: right top; opacity: .64; filter: saturate(.72); }
+.uc-challenge-grid h2 { position: relative; z-index: 1; margin: 142px 0 0; color: var(--uc-deep); font-family: "Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif; font-size: 1.48rem; line-height: 1.5; letter-spacing: -.02em; }
+.uc-challenge-grid article > p { position: relative; z-index: 1; margin: 13px 0 20px; color: #536a84; font-size: .82rem; line-height: 1.75; }
+.uc-challenge-grid article > a { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; margin-top: auto; color: #103d74; font-size: .8rem; font-weight: 900; }
+.uc-challenge-grid article > a span { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #b9d3f5; border-radius: 50%; color: #2c72cf; transition: transform .2s ease,background .2s ease; }
+.uc-challenge-grid article > a:hover span { color: #fff; background: var(--uc-blue-strong); transform: translateX(3px); }
+.uc-scroll { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 22px 0 0; color: #4f88db; font-size: .64rem; font-weight: 900; letter-spacing: .2em; }
+.uc-scroll span { width: 1px; height: 30px; background: #75a7eb; }
 
 .uc-before-after { background: #fff; }
 .uc-before-after::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 5% 20%,rgba(213,234,252,.48),transparent 25%),radial-gradient(circle at 95% 88%,rgba(220,240,255,.45),transparent 28%); }
@@ -1046,8 +1056,10 @@ details[open] summary::after { content: "−"; }
 
 @media (max-width: 1024px) {
   .uc-hero { min-height: auto; }
-  .uc-hero-photo { width: 78%; opacity: .66; }
-  .uc-challenge-grid { grid-template-columns: repeat(2,1fr); }
+  .uc-hero-note { display: none; }
+  .uc-challenge-grid { gap: 13px; }
+  .uc-challenge-grid article { min-height: 375px; padding-inline: 20px; }
+  .uc-challenge-grid h2 { font-size: 1.3rem; }
   .uc-ba-grid { grid-template-columns: 1fr; gap: 18px; }
   .uc-change-arrow { transform: rotate(90deg); }
   .uc-ba-card { min-height: 470px; }
@@ -1063,12 +1075,15 @@ details[open] summary::after { content: "−"; }
   .uc-heading { margin-bottom: 38px; }
   .uc-heading h2, .uc-final-copy h2 { font-size: clamp(2.05rem,9vw,3rem); }
   .uc-heading > p:last-child { font-size: .94rem; }
-  .uc-hero-inner { padding: 24px 0 64px; }
-  .uc-hero-photo { width: 100%; height: 47%; background: linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.32)),url('/assets/images/asset_usecases_office_background.png') center / cover no-repeat; }
-  .uc-breadcrumbs { margin-bottom: 44px; }
+  .uc-hero-inner { padding: 58px 0 64px; }
+  .uc-hero-photo { background: linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.58) 34%,rgba(242,249,255,.52)),url('/assets/images/asset_usecases_office_background.png') center / cover no-repeat; }
   .uc-hero-copy h1 { font-size: clamp(2.8rem,13vw,4.2rem); }
+  .uc-hero-copy h1 span { white-space: normal; }
+  .uc-hero-lead br { display: none; }
   .uc-challenge-grid { grid-template-columns: 1fr; margin-top: 46px; }
-  .uc-challenge-grid article { min-height: 108px; }
+  .uc-challenge-grid article { min-height: 390px; }
+  .uc-challenge-image { width: 72%; }
+  .uc-scroll { display: none; }
   .uc-ba-card { min-height: 560px; }
   .uc-ba-copy { width: 100%; padding: 30px 28px 250px; }
   .uc-ba-card > img { right: 2%; width: 49%; max-height: 48%; }
@@ -1091,8 +1106,9 @@ details[open] summary::after { content: "−"; }
   .uc-section-label span { width: 27px; }
   .uc-hero-copy h1 { font-size: 2.85rem; }
   .uc-hero-lead { font-size: .95rem; }
-  .uc-challenge-grid article { grid-template-columns: 52px 1fr; padding: 18px 20px; }
-  .uc-challenge-grid svg { width: 49px; height: 49px; }
+  .uc-challenge-grid article { min-height: 380px; padding: 21px 20px; }
+  .uc-challenge-image { width: 86%; height: 170px; }
+  .uc-challenge-grid h2 { margin-top: 139px; font-size: 1.45rem; }
   .uc-ba-card { min-height: 585px; }
   .uc-ba-copy { padding: 28px 22px 260px; }
   .uc-ba-copy h3 { font-size: 1.48rem; }
