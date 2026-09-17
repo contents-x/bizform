@@ -291,7 +291,7 @@
   .sv-flow-grid li:not(:last-child)::after { display: none; }
   .sv-flow-note { display: none; }
   .sv-role-grid { grid-template-columns: 1fr; gap: 20px; }
-  .sv-handoff { transform: rotate(90deg); }
+  .sv-handoff > b { transform: rotate(90deg); }
   .sv-writing-grid { grid-template-columns: 1fr; gap: 18px; }
   .sv-writing-arrow { height: 80px; }
   .sv-writing-arrow::before, .sv-writing-arrow::after { display: none; }
