@@ -248,7 +248,7 @@
   inset: 0;
   background-image:
     linear-gradient(rgba(247,250,255,.72), rgba(247,250,255,.72)),
-    url('/assets/images/asset_faq_soft_office_background.png');
+    url('/assets/images/asset_faq_soft_office_background.webp');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
