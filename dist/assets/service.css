@@ -16,13 +16,6 @@
 .service-page img { height: auto; }
 
 .sv-container { width: min(calc(100% - 64px), 1340px); margin-inline: auto; }
-/* The service page body is 1340px wide, so its header must match the body,
-   not the 1180px default, or the header sits 160px narrower than everything
-   below it. This sets width only — colour still comes from the shared rules. */
-.service-page .header-inner { width: min(calc(100% - 64px), 1340px); }
-/* The service page body is 1340px wide, so its header must match the body,
-   not the 1180px default, or the header misaligns with the content below. */
-.service-page .header-inner { width: min(calc(100% - 64px), 1340px); }
 .sv-section { position: relative; overflow: hidden; padding: 100px 0; }
 .sv-kicker, .sv-section-label { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; color: var(--sv-blue); font-size: .75rem; font-weight: 900; letter-spacing: .22em; }
 .sv-kicker::after, .sv-section-label > span { content: ""; display: block; width: 52px; height: 1px; background: currentColor; }
