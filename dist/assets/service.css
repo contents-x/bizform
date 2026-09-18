@@ -362,4 +362,91 @@
   .sv-final-card { min-height: 600px; padding: 38px 22px 260px; background-image: linear-gradient(180deg,rgba(255,255,255,.99),rgba(255,255,255,.97) 58%,rgba(255,255,255,.15)), url("/assets/images/asset_service_bg_office_city.webp"); background-position: 65% center; }
 }
 
+/* Tablet hero: keep the copy and five-step process in one readable flow. */
+@media (min-width: 641px) and (max-width: 1366px) {
+  .sv-hero {
+    min-height: auto;
+    background-image: linear-gradient(180deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.9) 58%,rgba(232,246,255,.72) 100%), url("/assets/images/asset_service_bg_office_city.webp");
+    background-position: center top;
+  }
+  .sv-hero-container {
+    display: flex;
+    width: min(calc(100% - 64px), 1120px);
+    min-height: auto;
+    padding: 64px 0 80px;
+    flex-direction: column;
+  }
+  .sv-hero-copy { width: 100%; max-width: 760px; }
+  .sv-hero-copy h1 {
+    font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+    line-height: 1.35;
+    letter-spacing: -.05em;
+  }
+  .sv-hero-copy .sv-heading-line { display: inline; white-space: normal; }
+  .sv-hero-copy > p:not(.sv-kicker) { max-width: 760px; }
+  .sv-hero-copy > p:not(.sv-kicker) br { display: none; }
+  .sv-hero .sv-hero-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 42px;
+  }
+  .sv-hero .sv-hero-points li {
+    min-width: 0;
+    padding: 0 20px;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-radius: 0;
+  }
+  .sv-hero .sv-hero-points li:first-child { padding-left: 0; }
+  .sv-hero .sv-hero-points li:last-child { border-right: 0; }
+  .sv-hero-process {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 56px;
+    padding-top: 0;
+  }
+  .sv-hero-process::before { display: none; }
+  .sv-hero .sv-process-caption {
+    position: static;
+    display: block;
+    max-width: 100%;
+    padding: 0;
+    margin: 0 0 28px;
+    transform: none;
+    white-space: normal;
+    text-align: center;
+  }
+  .sv-hero-process ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 20px;
+    margin: 0;
+  }
+  .sv-hero-process li {
+    min-height: 0;
+    height: 100%;
+    padding: 28px 18px 24px;
+  }
+  .sv-hero-process li:not(:last-child)::after { display: none; }
+  .sv-hero-process h2 { font-size: 1.05rem; }
+  .sv-hero-process p { font-size: 1rem; line-height: 1.7; text-align: center; }
+  .sv-hero-process p br { display: none; }
+  .sv-hero-note, .sv-signature { display: none; }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .sv-hero-process ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Keep the interactive sample controls readable on mobile. */
+@media (max-width: 768px) {
+  .sv-results-head, .sv-dashboard-title { flex-direction: column; align-items: stretch; gap: 12px; }
+  .sv-results-head > *, .sv-dashboard-title > * { min-width: 0; }
+  .sv-results-head select, .sv-dashboard-title select { min-width: 0; max-width: 100%; min-height: 44px; font-size: 1rem; }
+  .sv-ui-top { height: auto; min-height: 70px; flex-wrap: wrap; padding-block: 12px; }
+  .sv-ui-top button, .sv-filters > button { min-width: 0; min-height: 52px; font-size: 1rem; }
+}
+
 @media (prefers-reduced-motion: reduce) { .sv-button { transition: none; } }
