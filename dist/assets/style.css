@@ -1223,6 +1223,17 @@ details[open] summary::after { content: "−"; }
   .uc-industry-grid article > div:last-child > p:last-child { font-size: .78rem; }
 }
 
+/* Next-read links at the end of a guide article. Uses the brand tokens;
+   do not give this a per-page variant. */
+.next-read { margin: 56px 0 0; padding: 28px 30px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--pale-blue); }
+.next-read strong { display: block; margin-bottom: 14px; color: var(--brand-navy); font-size: .95rem; font-weight: 800; }
+.next-read ul { display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; }
+.next-read li { margin: 0; }
+.next-read a { display: inline-flex; align-items: baseline; gap: 8px; color: var(--brand-blue); font-weight: 700; }
+.next-read a::before { content: "→"; }
+.next-read a:hover { text-decoration: underline; }
+.next-read span { display: block; margin-top: 2px; color: var(--muted); font-size: .88rem; font-weight: 400; }
+
 /* Shared mobile experience. Keep these after the page-specific themes. */
 @media (max-width: 1040px) {
   html { scroll-padding-top: 94px; }
