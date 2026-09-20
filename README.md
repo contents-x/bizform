@@ -12,6 +12,8 @@
 
 料金・件数・契約条件、サンプルと実例の区別、共通ヘッダー・追従CTA、スマートフォンの表示・操作、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
 
+ページごとの狙うキーワード、記事を書くときの禁止事項、canonical・構造化データの方針は [docs/SEO-STRATEGY.md](docs/SEO-STRATEGY.md) を参照してください。**新しいページを追加する前に、主キーワードが既存ページと重複しないかをこの表で確認してください。**
+
 ## 公開
 
 - GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
