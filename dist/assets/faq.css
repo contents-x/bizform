@@ -547,6 +547,7 @@
 }
 
 @media (max-width: 420px) {
+  .faq-contact-card { grid-template-columns: minmax(0, 1fr); }
   .faq-jump-links { grid-template-columns: minmax(0, 1fr); }
   .faq-group-heading { grid-template-columns: 36px 58px minmax(0, 1fr); gap: 10px; }
   .faq-group-heading > img { width: 58px; height: 58px; }

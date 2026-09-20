@@ -1338,7 +1338,6 @@ details[open] summary::after { content: "−"; }
   .pricing-method-table { min-width: 700px; border-collapse: separate; border-spacing: 0; }
   .pricing-method-table th, .pricing-method-table td { padding: 14px 12px; }
   .pricing-method-table tr > :first-child { position: sticky; left: 0; z-index: 1; width: 132px; min-width: 132px; background: #eef3fa; box-shadow: 2px 0 0 var(--pricing-border); font-size: .875rem; }
-  .table-scroll-hint { margin: 0 0 12px; color: var(--muted); font-size: .875rem; }
 
   /* Examples: readable steps and text without oversized image cards. */
   .examples-hero-inner { gap: 20px; padding: 20px 0 32px; }
@@ -1446,12 +1445,17 @@ details[open] summary::after { content: "−"; }
   .footer-bottom { flex-direction: column; gap: 8px; margin-top: 28px; font-size: .75rem; }
 }
 
-.mobile-message, .table-scroll-hint { display: none; }
+.mobile-message { display: none; }
+.table-scroll-hint { margin: 0 0 12px; color: var(--muted); font-size: .875rem; }
 .table-scroll-hint[hidden] { display: none; }
 @media (max-width: 768px) {
-  .mobile-message, .table-scroll-hint { display: block; }
+  .mobile-message { display: block; }
   .image-scroll { overflow-x: auto; overscroll-behavior-x: contain; border: 1px solid var(--ex-border); border-radius: 12px; background: #fff; }
   .image-scroll img { min-width: 760px; }
+}
+
+@media (max-width: 390px) {
+  .page-hero .guide-how-to-title { word-break: normal; }
 }
 
 @media (max-width: 360px) {

@@ -193,10 +193,11 @@ const scrollRegions = [];
 const addScrollHint = (region, label) => {
   const hint = document.createElement('p');
   hint.className = 'table-scroll-hint';
-  hint.textContent = '左右にスワイプして全体をご覧いただけます。';
+  hint.textContent = '左右にスクロールして全体をご覧いただけます。';
   hint.id = `scroll-hint-${scrollRegions.length}`;
   region.before(hint);
-  region.setAttribute('role', 'region');
+  // Scrollable ordered steps must retain their native list semantics.
+  if (!region.matches('ol, ul')) region.setAttribute('role', 'region');
   region.setAttribute('aria-label', label);
   const update = () => {
     const scrollable = region.scrollWidth > region.clientWidth + 1;
@@ -216,6 +217,19 @@ document.querySelectorAll('table.comparison').forEach(table => {
   addScrollHint(region, '比較表');
 });
 document.querySelectorAll('.pricing-table-wrap').forEach(region => addScrollHint(region, '営業手法の比較表'));
+
+document.querySelectorAll('.sv-table-scroll').forEach(region => {
+  addScrollHint(region, region.closest('.sv-results') ? '対象企業の一覧' : '送信履歴の一覧');
+});
+
+document.querySelectorAll('.sv-hero-process ol, .sv-operation-cards').forEach(region => {
+  // Keep the hint and cards in one grid item when the desktop columns return.
+  const group = document.createElement('div');
+  group.className = 'sv-scroll-group';
+  region.before(group);
+  group.append(region);
+  addScrollHint(region, region.matches('ol') ? 'サービスの5つの工程' : '送信・運用管理の対応内容');
+});
 document.querySelectorAll('.examples-reference-frame > img, .examples-dashboard > img').forEach(img => {
   const region = document.createElement('div');
   region.className = 'image-scroll';

@@ -204,11 +204,13 @@
 
 /* Management */
 .sv-management { background-image: linear-gradient(rgba(246,251,255,.9),rgba(247,251,255,.94)), url("/assets/images/asset_service_bg_office_city.webp"); background-position: center; background-size: cover; }
-.sv-management-top { position: relative; display: grid; grid-template-columns: 36% 64%; align-items: end; gap: 26px; margin-bottom: 30px; }
+.sv-management-top { position: relative; display: grid; grid-template-columns: minmax(0,.36fr) minmax(0,.64fr); align-items: end; gap: 26px; margin-bottom: 30px; }
 .sv-management-top .sv-heading { margin: 0; }
 .sv-management-top .sv-heading h2 { font-size: clamp(2.45rem,3.2vw,3.25rem); }
 .sv-management-top > .sv-handnote { position: absolute; top: 0; right: 3%; }
 .sv-operation-cards { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; padding-top: 140px; }
+.sv-scroll-group { min-width: 0; }
+.sv-scroll-group > .table-scroll-hint { margin: 0 0 12px; font-size: .875rem; }
 .sv-operation-cards article { min-height: 170px; padding: 20px 12px; border: 1px solid #d5e0f2; border-radius: 12px; background: rgba(255,255,255,.9); text-align: center; }
 .sv-operation-cards article > span { width: 54px; height: 54px; margin: 0 auto 10px; border-radius: 50%; background: #eff3fa; font-size: 1.7rem; }
 .sv-operation-cards h3 { margin: 0; font-size: .82rem; }
@@ -354,6 +356,8 @@
   .sv-writing-benefits li { border: 0; padding: 0 20px; }
   .sv-management-top > .sv-handnote { display: none; }
   .sv-operation-cards { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .sv-scroll-group .sv-operation-cards { padding-top: 0; }
+  .sv-scroll-group ol { margin-top: 0; }
   .sv-operation-cards article { flex: 0 0 155px; scroll-snap-align: start; }
   .sv-dashboard-main, .sv-improvements { padding: 18px 14px; }
   .sv-kpis { grid-template-columns: repeat(2,1fr); }
