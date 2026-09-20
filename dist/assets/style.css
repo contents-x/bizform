@@ -103,7 +103,11 @@ img { max-width: 100%; }
 
 /* One header for every page. Markup comes from app.js; do not add
    per-page .site-header / .logo / .global-nav overrides. */
-.site-header { position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97); backdrop-filter: blur(14px); }
+/* The header wrapper is only as tall as the header itself, so position:sticky
+   would stop holding after 78px. Fix the header and let the wrapper reserve
+   the space it no longer occupies. */
+[data-site-header] { height: var(--header-height, 79px); }
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97); backdrop-filter: blur(14px); }
 .header-inner { min-height: 78px; display: flex; align-items: center; gap: 28px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: var(--brand-navy); font-size: 1.25rem; font-weight: 900; letter-spacing: -.04em; white-space: nowrap; }
 .logo-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50% 50% 50% 14%; color: white; background: var(--brand-blue); font-size: 1rem; font-weight: 900; }
@@ -1222,8 +1226,7 @@ details[open] summary::after { content: "−"; }
 /* Shared mobile experience. Keep these after the page-specific themes. */
 @media (max-width: 1040px) {
   html { scroll-padding-top: 94px; }
-  [data-site-header] { position: sticky; top: 0; z-index: 100; }
-  .site-header { position: static; backdrop-filter: none; background: #fff; }
+  .site-header { backdrop-filter: none; background: #fff; }
   .header-inner { gap: 16px; }
   .header-actions { order: 1; margin-left: auto; }
   .menu-button { order: 2; flex: none; margin-left: 0; cursor: pointer; }
@@ -1235,7 +1238,6 @@ details[open] summary::after { content: "−"; }
   .global-nav .nav-actions .button-primary { color: var(--brand-navy); }
   .global-nav .nav-actions .button::after { display: none; }
   body.nav-open { position: fixed; top: var(--nav-scroll-top); left: 0; right: 0; width: 100%; }
-  body.nav-open [data-site-header] { position: fixed; left: 0; right: 0; }
 }
 
 @media (max-width: 768px) {
@@ -1462,4 +1464,70 @@ details[open] summary::after { content: "−"; }
   .uc-industry-grid article { grid-template-columns: minmax(0,1fr); }
   .uc-industry-image { grid-template: minmax(0,1fr) / minmax(0,1fr); height: 116px; }
   .uc-industry-image img { min-width: 0; min-height: 0; width: auto; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
+}
+
+/* Floating CTA. Injected by app.js on every page except the contact form,
+   where a second "相談する" would only compete with the form itself. */
+.floating-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 14px max(20px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 28px rgba(7, 30, 69, .09);
+  transform: translateY(120%);
+  visibility: hidden;
+  transition: transform .28s ease, visibility .28s ease;
+}
+.floating-cta.is-visible { transform: translateY(0); visibility: visible; }
+.floating-cta a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 12px 30px;
+  border-radius: 999px;
+  font-size: .95rem;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.floating-cta .floating-cta-primary {
+  color: #fff;
+  background: var(--brand-blue);
+  box-shadow: 0 10px 24px rgba(18, 101, 232, .3);
+}
+.floating-cta .floating-cta-primary:hover { background: var(--brand-blue-dark); transform: translateY(-2px); }
+.floating-cta .floating-cta-secondary {
+  color: var(--brand-navy);
+  background: #fff;
+  border: 1.5px solid var(--line);
+}
+.floating-cta .floating-cta-secondary:hover { border-color: var(--brand-blue); color: var(--brand-blue); transform: translateY(-2px); }
+.floating-cta svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Keep the footer clear of the bar so the last links stay clickable. */
+body.has-floating-cta .site-footer { padding-bottom: 96px; }
+
+@media (max-width: 768px) {
+  .floating-cta { gap: 10px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+  .floating-cta a { flex: 1 1 0; min-height: 50px; padding: 10px 14px; font-size: .9rem; }
+  .floating-cta .floating-cta-label-long { display: none; }
+  body.has-floating-cta .site-footer { padding-bottom: 88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-cta { transition: none; }
+}
+
+@media print {
+  .floating-cta { display: none; }
 }

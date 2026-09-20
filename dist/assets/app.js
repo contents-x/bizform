@@ -47,6 +47,95 @@ const footer = `
 document.querySelector('[data-site-header]')?.insertAdjacentHTML('afterbegin', header);
 document.querySelector('[data-site-footer]')?.insertAdjacentHTML('afterbegin', footer);
 
+// The header is fixed, so its wrapper has to reserve the matching height.
+const headerWrap = document.querySelector('[data-site-header]');
+const siteHeader = document.querySelector('.site-header');
+const syncHeaderHeight = () => {
+  if (!headerWrap || !siteHeader) return;
+  const height = siteHeader.offsetHeight;
+  if (height) headerWrap.style.setProperty('--header-height', `${height}px`);
+};
+syncHeaderHeight();
+window.addEventListener('load', syncHeaderHeight);
+if ('ResizeObserver' in window && siteHeader) {
+  new ResizeObserver(syncHeaderHeight).observe(siteHeader);
+} else {
+  window.addEventListener('resize', syncHeaderHeight);
+}
+
+// Floating CTA on every page except the contact form, which already asks for
+// the same action. It appears once the hero CTA has scrolled out of reach.
+const svgIcon = (paths) => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('aria-hidden', 'true');
+  paths.forEach(d => {
+    const node = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    node.setAttribute('d', d);
+    svg.append(node);
+  });
+  return svg;
+};
+const ctaLink = (className, href, icon, labels) => {
+  const link = document.createElement('a');
+  link.className = className;
+  link.href = href;
+  link.append(icon);
+  labels.forEach(({ text, className: labelClass, hidden }) => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    if (labelClass) span.className = labelClass;
+    if (hidden) span.hidden = true;
+    link.append(span);
+  });
+  return link;
+};
+
+const isContactPage = /\/contact\/?$/.test(path.replace(/index\.html$/, ''));
+if (!isContactPage && !document.querySelector('.floating-cta')) {
+  const cta = document.createElement('aside');
+  cta.className = 'floating-cta';
+  cta.setAttribute('aria-label', 'お問い合わせ');
+  cta.append(
+    ctaLink('floating-cta-secondary', `${base}/resources/`,
+      svgIcon(['M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z', 'M14 3v5h5']),
+      [{ text: '資料を見る' }]),
+    ctaLink('floating-cta-primary', `${base}/contact/`,
+      svgIcon(['M3 6h18v12H3z', 'm3 7 9 6 9-6']),
+      [
+        { text: '無料で相談する', className: 'floating-cta-label-long' },
+        { text: '無料相談', className: 'floating-cta-label-short', hidden: true }
+      ])
+  );
+  document.body.append(cta);
+  document.body.classList.add('has-floating-cta');
+
+  const shortLabel = cta.querySelector('.floating-cta-label-short');
+  const narrow = window.matchMedia('(max-width: 768px)');
+  const syncLabel = () => { if (shortLabel) shortLabel.hidden = !narrow.matches; };
+  syncLabel();
+  narrow.addEventListener('change', syncLabel);
+
+  const revealAfter = () => Math.max(window.innerHeight * 0.6, 420);
+  let ctaVisible = false;
+  let ctaTicking = false;
+  const syncCta = () => {
+    ctaTicking = false;
+    const shouldShow = window.scrollY > revealAfter();
+    if (shouldShow === ctaVisible) return;
+    ctaVisible = shouldShow;
+    cta.classList.toggle('is-visible', shouldShow);
+  };
+  const queueCta = () => {
+    if (ctaTicking) return;
+    ctaTicking = true;
+    requestAnimationFrame(syncCta);
+  };
+  window.addEventListener('scroll', queueCta, { passive: true });
+  window.addEventListener('resize', queueCta);
+  syncCta();
+}
+
 const menuButton = document.querySelector('.menu-button');
 const globalNav = document.querySelector('.global-nav');
 const mobileMenu = window.matchMedia('(max-width: 1040px)');
@@ -56,7 +145,8 @@ const setMenuOpen = (open, restoreFocus = false) => {
   const wasOpen = menuButton.getAttribute('aria-expanded') === 'true';
   if (open === wasOpen) return;
   if (open) {
-    menuScrollY = window.scrollY;
+    // Read once, before any class toggle can reflow the page underneath us.
+    menuScrollY = Math.round(window.scrollY);
     document.body.style.setProperty('--nav-scroll-top', `-${menuScrollY}px`);
   }
   menuButton.setAttribute('aria-expanded', String(open));
