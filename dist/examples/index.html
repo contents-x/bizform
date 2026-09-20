@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>文面・運用サンプル｜ビズフォーム</title>
-  <meta name="description" content="企業のWebサイトを読み込み、一社ごとに文面を作成・確認・送信するビズフォームの運用をご紹介します。">
+  <meta name="description" content="営業先企業を調査し、ご依頼企業に代わって文面を作成・確認し、営業先の問い合わせフォームへ送信するビズフォームの運用をご紹介します。">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body class="examples-page">
@@ -16,7 +16,7 @@
           <nav class="examples-breadcrumbs" aria-label="パンくず"><a href="/">トップ</a><span>›</span><span>文面・運用サンプル</span></nav>
           <p class="examples-kicker">会社名を変えるだけの、一斉送信はしない。</p>
           <h1 id="examples-title"><span class="examples-heading-line">その会社だから書ける、</span><br><em class="examples-heading-line">営業のきっかけを。</em></h1>
-          <p class="examples-hero-lead">企業ごとの事業内容や取り組みを読み込み、<br>一社ずつ最適化した文章で、問い合わせフォームからアプローチします。</p>
+          <p class="examples-hero-lead">営業先企業の事業内容や取り組みを調べ、<br>ご依頼企業に代わって文面を作成し、営業先の問い合わせフォームへ送信します。</p>
           <div class="examples-hero-actions">
             <a class="examples-button examples-button-primary" href="#process">実際の運用フローを見る</a>
             <a class="examples-button examples-button-secondary" href="#sample">サンプル文面を確認する</a>
@@ -26,7 +26,7 @@
           <img src="/assets/images/asset_examples_hero_flow.webp" width="1448" height="1086" alt="Webサイトの読み込み、個別文面の生成、フォーム送信という3つの流れ">
         </div>
       </div>
-      <p class="examples-handnote examples-handnote-hero" aria-hidden="true">一通のメールが、<br>未来の取引につながる。<span></span></p>
+      <p class="examples-handnote examples-handnote-hero" aria-hidden="true">一通の提案が、<br>未来の取引につながる。<span></span></p>
     </section>
 
     <section class="examples-section examples-comparison" aria-labelledby="comparison-title">
@@ -34,11 +34,24 @@
         <header class="examples-heading">
           <p class="examples-label"><span></span>COMPARISON<span></span></p>
           <h2 id="comparison-title"><span class="examples-heading-line">会社名を変えるだけでは、</span><br><em class="examples-heading-line">個別化とは言わない。</em></h2>
-          <p>ビズフォームは、企業ごとの事業内容や取り組みを読み込み、<br>なぜ連絡するのかという理由を一社ずつ考えて文面を作成します。</p>
+          <p>ビズフォームは、営業先企業の事業内容や取り組みを読み込み、<br>ご依頼企業の商材と結びつけて、連絡する理由を一社ずつ文面に反映します。</p>
         </header>
         <figure class="examples-reference-frame reveal">
-          <img src="/assets/images/asset_examples_comparison.webp" width="1672" height="941" alt="一般的な一斉送信とビズフォームの個別文面の比較" loading="lazy">
-          <figcaption>個別化する部分には、企業を調べて得た情報と、連絡する理由を反映します。</figcaption>
+          <div class="examples-comparison-grid">
+            <article class="examples-comparison-card">
+              <span class="examples-sample-label">架空サンプル・文面の抜粋</span>
+              <h3>共通の案内だけの場合</h3>
+              <p class="examples-comparison-context">営業先の問い合わせフォームに送る文面</p>
+              <blockquote><p>株式会社サンプル物流<br>採用ご担当者様</p><p>突然のご連絡失礼いたします。株式会社サンプル採用支援でございます。</p><p>弊社では、法人向け採用支援サービスを提供しております。サービスをご紹介する機会をいただけますでしょうか。</p></blockquote>
+            </article>
+            <article class="examples-comparison-card examples-comparison-card-personalized">
+              <span class="examples-sample-label">架空サンプル・文面の抜粋</span>
+              <h3>企業情報に合わせた案内</h3>
+              <p class="examples-comparison-context">同じ営業先の問い合わせフォームに送る文面</p>
+              <blockquote><p>株式会社サンプル物流<br>採用ご担当者様</p><p>突然のご連絡失礼いたします。株式会社サンプル採用支援でございます。</p><p><mark>貴社のWebサイトで、新たな物流拠点の開設のお知らせを拝見しました。</mark>拠点の稼働に伴う人材確保をご検討でしたら、弊社の法人向け採用支援サービスをご紹介できればと考え、ご連絡いたしました。</p></blockquote>
+            </article>
+          </div>
+          <figcaption>社名・取り組み・文面は架空です。営業先企業の情報と、ご依頼企業の商材を結びつけて連絡する理由を伝えます。</figcaption>
         </figure>
       </div>
     </section>
@@ -48,17 +61,17 @@
         <header class="examples-heading">
           <p class="examples-label"><span></span>PROCESS<span></span></p>
           <h2 id="process-title"><span class="examples-heading-line">企業を読むところから、</span><br><em class="examples-heading-line">文面づくりは始まる。</em></h2>
-          <p>企業ごとの事業内容や取り組みを読み込み、固定文と生成ルールをもとに、<br>一社ずつ最適化した問い合わせ文を作成します。</p>
+          <p>ビズフォームの運用担当が営業先企業の情報を確認し、<br>ご依頼企業の商材・提案方針をもとに、一社ずつ営業文面を作成します。</p>
         </header>
         <ol class="examples-process-grid reveal">
           <li class="examples-process-card">
             <div class="examples-step-head"><span>1</span><h3>企業URLを入力</h3></div>
-            <p>アプローチしたい企業のWebサイトURLを登録します。</p>
+            <p>事前に確認した対象条件に沿って、営業先企業のWebサイトURLを登録します。</p>
             <img src="/assets/images/asset_examples_url.webp" width="1254" height="1254" alt="企業URLを入力する画面のイメージ" loading="lazy">
           </li>
           <li class="examples-process-card">
             <div class="examples-step-head"><span>2</span><h3>Webサイトを読み取り</h3></div>
-            <p>事業内容やサービス、特徴、取り組みを自動で整理します。</p>
+            <p>営業先企業の事業内容やサービス、特徴、取り組みを読み取り、確認します。</p>
             <div class="examples-reading-ui" aria-label="読み取った情報の例">
               <div><b>▤</b><span>事業内容<small></small></span><i>✓</i></div>
               <div><b>◇</b><span>提供サービス<small></small></span></div>
@@ -68,19 +81,20 @@
           </li>
           <li class="examples-process-card">
             <div class="examples-step-head"><span>3</span><h3>固定文＋生成ルールを設定</h3></div>
-            <p>共通の文章と、個別文を生成するルールを設定します。</p>
+            <p>ご依頼企業の商材や方針に合わせて、共通の文章と個別文の生成ルールを設定します。</p>
             <img src="/assets/images/asset_examples_rules.webp" width="1254" height="1254" alt="固定文と生成ルールを設定する画面のイメージ" loading="lazy">
           </li>
           <li class="examples-process-card">
             <div class="examples-step-head"><span>4</span><h3>企業ごとの文面を生成</h3></div>
-            <p>読み取った内容をもとに、それぞれの企業へ最適化します。</p>
+            <p>営業先企業の情報とご依頼企業の商材を結びつけて、提案文を作成します。</p>
             <img src="/assets/images/asset_examples_message_card.webp" width="1254" height="1254" alt="企業ごとに生成された文面のイメージ" loading="lazy">
+            <span class="examples-sample-label">架空サンプル</span>
           </li>
         </ol>
         <div class="examples-process-note">
           <span class="examples-note-icon" aria-hidden="true">!</span>
           <div><h3>文面は2つの要素で構成されます</h3><p>共通のメッセージを軸に、企業ごとに変わる内容を自動で組み合わせ、一社ずつ最適化します。</p></div>
-          <dl><div><dt>固定する文章</dt><dd>挨拶・自社紹介・サービス説明など</dd></div><div><dt>企業ごとに変わる文章</dt><dd>事業内容や取り組みに合わせて生成</dd></div></dl>
+          <dl><div><dt>固定する文章</dt><dd>挨拶・ご依頼企業の紹介・商材説明など</dd></div><div><dt>企業ごとに変わる文章</dt><dd>営業先企業の事業や取り組みに合わせて生成</dd></div></dl>
         </div>
       </div>
     </section>
@@ -89,33 +103,32 @@
       <div class="examples-container">
         <header class="examples-heading">
           <p class="examples-label"><span></span>SAMPLE<span></span></p>
-          <h2 id="sample-title">実際に、<em>こんな文章</em>を作っています。</h2>
-          <p>企業のWebサイトを読み込んだうえで、<br>一社ごとに最適化した文章を作成します。</p>
+          <h2 id="sample-title">企業情報から、<em>提案の文面へ。</em></h2>
+          <p>架空のご依頼企業「株式会社サンプル採用支援」が、<br>「株式会社サンプル物流」へ法人向け採用支援サービスを提案する例です。</p>
         </header>
         <div class="examples-sample-grid reveal">
           <article class="examples-insight-panel">
-            <div class="examples-panel-title"><span aria-hidden="true">▤</span><div><h3>この企業から読み取ったこと</h3><p>Webサイトの内容をもとに、情報を抽出しました。</p></div></div>
+            <div class="examples-panel-title"><span aria-hidden="true">▤</span><div><h3>営業先企業を調べて分かったこと</h3><p>株式会社サンプル物流のWebサイトを調べた架空の例です。</p></div></div>
             <div class="examples-insight-list">
-              <div><span aria-hidden="true">▣</span><p><strong>事業内容</strong>BtoB向けに、マーケティング支援ツールを提供している。</p></div>
-              <div><span aria-hidden="true">◇</span><p><strong>特徴</strong>業界特化のノウハウと、使いやすいUIに強みを持っている。</p></div>
-              <div><span aria-hidden="true">▥</span><p><strong>取り組み</strong>直近で新サービスの提供を開始し、展示会にも積極的に出展している。</p></div>
-              <div><span aria-hidden="true">◎</span><p><strong>想定ニーズ</strong>認知拡大・リード獲得・営業効率化の支援ニーズがあると考えられる。</p></div>
+              <div><span aria-hidden="true">▣</span><p><strong>事業内容</strong>法人向けに配送・倉庫管理などの物流サービスを提供している。</p></div>
+              <div><span aria-hidden="true">▥</span><p><strong>公開された取り組み</strong>Webサイトで、新たな物流拠点の開設を告知している。</p></div>
+              <div><span aria-hidden="true">◎</span><p><strong>提案につなげる仮説</strong>拠点の稼働に伴う人材確保のニーズがある可能性。採用計画があるとは断定しない。</p></div>
+              <div><span aria-hidden="true">◇</span><p><strong>ご依頼企業の商材との接点</strong>法人向け採用支援サービスを、新拠点の人材確保を支援する選択肢として案内する。</p></div>
             </div>
           </article>
           <article class="examples-message-panel">
-            <img src="/assets/images/asset_examples_message.webp" width="1448" height="1086" alt="株式会社サンプルに向けて生成した営業文面のサンプル" loading="lazy">
-            <div class="mobile-message">
-              <span class="pending">架空サンプル</span>
-              <h3>生成された文面サンプル</h3>
-              <p class="mobile-message-subject"><strong>件名</strong><br>【ご提案】貴社のマーケティング施策をさらに加速させるご支援について</p>
-              <p>株式会社サンプル<br>マーケティング部 ご担当者様</p>
-              <p>いつもお世話になっております。<br>株式会社Bizformでございます。</p>
-              <p><mark>貴社のWebサイト（https://sample-company.jp）を拝見し、特にマーケティング活動に力を入れていらっしゃる点に、大変共感いたしました。</mark></p>
-              <p>弊社のBtoB向けマーケティング支援ツール「Bizform」は、貴社のリード獲得・営業効率化のさらなる推進にお役立ていただけます。</p>
-              <p><mark>例えば、展示会後のフォロー施策や、コンテンツマーケティングの効果最大化など、貴社の重点施策に合わせた活用が可能です。</mark></p>
-              <p>よろしければ、サービスの詳細をご説明するお時間をいただけますでしょうか。<br>何卒、よろしくお願い申し上げます。</p>
+            <div class="examples-message">
+              <span class="examples-sample-label">架空サンプル</span>
+              <h3>営業先のフォームへ送る文面</h3>
+              <p class="examples-message-subject"><strong>件名の例</strong><br>新たな物流拠点の人材確保に向けた採用支援のご提案</p>
+              <p>株式会社サンプル物流<br>採用ご担当者様</p>
+              <p>突然のご連絡失礼いたします。<br>株式会社サンプル採用支援でございます。</p>
+              <p><mark>貴社のWebサイトで、新たな物流拠点の開設のお知らせを拝見しました。</mark></p>
+              <p>弊社では、法人向け採用支援サービスを提供しております。</p>
+              <p><mark>拠点の稼働に伴う人材確保をご検討でしたら、採用活動をご支援できればと考え、ご連絡いたしました。</mark></p>
+              <p>よろしければ、サービスの詳細をご紹介する機会をいただけますでしょうか。<br>何卒、よろしくお願い申し上げます。</p>
             </div>
-            <p>※これはサンプルです。実際の生成結果は企業ごとに異なります。</p>
+            <p>※社名・取り組み・文面は架空です。ビズフォームがご依頼企業に代わって作成し、営業先企業の問い合わせフォームへ送信する想定です。</p>
           </article>
         </div>
         <p class="examples-handnote examples-handnote-sample" aria-hidden="true">企業を深く理解するから、<br>心に響く文章になる。<span></span></p>
@@ -127,10 +140,11 @@
         <header class="examples-heading">
           <p class="examples-label"><span></span>MANAGEMENT<span></span></p>
           <h2 id="management-title">一社ずつ書く。<em>数千件でも。</em></h2>
-          <p>企業ごとの生成・確認・進捗をまとめて管理。<br>数千件のアプローチでも、一社ずつ丁寧にコントロールします。</p>
+          <p>ビズフォームの運用担当が、営業先企業ごとの文面作成・確認・進捗を管理。<br>数千件のアプローチでも、一社ずつ確認しながら進めます。</p>
         </header>
         <figure class="examples-dashboard reveal">
           <img src="/assets/images/asset_examples_dashboard.webp" width="1586" height="992" alt="企業ごとの文面生成状況を管理するダッシュボード" loading="lazy">
+          <figcaption>ビズフォームの運用を説明する架空の管理画面です。社名・件数は実績ではありません。</figcaption>
         </figure>
       </div>
     </section>
@@ -140,8 +154,8 @@
         <div>
           <header class="examples-heading examples-heading-left">
             <p class="examples-label"><span></span>OPERATION</p>
-            <h2 id="operation-title"><span class="examples-heading-line">作って終わりではない。</span><br><em class="examples-heading-line">送れる状態まで、運用する。</em></h2>
-            <p>文面の生成から確認・承認・送信・結果確認まで、接点づくりに必要な実務を一続きで進めます。</p>
+            <h2 id="operation-title"><span class="examples-heading-line">作って終わりではない。</span><br><em class="examples-heading-line">営業先への送信まで、担う。</em></h2>
+            <p>ビズフォームが文面の作成・確認から、営業先企業の問い合わせフォームへの送信・結果確認まで対応します。<br>送信後の返信対応・日程調整・商談は、ご依頼企業の営業担当者が行います。</p>
           </header>
           <ol class="examples-operation-flow">
             <li><b>01</b><span>文面生成</span></li><li><b>02</b><span>内容確認</span></li><li><b>03</b><span>承認</span></li><li><b>04</b><span>送信準備</span></li><li><b>05</b><span>フォーム送信</span></li><li><b>06</b><span>結果確認</span></li>

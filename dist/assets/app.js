@@ -34,7 +34,7 @@ const footer = `
       <div class="footer-grid">
         <div class="footer-brand">
           <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>bizform</span></a>
-          <p>企業ごとの文面作成から送信運用まで。新規開拓の実務を前に進めるフォーム営業代行です。</p>
+          <p>企業調査・文面作成から営業先企業の問い合わせフォームへの送信まで。新規開拓の実務を担うフォーム営業代行です。</p>
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="${base}/service/">サービス内容</a><a href="${base}/pricing/">料金・契約条件</a><a href="${base}/examples/">文面・運用サンプル</a><a href="${base}/use-cases/">活用シーン</a></div>
         <div class="footer-column"><strong>理解する</strong><a href="${base}/faq/">よくある質問</a><a href="${base}/guide/">フォーム営業ガイド</a><a href="${base}/policy/">送信方針</a><a href="${base}/stop/">送信停止・受信窓口</a></div>
