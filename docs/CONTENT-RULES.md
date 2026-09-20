@@ -110,7 +110,7 @@ TOPのセクション順は「何のサービスか → 4つの対応工程 → 
 - 対象企業数、送信試行数、送信完了数を混同しない。
 - 料金ページは「Heroの3プラン概要 → 全プラン共通業務 → プラン比較 → 適合プラン → 他手法比較 → 特急便 → FAQ → 相談導線」の順を正本とする。
 - 料金ページのコンテンツ幅は基本1080〜1120pxとし、比較表を除いてPCでも横へ広げすぎない。
-- ライト、スタンダード、プレミアムの人物素材と特急便素材は `dist/assets/images/asset_plan_*.png` と `asset_express_runner.png` を正本とする。
+- ライト、スタンダード、プレミアムの人物素材と特急便素材は `dist/assets/images/asset_plan_*.webp` と `dist/assets/images/asset_express_runner.webp` を正本とする。
 
 ## サンプル・実績
 
