@@ -251,19 +251,25 @@ const observer = 'IntersectionObserver' in window ? new IntersectionObserver((en
 document.querySelectorAll('.reveal').forEach(el => observer ? observer.observe(el) : el.classList.add('visible'));
 
 const contactForm = document.querySelector('[data-contact-form]');
-contactForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
-  if (!contactForm.reportValidity()) return;
-  const data = new FormData(contactForm);
-  const subject = `ビズフォーム導入相談：${data.get('company')}`;
-  const body = [
-    `会社名：${data.get('company')}`,
-    `お名前：${data.get('name')}`,
-    `メール：${data.get('email')}`,
-    `相談内容：${data.get('topic') || '未選択'}`,
-    '',
-    `${data.get('message')}`
-  ].join('\n');
-  document.querySelector('.form-message')?.classList.add('show');
-  window.location.href = `mailto:info@content-x.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-});
+const contactSubmit = contactForm?.querySelector('[data-contact-submit]');
+if (contactForm && contactSubmit) {
+  contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const data = new FormData(contactForm);
+    const subject = `ビズフォーム導入相談：${data.get('company')}`;
+    const body = [
+      `会社名：${data.get('company')}`,
+      `お名前：${data.get('name')}`,
+      `メール：${data.get('email')}`,
+      `相談内容：${data.get('topic') || '未選択'}`,
+      '',
+      `${data.get('message')}`
+    ].join('\n');
+    document.querySelector('.form-message')?.classList.add('show');
+    window.location.href = `mailto:info@content-x.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+  // Enable only after the mail handler is installed. method="dialog" also
+  // prevents HTTP submission when JavaScript is unavailable or fails to load.
+  contactSubmit.disabled = false;
+}

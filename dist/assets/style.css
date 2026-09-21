@@ -278,6 +278,7 @@ details[open] summary::after { content: "−"; }
 
 .form-shell { display: grid; grid-template-columns: .7fr 1.3fr; gap: 48px; align-items: start; }
 .form-card { padding: 34px; border: 1px solid var(--line); border-radius: var(--radius); background: white; box-shadow: var(--shadow); }
+.form-card button:disabled { opacity: .55; cursor: not-allowed; }
 .field { display: grid; gap: 8px; margin-bottom: 20px; }
 .field label, .field legend { font-weight: 800; }
 .optional { margin-left: 8px; color: var(--muted); font-size: .75rem; font-weight: 500; }
