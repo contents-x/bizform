@@ -53,7 +53,8 @@ const siteHeader = document.querySelector('.site-header');
 const syncHeaderHeight = () => {
   if (!headerWrap || !siteHeader) return;
   const height = siteHeader.offsetHeight;
-  if (height) headerWrap.style.setProperty('--header-height', `${height}px`);
+  if (height) document.documentElement.style.setProperty('--header-height', `${height}px`);
+  keepFocusVisible();
 };
 syncHeaderHeight();
 window.addEventListener('load', syncHeaderHeight);
@@ -116,6 +117,19 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   syncLabel();
   narrow.addEventListener('change', syncLabel);
 
+  // Reserve the bar's full height even while hidden: focusing a link can
+  // scroll far enough to reveal it before the next frame.
+  const syncCtaHeight = () => {
+    document.documentElement.style.setProperty('--floating-cta-height', `${cta.offsetHeight}px`);
+    keepFocusVisible();
+  };
+  syncCtaHeight();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(syncCtaHeight).observe(cta);
+  } else {
+    window.addEventListener('resize', syncCtaHeight);
+  }
+
   const revealAfter = () => Math.max(window.innerHeight * 0.6, 420);
   let ctaVisible = false;
   let ctaTicking = false;
@@ -135,6 +149,29 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   window.addEventListener('resize', queueCta);
   syncCta();
 }
+
+// Native focus scrolling uses the root scroll padding where supported.
+// Correct the remaining occlusion without moving focus or horizontal scroll.
+function keepFocusVisible() {
+  const target = document.activeElement;
+  if (!(target instanceof HTMLElement) || !target.matches(':focus-visible') ||
+      target.closest('.site-header, .floating-cta, .skip-link')) return;
+  requestAnimationFrame(() => {
+    if (document.activeElement !== target || document.body.classList.contains('nav-open')) return;
+    const padding = getComputedStyle(document.documentElement);
+    const top = parseFloat(padding.scrollPaddingTop) || 0;
+    const bottom = window.innerHeight - (parseFloat(padding.scrollPaddingBottom) || 0);
+    const rect = target.getBoundingClientRect();
+    if (!rect.height || bottom <= top) return;
+    // A tall scrollable table cannot fit entirely; keep its start visible.
+    const end = rect.top + Math.min(rect.height, bottom - top);
+    const delta = rect.top < top ? rect.top - top : end > bottom ? end - bottom : 0;
+    if (delta) window.scrollBy({ top: delta, behavior: 'instant' });
+  });
+}
+document.addEventListener('focusin', keepFocusVisible);
+// Let resize observers and the browser's scroll restoration settle first.
+window.addEventListener('resize', () => requestAnimationFrame(keepFocusVisible));
 
 const menuButton = document.querySelector('.menu-button');
 const globalNav = document.querySelector('.global-nav');
