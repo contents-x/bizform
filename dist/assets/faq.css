@@ -1,7 +1,7 @@
 .faq-page {
   /* Colour comes from the brand tokens in style.css.
      Do not hardcode colours here; add a token there instead. */
-  background: #fff;
+  background: var(--white);
 }
 
 .faq-container {
@@ -123,19 +123,19 @@
 }
 
 .faq-jump-links a:hover {
-  color: #fff;
+  color: var(--white);
   border-color: var(--brand-blue);
   background: var(--brand-blue);
   transform: translateY(-2px);
 }
 
 .faq-jump-links a:hover::after {
-  color: #fff;
+  color: var(--white);
 }
 
 .faq-categories {
   padding: 104px 0 112px;
-  background: #fff;
+  background: var(--white);
 }
 
 .faq-section-heading {
@@ -187,7 +187,7 @@
   padding: 28px 27px 22px;
   border: 1px solid var(--line);
   border-radius: 18px;
-  background: #fff;
+  background: var(--white);
   box-shadow: 0 15px 38px rgba(26,70,126,.07);
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
@@ -233,7 +233,7 @@
   position: relative;
   overflow: hidden;
   padding: 116px 0 122px;
-  background: #f7faff;
+  background: var(--pale-blue-2);
 }
 
 .faq-content-background {
@@ -350,7 +350,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  color: #fff;
+  color: var(--white);
   background: var(--brand-blue);
   font-size: .78rem;
   font-weight: 900;
@@ -390,7 +390,7 @@
 
 .faq-page .faq-accordion details[open] .faq-toggle::before,
 .faq-page .faq-accordion details[open] .faq-toggle::after {
-  background: #fff;
+  background: var(--white);
 }
 
 .faq-page .faq-accordion details[open] .faq-toggle::after {
@@ -424,7 +424,7 @@
 
 .faq-contact {
   padding: 104px 0 112px;
-  background: #fff;
+  background: var(--white);
 }
 
 .faq-contact-card {
@@ -473,7 +473,7 @@
 }
 
 .faq-button-primary {
-  color: #fff;
+  color: var(--white);
   background: var(--brand-blue);
   box-shadow: 0 12px 26px rgba(18,101,232,.2);
 }
@@ -547,10 +547,3 @@
   .faq-group-heading h2 { font-size: 1.35rem; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .faq-page *, .faq-page *::before, .faq-page *::after {
-    scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
-    animation-duration: .01ms !important;
-  }
-}
