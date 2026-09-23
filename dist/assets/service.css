@@ -22,7 +22,7 @@
 .sv-heading { margin-bottom: 46px; }
 .sv-heading-center { text-align: center; }
 .sv-heading-center .sv-section-label { justify-content: center; }
-.sv-heading h2, .sv-final h2 { margin: 0; color: var(--sv-ink); font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif; font-size: clamp(2.45rem,4.1vw,4rem); font-weight: 800; line-height: 1.35; letter-spacing: -.055em; }
+.sv-heading h2, .sv-final h2 { margin: 0; color: var(--sv-ink); font-family: var(--font-serif); font-size: clamp(2.45rem,4.1vw,4rem); font-weight: 700; line-height: 1.35; letter-spacing: -.055em; }
 .sv-heading > p:last-child { max-width: 760px; margin: 22px 0 0; color: var(--sv-muted); font-size: 1rem; line-height: 1.95; }
 .sv-heading-center > p:last-child { margin-inline: auto; }
 .sv-heading-sub { margin: 0 0 16px; color: var(--sv-ink); font-size: 1rem; font-weight: 800; letter-spacing: .06em; }
@@ -31,7 +31,7 @@
 .sv-button-primary { color: var(--white); background: linear-gradient(135deg,var(--brand-blue-dark),var(--brand-blue)); box-shadow: 0 12px 25px color-mix(in srgb, var(--brand-blue) 20%, transparent); }
 .sv-button-outline { color: var(--sv-ink); border-color: var(--brand-blue); background: var(--white); }
 .sv-actions { display: flex; flex-wrap: wrap; gap: 18px; }
-.sv-handnote { margin: 0; color: var(--brand-blue); font-family: "Klee", "Yu Kyokasho", cursive; font-size: 1.8rem; font-weight: 500; line-height: 1.45; transform: rotate(-6deg); }
+.sv-handnote { margin: 0; color: var(--brand-blue); font-family: var(--font-serif); font-size: 1.8rem; font-weight: 600; line-height: 1.45; transform: rotate(-6deg); }
 .sv-handnote::after { content: ""; display: block; width: 180px; height: 1px; margin-top: 4px; background: currentColor; transform: rotate(-7deg); }
 
 /* Shared drawn icons. Alpha masks preserve the SVG shapes and inherit the brand colour. */
@@ -51,7 +51,7 @@
 .sv-hero::before { content: ""; position: absolute; left: -10%; bottom: -27%; width: 68%; height: 44%; border-radius: 50%; background: color-mix(in srgb, var(--pale-blue) 78%, transparent); transform: rotate(6deg); }
 .sv-hero-container { position: relative; width: min(calc(100% - 52px), 1380px); min-height: 805px; margin-inline: auto; padding: 76px 0 72px; }
 .sv-hero-copy { position: relative; z-index: 2; width: 49%; max-width: 650px; }
-.sv-hero-copy h1 { margin: 0; font-size: clamp(3.2rem,4.8vw,4.5rem); font-weight: 900; line-height: 1.28; letter-spacing: -.065em; }
+.sv-hero-copy h1 { margin: 0; font-family: var(--font-serif); font-size: clamp(3.2rem,4.8vw,4.5rem); font-weight: 700; line-height: 1.28; letter-spacing: -.065em; }
 .sv-heading-line { display: inline-block; white-space: nowrap; }
 .sv-hero-copy > p:not(.sv-kicker) { margin: 24px 0 0; color: var(--text-body); font-size: 1.05rem; line-height: 1.9; }
 .sv-hero-copy .sv-actions { margin-top: 36px; }
