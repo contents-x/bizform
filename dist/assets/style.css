@@ -32,6 +32,7 @@
   --cyan: #8eafe3;
   --green: #0c7a62;
   --alert: #e0655f;
+  --alert-text: #b3261e;   /* 白背景 6.54:1。--alert は 3.39:1 で本文には使えない */
   --surface-disabled: #eef1f5;
 
   /* Typography. Single source of truth for type across every page.
@@ -221,6 +222,7 @@ details[open] summary::after { content: "−"; }
 .field input, .field select, .field textarea { width: 100%; padding: 13px 14px; border: 1px solid #bbc2cf; border-radius: 10px; color: var(--ink); background: white; }
 .field textarea { min-height: 150px; resize: vertical; }
 .field-help { margin: -2px 0 0; color: var(--muted); font-size: .8rem; }
+.field-limit { color: var(--alert-text); font-weight: 700; }
 .form-shell aside .section-title { font-size: 2.3rem; }
 .form-card > button + .field-help,
 .form-card > .field-help + .field-help { margin-top: 14px; }

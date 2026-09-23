@@ -290,9 +290,15 @@ document.querySelectorAll('.reveal').forEach(el => observer ? observer.observe(e
 const contactForm = document.querySelector('[data-contact-form]');
 const contactSubmit = contactForm?.querySelector('[data-contact-submit]');
 if (contactForm && contactSubmit) {
-  contactForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!contactForm.reportValidity()) return;
+  // Windows hands a mailto: to the shell, which stops reading at roughly 2,083
+  // characters. Japanese costs nine characters per glyph once percent-encoded,
+  // so the ceiling arrives long before the textarea looks full. Stay under it
+  // with headroom instead of letting the mail app receive a truncated body.
+  const MAILTO_LIMIT = 1900;
+  const limitNote = contactForm.querySelector('[data-message-limit]');
+  const messageField = contactForm.querySelector('#message');
+
+  const buildMailto = () => {
     const data = new FormData(contactForm);
     const subject = `ビズフォーム導入相談：${data.get('company')}`;
     const body = [
@@ -303,10 +309,45 @@ if (contactForm && contactSubmit) {
       '',
       `${data.get('message')}`
     ].join('\n');
+    return `mailto:info@content-x.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const overBy = () => buildMailto().length - MAILTO_LIMIT;
+
+  // The advice is rounded to ten characters so the live region is not
+  // re-announced on every keystroke.
+  const syncLimit = () => {
+    const over = overBy();
+    contactSubmit.disabled = over > 0;
+    if (!limitNote) return;
+    if (over <= 0) {
+      limitNote.hidden = true;
+      limitNote.textContent = '';
+      return;
+    }
+    const trim = Math.ceil(over / 9 / 10) * 10;
+    const text = `入力が長すぎるため、メールアプリへ渡せません。あと${trim}文字ほど減らすか、下の運営会社フォームをご利用ください。`;
+    if (limitNote.textContent !== text) limitNote.textContent = text;
+    limitNote.hidden = false;
+  };
+
+  contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    if (overBy() > 0) {
+      syncLimit();
+      messageField?.focus();
+      return;
+    }
+    window.location.href = buildMailto();
+    // Shown only once the handler has actually been asked to open. A missing
+    // mail app is what the fallback link under the form covers.
     document.querySelector('.form-message')?.classList.add('show');
-    window.location.href = `mailto:info@content-x.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
+
+  contactForm.addEventListener('input', syncLimit);
+  contactForm.addEventListener('change', syncLimit);
   // Enable only after the mail handler is installed. method="dialog" also
   // prevents HTTP submission when JavaScript is unavailable or fails to load.
-  contactSubmit.disabled = false;
+  syncLimit();
 }
