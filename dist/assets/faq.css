@@ -1,13 +1,6 @@
 .faq-page {
-  /* Page aliases resolve to the shared brand tokens in style.css.
+  /* Colour comes from the brand tokens in style.css.
      Do not hardcode colours here; add a token there instead. */
-  --faq-navy: var(--brand-navy);
-  --faq-blue: var(--brand-blue);
-  --faq-blue-dark: var(--brand-blue-dark);
-  --faq-pale: var(--pale-blue-2);
-  --faq-pale-deep: var(--pale-blue);
-  --faq-border: var(--line);
-  --faq-muted: var(--muted);
   background: #fff;
 }
 
@@ -21,7 +14,7 @@
   align-items: center;
   gap: 14px;
   margin: 0 0 18px;
-  color: var(--faq-blue);
+  color: var(--brand-blue);
   font-size: .75rem;
   font-weight: 900;
   letter-spacing: .22em;
@@ -70,7 +63,7 @@
 }
 
 .faq-breadcrumbs a:hover {
-  color: var(--faq-blue);
+  color: var(--brand-blue);
 }
 
 .faq-hero-copy {
@@ -79,7 +72,7 @@
 
 .faq-hero-copy h1 {
   margin: 0;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-family: var(--font-serif);
   font-size: clamp(3.5rem, 5.2vw, 4.8rem);
   font-weight: 700;
@@ -126,13 +119,13 @@
 .faq-jump-links a::after {
   content: "↓";
   margin-left: 8px;
-  color: var(--faq-blue);
+  color: var(--brand-blue);
 }
 
 .faq-jump-links a:hover {
   color: #fff;
-  border-color: var(--faq-blue);
-  background: var(--faq-blue);
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
   transform: translateY(-2px);
 }
 
@@ -164,7 +157,7 @@
 
 .faq-section-heading h2 {
   margin: 0;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-family: var(--font-serif);
   font-size: clamp(2.45rem, 4vw, 3.45rem);
   line-height: 1.35;
@@ -173,7 +166,7 @@
 
 .faq-section-heading > p:last-child {
   margin: 18px 0 0;
-  color: var(--faq-muted);
+  color: var(--muted);
 }
 
 .faq-category-grid {
@@ -192,7 +185,7 @@
   width: calc((100% - 36px) / 3);
   min-height: 220px;
   padding: 28px 27px 22px;
-  border: 1px solid var(--faq-border);
+  border: 1px solid var(--line);
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 15px 38px rgba(26,70,126,.07);
@@ -213,14 +206,14 @@
 
 .faq-category-card h3 {
   margin: 4px 0 9px;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-size: 1.08rem;
   line-height: 1.5;
 }
 
 .faq-category-card p {
   margin: 0;
-  color: var(--faq-muted);
+  color: var(--muted);
   font-size: .82rem;
   line-height: 1.75;
 }
@@ -229,7 +222,7 @@
   grid-column: 1 / -1;
   padding-top: 14px;
   border-top: 1px solid #e9f0f8;
-  color: var(--faq-blue);
+  color: var(--brand-blue);
   font-size: .66rem;
   font-weight: 900;
   letter-spacing: .15em;
@@ -298,7 +291,7 @@
 
 .faq-group-heading > div > p {
   margin: 0 0 3px;
-  color: var(--faq-blue);
+  color: var(--brand-blue);
   font-size: .66rem;
   font-weight: 900;
   letter-spacing: .18em;
@@ -306,7 +299,7 @@
 
 .faq-group-heading h2 {
   margin: 0;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-family: var(--font-serif);
   font-size: clamp(2rem, 3.2vw, 2.8rem);
   line-height: 1.4;
@@ -320,7 +313,7 @@
 
 .faq-page .faq-accordion details {
   overflow: hidden;
-  border: 1px solid var(--faq-border);
+  border: 1px solid var(--line);
   border-radius: 16px;
   background: rgba(255,255,255,.98);
   box-shadow: 0 9px 28px rgba(27,67,119,.045);
@@ -340,7 +333,7 @@
   gap: 14px;
   min-height: 82px;
   padding: 18px 22px;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-size: 1rem;
   font-weight: 800;
   line-height: 1.65;
@@ -358,7 +351,7 @@
   height: 36px;
   border-radius: 50%;
   color: #fff;
-  background: var(--faq-blue);
+  background: var(--brand-blue);
   font-size: .78rem;
   font-weight: 900;
 }
@@ -381,7 +374,7 @@
   width: 12px;
   height: 2px;
   border-radius: 2px;
-  background: var(--faq-blue);
+  background: var(--brand-blue);
   transform: translate(-50%, -50%);
 }
 
@@ -391,8 +384,8 @@
 }
 
 .faq-page .faq-accordion details[open] .faq-toggle {
-  border-color: var(--faq-blue);
-  background: var(--faq-blue);
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
 }
 
 .faq-page .faq-accordion details[open] .faq-toggle::before,
@@ -418,8 +411,8 @@
 }
 
 .faq-a {
-  color: var(--faq-blue);
-  background: var(--faq-pale-deep);
+  color: var(--brand-blue);
+  background: var(--pale-blue);
 }
 
 .faq-answer p {
@@ -461,7 +454,7 @@
 
 .faq-contact-copy h2 {
   margin: 0;
-  color: var(--faq-navy);
+  color: var(--brand-navy);
   font-family: var(--font-serif);
   font-size: clamp(2rem, 3.4vw, 3rem);
   line-height: 1.4;
@@ -470,7 +463,7 @@
 
 .faq-contact-copy > p:last-child {
   margin: 15px 0 0;
-  color: var(--faq-muted);
+  color: var(--muted);
 }
 
 .faq-contact-actions {
@@ -481,16 +474,16 @@
 
 .faq-button-primary {
   color: #fff;
-  background: var(--faq-blue);
+  background: var(--brand-blue);
   box-shadow: 0 12px 26px rgba(18,101,232,.2);
 }
 
 .faq-button-primary:hover {
-  background: var(--faq-blue-dark);
+  background: var(--brand-blue-dark);
 }
 
 .faq-button-secondary {
-  color: var(--faq-blue-dark);
+  color: var(--brand-blue-dark);
   border-color: #9abdea;
   background: rgba(255,255,255,.9);
 }
