@@ -59,7 +59,7 @@
 
 .faq-breadcrumbs {
   margin-bottom: 56px;
-  color: #70839b;
+  color: var(--muted);
 }
 
 .faq-breadcrumbs a:hover {
@@ -90,7 +90,7 @@
 
 .faq-hero-note {
   margin: 12px 0 0;
-  color: #687d96;
+  color: var(--muted);
   font-size: .88rem;
 }
 
@@ -278,7 +278,7 @@
   justify-content: center;
   margin: 0;
   border-right: 1px solid #bcd5f2;
-  color: #78a9e8;
+  color: var(--brand-blue);
   font-size: 1.45rem;
   font-weight: 900;
 }
