@@ -12,6 +12,8 @@
 
 料金・件数・契約条件、サンプルと実例の区別、共通ヘッダー・追従CTA、スマートフォンの表示・操作、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
 
+HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `python scripts/format_html.py --check` で行います（Python 3.10以上、追加パッケージ不要）。本文やインライン要素間の空白を維持し、ブロック構造をスペース2つで揃えます。
+
 ## 公開
 
 - GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
