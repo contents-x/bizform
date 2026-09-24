@@ -1345,6 +1345,7 @@ details[open] summary::after { content: "−"; }
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 32px); }
   .header-inner { gap: 8px; }
+  .header-inner .logo { font-size: 1rem; }
   .header-actions .button-primary { padding-inline: 12px; }
   .home-kicker { letter-spacing: .06em; }
   .uc-industry-grid article { grid-template-columns: minmax(0,1fr); }

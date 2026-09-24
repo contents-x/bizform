@@ -7,7 +7,7 @@ const header = `
   <header class="site-header">
     <div class="container header-inner">
       <a class="logo" href="${base}/" aria-label="ビズフォーム トップ">
-        <span class="logo-mark" aria-hidden="true">B</span><span>bizform</span>
+        <span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span>
       </a>
       <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
         <a href="${base}/service/"${active('/service/')}>サービス内容</a>
@@ -33,7 +33,7 @@ const footer = `
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>bizform</span></a>
+          <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span></a>
           <p>企業調査・文面作成から営業先企業の問い合わせフォームへの送信まで。新規開拓の実務を担うフォーム営業代行です。</p>
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="${base}/service/">サービス内容</a><a href="${base}/pricing/">料金・契約条件</a><a href="${base}/examples/">文面・運用サンプル</a><a href="${base}/use-cases/">活用シーン</a></div>
