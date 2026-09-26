@@ -34,6 +34,7 @@
   --green: #0c7a62;
   --alert: #e0655f;
   --alert-text: #b3261e;         /* 白背景 6.54:1。--alert は 3.39:1 で本文には使えない */
+  --alert-surface: #fff4f3;      /* 送信失敗の案内の背景。--alert-text 6.07:1・--brand-blue 4.81:1 */
   --on-brand-blue: #f7faff;      /* --brand-blue の上に載る文字。4.95:1 */
   --surface-disabled: #eef1f5;
 
@@ -236,12 +237,19 @@ details[open] summary::after { content: "−"; }
 .field input, .field select, .field textarea { width: 100%; padding: 13px 14px; border: 1px solid #bbc2cf; border-radius: 10px; color: var(--ink); background: white; }
 .field textarea { min-height: 150px; resize: vertical; }
 .field-help { margin: -2px 0 0; color: var(--muted); font-size: 1rem; }
-.field-limit { color: var(--alert-text); font-weight: 700; }
 .form-shell aside .section-title { font-size: 2.3rem; }
 .form-card > button + .field-help,
 .form-card > .field-help + .field-help { margin-top: 14px; }
-.form-message { display: none; margin-top: 18px; padding: 16px; border-radius: 10px; color: #0a614f; background: #e5f6f1; }
-.form-message.show { display: block; }
+.form-honeypot { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.form-alert { margin-top: 18px; padding: 16px 18px; border-left: 4px solid var(--alert-text); border-radius: 0 10px 10px 0; color: var(--ink); background: var(--alert-surface); scroll-margin-block: calc(var(--header-height, 79px) + 16px) 24px; }
+.form-alert strong { display: block; margin-bottom: 4px; color: var(--alert-text); }
+.form-alert .text-link { display: inline; overflow-wrap: anywhere; }
+.form-complete { scroll-margin-block: calc(var(--header-height, 79px) + 16px) 24px; }
+.form-complete h2 { margin: 0 0 12px; color: var(--brand-navy-deep); font-size: 1.5rem; line-height: 1.5; }
+.form-complete p { margin: 0 0 16px; }
+.form-complete-steps { margin: 0 0 18px; padding-left: 1.4em; }
+.form-complete-steps li + li { margin-top: 6px; }
+.form-complete .text-link { display: inline; overflow-wrap: anywhere; }
 .contact-flow { display: grid; gap: 15px; margin-top: 28px; }
 .contact-flow div { display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
 .contact-flow b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: white; background: var(--brand-blue); font-size: .78rem; }

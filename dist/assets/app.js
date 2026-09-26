@@ -290,64 +290,154 @@ document.querySelectorAll('.reveal').forEach(el => observer ? observer.observe(e
 const contactForm = document.querySelector('[data-contact-form]');
 const contactSubmit = contactForm?.querySelector('[data-contact-submit]');
 if (contactForm && contactSubmit) {
-  // Windows hands a mailto: to the shell, which stops reading at roughly 2,083
-  // characters. Japanese costs nine characters per glyph once percent-encoded,
-  // so the ceiling arrives long before the textarea looks full. Stay under it
-  // with headroom instead of letting the mail app receive a truncated body.
-  const MAILTO_LIMIT = 1900;
-  const limitNote = contactForm.querySelector('[data-message-limit]');
-  const messageField = contactForm.querySelector('#message');
+  // HubSpot is the system of record: its answer alone decides what the visitor
+  // sees. The Contents X CRM inbox gets a fire-and-forget copy, so a CRM outage
+  // can never block, delay or alter the HubSpot submission. Same arrangement as
+  // BizManga, ContentsX and イチオシ採用 (README: 外部連携).
+  const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
+  // Replace with crm.contentsx.jp once that domain is assigned.
+  const CRM_ENDPOINT = 'https://contentsx-crm.vercel.app/api/inbound/web';
+  // Not a secret: every site that posts to the CRM ships this value in public
+  // JS. It only turns away blind requests; the CRM's rate limit and the
+  // honeypot do the real spam filtering. Kept identical in five places.
+  const CRM_TOKEN = 'ENoK7H4O60a8KdKlTal12exoV2rqSNlIb841sj3dSeo=';
+  const HUBSPOT_TIMEOUT_MS = 20000;
 
-  const buildMailto = () => {
-    const data = new FormData(contactForm);
-    const subject = `ビズフォーム導入相談：${data.get('company')}`;
-    const body = [
-      `会社名：${data.get('company')}`,
-      `お名前：${data.get('name')}`,
-      `メール：${data.get('email')}`,
-      `相談内容：${data.get('topic') || '未選択'}`,
-      '',
-      `${data.get('message')}`
-    ].join('\n');
-    return `mailto:info@content-x.co.jp?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const complete = document.querySelector('[data-contact-complete]');
+  const failures = {
+    rejected: contactForm.querySelector('[data-contact-error="rejected"]'),
+    unknown: contactForm.querySelector('[data-contact-error="unknown"]')
+  };
+  const submitLabel = contactSubmit.textContent;
+  let submitting = false;
+
+  const field = (data, name) => String(data.get(name) || '').trim();
+
+  const sendToCrm = (inquiry) => {
+    try {
+      fetch(CRM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${CRM_TOKEN}`
+        },
+        body: JSON.stringify(inquiry)
+      }).then((res) => {
+        if (!res.ok) console.warn('CRM inbound rejected (ignored):', res.status);
+      }).catch((err) => {
+        console.warn('CRM inbound failed (ignored):', err);
+      });
+    } catch (err) {
+      console.warn('CRM inbound skipped:', err);
+    }
   };
 
-  const overBy = () => buildMailto().length - MAILTO_LIMIT;
+  const sendToHubSpot = (payload) => {
+    const controller = 'AbortController' in window ? new AbortController() : null;
+    const timer = controller && setTimeout(() => controller.abort(), HUBSPOT_TIMEOUT_MS);
+    return fetch(HUBSPOT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller?.signal
+    }).then((res) => {
+      if (res.ok) return;
+      const error = new Error(`HubSpot responded ${res.status}`);
+      // A 4xx is a definite refusal (HubSpot validates before storing), so
+      // nothing arrived and resending is safe. Anything else may have landed.
+      error.rejected = res.status >= 400 && res.status < 500;
+      throw error;
+    }).finally(() => clearTimeout(timer));
+  };
 
-  // The advice is rounded to ten characters so the live region is not
-  // re-announced on every keystroke.
-  const syncLimit = () => {
-    const over = overBy();
-    contactSubmit.disabled = over > 0;
-    if (!limitNote) return;
-    if (over <= 0) {
-      limitNote.hidden = true;
-      limitNote.textContent = '';
-      return;
-    }
-    const trim = Math.ceil(over / 9 / 10) * 10;
-    const text = `入力が長すぎるため、メールアプリへ渡せません。あと${trim}文字ほど減らすか、下の運営会社フォームをご利用ください。`;
-    if (limitNote.textContent !== text) limitNote.textContent = text;
-    limitNote.hidden = false;
+  const showComplete = () => {
+    contactForm.hidden = true;
+    if (!complete) return;
+    complete.hidden = false;
+    complete.focus();
   };
 
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
+    // Enter in a field and requestSubmit() skip the disabled button, so the
+    // form itself carries the in-flight flag.
+    if (submitting) return;
     if (!contactForm.reportValidity()) return;
-    if (overBy() > 0) {
-      syncLimit();
-      messageField?.focus();
+    submitting = true;
+    contactSubmit.disabled = true;
+    contactSubmit.textContent = '送信中…';
+    Object.values(failures).forEach((el) => { if (el) el.hidden = true; });
+
+    const data = new FormData(contactForm);
+    const company = field(data, 'company');
+    const name = field(data, 'name');
+    const email = field(data, 'email');
+    const message = `【相談内容】${field(data, 'topic') || '未選択'}\n\n${field(data, 'message')}`;
+    const honeypot = field(data, 'website');
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get('utm_source');
+    const utmMedium = params.get('utm_medium');
+    const utmCampaign = params.get('utm_campaign');
+
+    sendToCrm({
+      site: 'bizform',
+      company_name: company,
+      department: null,
+      full_name: name,
+      email,
+      message,
+      page_url: window.location.href,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+      referrer: document.referrer || null,
+      hp: honeypot
+    });
+
+    // Only bots fill the off-screen field. Pretend it worked and keep them out
+    // of HubSpot; the CRM drops its copy on the same signal.
+    if (honeypot) {
+      showComplete();
       return;
     }
-    window.location.href = buildMailto();
-    // Shown only once the handler has actually been asked to open. A missing
-    // mail app is what the fallback link under the form covers.
-    document.querySelector('.form-message')?.classList.add('show');
+
+    const tracking = ['[ビズフォーム経由のお問い合わせ]'];
+    if (utmSource) tracking.push(`流入元: ${utmSource}`);
+    if (utmMedium) tracking.push(`媒体: ${utmMedium}`);
+    if (utmCampaign) tracking.push(`キャンペーン: ${utmCampaign}`);
+    tracking.push(`ページ: ${window.location.href}`);
+
+    sendToHubSpot({
+      fields: [
+        { name: 'company', value: company },
+        // The form has one name field; the other Contents X sites fill both
+        // HubSpot name properties with it, so do the same here.
+        { name: 'lastname', value: name },
+        { name: 'firstname', value: name },
+        { name: 'email', value: email },
+        { name: 'message', value: `${message}\n\n---\n${tracking.join('\n')}` }
+      ],
+      context: {
+        pageUri: window.location.href,
+        pageName: 'ビズフォーム - お問い合わせ'
+      }
+    }).then(showComplete).catch((err) => {
+      console.error('HubSpot submission error:', err);
+      submitting = false;
+      contactSubmit.disabled = false;
+      contactSubmit.textContent = submitLabel;
+      // A lost response or a 5xx is not a lost submission. Asking for a retry
+      // there would duplicate inquiries that did arrive, so that message points
+      // to email; only a definite refusal asks the visitor to check and resend.
+      const failure = err && err.rejected ? failures.rejected : failures.unknown;
+      if (failure) {
+        failure.hidden = false;
+        failure.focus();
+      }
+    });
   });
 
-  contactForm.addEventListener('input', syncLimit);
-  contactForm.addEventListener('change', syncLimit);
-  // Enable only after the mail handler is installed. method="dialog" also
-  // prevents HTTP submission when JavaScript is unavailable or fails to load.
-  syncLimit();
+  // Enable only after the handler is installed. method="dialog" keeps the
+  // fields from being posted over HTTP when JavaScript fails to load.
+  contactSubmit.disabled = false;
 }
