@@ -21,14 +21,15 @@ HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `
 | 送信先 | 内容 |
 |---|---|
 | HubSpot | Portal `48367061` / Form `b6da14d0-d60d-4357-89fc-0015ed32b704`（BizManga・ContentsX と同じフォーム）。`pageName` は `ビズフォーム - お問い合わせ`。部署の項目は無いので `busyo` は送らない |
-| Contents X CRM | `https://contentsx-crm.vercel.app/api/inbound/web` に `site: 'bizform'` で送る。受信箱 `/inbox` に入り、人が承認するまで顧客データにはならない |
+| Contents X CRM | CRM の埋め込みスクリプト `https://contentsx-crm.vercel.app/embed/inbound-v1.js` を `dist/contact/index.html` の `</body>` 直前で読み込み（公開キー `data-source-key`・`data-auto="false"`）、`app.js` が入力チェック後・HubSpot 送信の直前に `BizcarteInbound.sendForm(form)` を呼ぶ。受信箱 `/inbox` の受信元カードに入り、人が承認するまで顧客データにはならない |
 
-- **CRM のトークン（`CRM_TOKEN`）は5箇所で同じ値にする**: CRM 側の設定／BizManga `contact.html`／ContentsX `js/contact.js`／イチオシ採用 `js/main.js`／ビズフォーム `dist/assets/app.js`。1箇所でもずれるとそのサイトだけ CRM に届かなくなるが、HubSpot は動くので気づきにくい。ビズフォームは ContentX_HP とは別リポジトリのため、ContentX_HP の `crm-token-sync` フックでは検知されない。
-  - このトークンはブラウザから見える前提の値で、機密ではない。新しい値を作るのは CRM 側の担当者の判断で、変えるときは5箇所を同時に直す。
-- CRM 側でこのサイトからの送信を受け付ける設定が必要（CRM リポジトリで管理）。CRM 側の受付方式が変わると、送信にキーの追加などが要ることがある。CRM に届かなくても HubSpot には届くので、変更時は CRM 側の担当者と受信箱で届いたかを確認する。
+- **公開キーは秘密ではない**（ブラウザに出る前提の値）。CRM 側はこのキーに登録したドメイン（`https://bizform.contentsx.jp`）からの送信だけを受け付ける。ドメインが変わる・別ドメインで開かれるようになったら、コードではなく CRM 側の許可ドメインを足してもらう。localhost からの送信は拒否されるのが正常。
+- `data-auto="false"` は外さない。外すと入力チェックで止まった送信まで拾う。
+- 項目は欄の名前とラベルから自動で判別される（会社名・氏名・メール・相談内容＝件名・詳しい内容＝本文）。判別を指定したい欄だけ `data-crm-field` を付ける。ハニーポット `#bfWebsite`（`name="website"`・`tabindex="-1"`）は自動で認識され、値が入っていれば CRM 側で捨てられる。
+- CRM への送信はスクリプトが応答を待たずに行い、失敗しても例外を出さない。CRM に届かなくても HubSpot には届くので、変更時は受信箱で届いたかを確認する。
 - `/stop/`（送信停止窓口）はどちらにもつないでいない。
-- 今はどのページにも CSP が無い。CSP を足すときは `connect-src` に `https://api.hsforms.com` と `https://contentsx-crm.vercel.app` を必ず入れる（漏れると送信が失敗表示になる）。
-- CRM に独自ドメイン `crm.contentsx.jp` が割り当てられたら、`app.js` の `CRM_ENDPOINT`（と CSP があればその送信先）を差し替える。
+- 今はどのページにも CSP が無い。CSP を足すときは `connect-src` に `https://api.hsforms.com` と `https://contentsx-crm.vercel.app`、`script-src` に `https://contentsx-crm.vercel.app` を必ず入れる（漏れると HubSpot 送信が失敗表示になる、または CRM に届かなくなる）。
+- CRM に独自ドメイン `crm.contentsx.jp` が割り当てられたら、`dist/contact/index.html` のスクリプトの読み込み元（と CSP があればその送信先）を差し替える。
 - HubSpot のトラッキングコード（Cookie）は読み込んでいない。入れる場合は先にプライバシーポリシーの「10. Cookie・アクセス解析」を改定する。
 
 ## 公開

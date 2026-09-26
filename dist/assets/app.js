@@ -286,16 +286,11 @@ const contactForm = document.querySelector('[data-contact-form]');
 const contactSubmit = contactForm?.querySelector('[data-contact-submit]');
 if (contactForm && contactSubmit) {
   // HubSpot is the system of record: its answer alone decides what the visitor
-  // sees. The Contents X CRM inbox gets a fire-and-forget copy, so a CRM outage
-  // can never block, delay or alter the HubSpot submission. Same arrangement as
-  // BizManga, ContentsX and イチオシ採用 (README: 外部連携).
+  // sees. The Contents X CRM inbox gets a copy through the CRM's embed script
+  // (loaded on the contact page with data-auto="false"), which never throws,
+  // never waits for a reply and cannot block the HubSpot submission. Same
+  // arrangement as BizManga, ContentsX and イチオシ採用 (README: 外部連携).
   const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
-  // Replace with crm.contentsx.jp once that domain is assigned.
-  const CRM_ENDPOINT = 'https://contentsx-crm.vercel.app/api/inbound/web';
-  // Not a secret: every site that posts to the CRM ships this value in public
-  // JS. It only turns away blind requests; the CRM's rate limit and the
-  // honeypot do the real spam filtering. Kept identical in five places.
-  const CRM_TOKEN = 'ENoK7H4O60a8KdKlTal12exoV2rqSNlIb841sj3dSeo=';
   const HUBSPOT_TIMEOUT_MS = 20000;
 
   const complete = document.querySelector('[data-contact-complete]');
@@ -307,25 +302,6 @@ if (contactForm && contactSubmit) {
   let submitting = false;
 
   const field = (data, name) => String(data.get(name) || '').trim();
-
-  const sendToCrm = (inquiry) => {
-    try {
-      fetch(CRM_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${CRM_TOKEN}`
-        },
-        body: JSON.stringify(inquiry)
-      }).then((res) => {
-        if (!res.ok) console.warn('CRM inbound rejected (ignored):', res.status);
-      }).catch((err) => {
-        console.warn('CRM inbound failed (ignored):', err);
-      });
-    } catch (err) {
-      console.warn('CRM inbound skipped:', err);
-    }
-  };
 
   const sendToHubSpot = (payload) => {
     const controller = 'AbortController' in window ? new AbortController() : null;
@@ -374,23 +350,11 @@ if (contactForm && contactSubmit) {
     const utmMedium = params.get('utm_medium');
     const utmCampaign = params.get('utm_campaign');
 
-    sendToCrm({
-      site: 'bizform',
-      company_name: company,
-      department: null,
-      full_name: name,
-      email,
-      message,
-      page_url: window.location.href,
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
-      referrer: document.referrer || null,
-      hp: honeypot
-    });
+    // CRM の受信箱へも送る（失敗しても HubSpot の受付・完了表示には影響しない）
+    if (window.BizcarteInbound) window.BizcarteInbound.sendForm(contactForm);
 
     // Only bots fill the off-screen field. Pretend it worked and keep them out
-    // of HubSpot; the CRM drops its copy on the same signal.
+    // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
     if (honeypot) {
       showComplete();
       return;
