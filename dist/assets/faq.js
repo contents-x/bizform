@@ -23,30 +23,23 @@ document.querySelectorAll('.faq-accordion details').forEach((details, index) => 
     animation = null;
   };
 
-  const expand = () => {
-    details.open = true;
-    summary.setAttribute('aria-expanded', 'true');
-    const startHeight = summary.offsetHeight;
-    const endHeight = details.offsetHeight;
+  const animateHeight = (open, startHeight, endHeight, timing) => {
     details.style.overflow = 'hidden';
-    animation = details.animate(
-      { height: [`${startHeight}px`, `${endHeight}px`] },
-      { duration: 260, easing: 'cubic-bezier(.2,.7,.2,1)' }
-    );
-    animation.onfinish = () => finish(true);
+    animation = details.animate({ height: [`${startHeight}px`, `${endHeight}px`] }, timing);
+    animation.onfinish = () => finish(open);
     animation.oncancel = () => { animation = null; };
   };
 
+  const expand = () => {
+    details.open = true;
+    summary.setAttribute('aria-expanded', 'true');
+    animateHeight(true, summary.offsetHeight, details.offsetHeight,
+      { duration: 260, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  };
+
   const collapse = () => {
-    const startHeight = details.offsetHeight;
-    const endHeight = summary.offsetHeight;
-    details.style.overflow = 'hidden';
-    animation = details.animate(
-      { height: [`${startHeight}px`, `${endHeight}px`] },
-      { duration: 220, easing: 'cubic-bezier(.4,0,.2,1)' }
-    );
-    animation.onfinish = () => finish(false);
-    animation.oncancel = () => { animation = null; };
+    animateHeight(false, details.offsetHeight, summary.offsetHeight,
+      { duration: 220, easing: 'cubic-bezier(.4,0,.2,1)' });
   };
 
   summary.addEventListener('click', (event) => {

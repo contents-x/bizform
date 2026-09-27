@@ -1,4 +1,3 @@
-const base = document.documentElement.dataset.base || '';
 const path = window.location.pathname;
 const active = (segment) => path.includes(segment) ? ' aria-current="page"' : '';
 
@@ -6,24 +5,24 @@ const header = `
   <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="logo" href="${base}/" aria-label="ビズフォーム トップ">
+      <a class="logo" href="/" aria-label="ビズフォーム トップ">
         <span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span>
       </a>
       <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
-        <a href="${base}/service/"${active('/service/')}>サービス内容</a>
-        <a href="${base}/pricing/"${active('/pricing/')}>料金</a>
-        <a href="${base}/examples/"${active('/examples/')}>文面サンプル</a>
-        <a href="${base}/use-cases/"${active('/use-cases/')}>活用シーン</a>
-        <a href="${base}/faq/"${active('/faq/')}>よくある質問</a>
+        <a href="/service/"${active('/service/')}>サービス内容</a>
+        <a href="/pricing/"${active('/pricing/')}>料金</a>
+        <a href="/examples/"${active('/examples/')}>文面サンプル</a>
+        <a href="/use-cases/"${active('/use-cases/')}>活用シーン</a>
+        <a href="/faq/"${active('/faq/')}>よくある質問</a>
         <div class="nav-actions">
-          <a class="button button-secondary" href="${base}/resources/">資料を見る</a>
-          <a class="button button-primary" href="${base}/contact/">無料で相談する</a>
+          <a class="button button-secondary" href="/resources/">資料を見る</a>
+          <a class="button button-primary" href="/contact/">無料で相談する</a>
         </div>
       </nav>
       <button class="menu-button" type="button" aria-label="メニューを開く" aria-controls="global-nav" aria-expanded="false"><span></span></button>
       <div class="header-actions">
-        <a class="button button-secondary" href="${base}/resources/">資料を見る</a>
-        <a class="button button-primary" href="${base}/contact/"><span class="desktop-label">無料で相談する</span><span class="mobile-label">無料相談</span></a>
+        <a class="button button-secondary" href="/resources/">資料を見る</a>
+        <a class="button button-primary" href="/contact/"><span class="desktop-label">無料で相談する</span><span class="mobile-label">無料相談</span></a>
       </div>
     </div>
   </header>`;
@@ -33,12 +32,12 @@ const footer = `
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="${base}/"><span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span></a>
+          <a class="logo" href="/"><span class="logo-mark" aria-hidden="true">B</span><span>ビズフォーム</span></a>
           <p>企業調査・文面作成から営業先企業の問い合わせフォームへの送信まで。新規開拓の実務を担うフォーム営業代行です。</p>
         </div>
-        <div class="footer-column"><strong>検討する</strong><a href="${base}/service/">サービス内容</a><a href="${base}/pricing/">料金・契約条件</a><a href="${base}/examples/">文面・運用サンプル</a><a href="${base}/use-cases/">活用シーン</a></div>
-        <div class="footer-column"><strong>理解する</strong><a href="${base}/faq/">よくある質問</a><a href="${base}/guide/">フォーム営業ガイド</a><a href="${base}/policy/">送信方針</a><a href="${base}/stop/">送信停止・受信窓口</a></div>
-        <div class="footer-column"><strong>会社・相談</strong><a href="${base}/resources/">サービス資料</a><a href="${base}/contact/">導入相談</a><a href="${base}/company/">運営会社</a><a href="${base}/policy/#privacy">プライバシーポリシー</a></div>
+        <div class="footer-column"><strong>検討する</strong><a href="/service/">サービス内容</a><a href="/pricing/">料金・契約条件</a><a href="/examples/">文面・運用サンプル</a><a href="/use-cases/">活用シーン</a></div>
+        <div class="footer-column"><strong>理解する</strong><a href="/faq/">よくある質問</a><a href="/guide/">フォーム営業ガイド</a><a href="/policy/">送信方針</a><a href="/stop/">送信停止・受信窓口</a></div>
+        <div class="footer-column"><strong>会社・相談</strong><a href="/resources/">サービス資料</a><a href="/contact/">導入相談</a><a href="/company/">運営会社</a><a href="/policy/#privacy">プライバシーポリシー</a></div>
       </div>
       <div class="footer-bottom"><span>© 2026 Contents X Inc.</span><span>フォーム営業を、判断できる情報から。</span></div>
     </div>
@@ -47,22 +46,27 @@ const footer = `
 document.querySelector('[data-site-header]')?.insertAdjacentHTML('afterbegin', header);
 document.querySelector('[data-site-footer]')?.insertAdjacentHTML('afterbegin', footer);
 
+// Fall back to window resizes where ResizeObserver is unavailable.
+const onResize = (elements, callback) => {
+  if ('ResizeObserver' in window) {
+    const resizeObserver = new ResizeObserver(() => callback());
+    elements.forEach(el => resizeObserver.observe(el));
+  } else {
+    window.addEventListener('resize', () => callback());
+  }
+};
+
 // The header is fixed, so its wrapper has to reserve the matching height.
-const headerWrap = document.querySelector('[data-site-header]');
 const siteHeader = document.querySelector('.site-header');
 const syncHeaderHeight = () => {
-  if (!headerWrap || !siteHeader) return;
+  if (!siteHeader) return;
   const height = siteHeader.offsetHeight;
   if (height) document.documentElement.style.setProperty('--header-height', `${height}px`);
   keepFocusVisible();
 };
 syncHeaderHeight();
 window.addEventListener('load', syncHeaderHeight);
-if ('ResizeObserver' in window && siteHeader) {
-  new ResizeObserver(syncHeaderHeight).observe(siteHeader);
-} else {
-  window.addEventListener('resize', syncHeaderHeight);
-}
+if (siteHeader) onResize([siteHeader], syncHeaderHeight);
 
 // Floating CTA on every page except the contact form, which already asks for
 // the same action. It appears once the hero CTA has scrolled out of reach.
@@ -98,10 +102,10 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   cta.className = 'floating-cta';
   cta.setAttribute('aria-label', 'お問い合わせ');
   cta.append(
-    ctaLink('floating-cta-secondary', `${base}/resources/`,
+    ctaLink('floating-cta-secondary', '/resources/',
       svgIcon(['M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z', 'M14 3v5h5']),
       [{ text: '資料を見る' }]),
-    ctaLink('floating-cta-primary', `${base}/contact/`,
+    ctaLink('floating-cta-primary', '/contact/',
       svgIcon(['M3 6h18v12H3z', 'm3 7 9 6 9-6']),
       [
         { text: '無料で相談する', className: 'floating-cta-label-long' },
@@ -124,11 +128,7 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
     keepFocusVisible();
   };
   syncCtaHeight();
-  if ('ResizeObserver' in window) {
-    new ResizeObserver(syncCtaHeight).observe(cta);
-  } else {
-    window.addEventListener('resize', syncCtaHeight);
-  }
+  onResize([cta], syncCtaHeight);
 
   const revealAfter = () => Math.max(window.innerHeight * 0.6, 420);
   let ctaVisible = false;
@@ -275,12 +275,7 @@ document.querySelectorAll('.examples-reference-frame > img, .examples-dashboard 
   addScrollHint(region, img.alt);
   img.addEventListener('load', () => scrollRegions.find(item => item.region === region)?.update());
 });
-if ('ResizeObserver' in window) {
-  const resizeObserver = new ResizeObserver(() => scrollRegions.forEach(item => item.update()));
-  scrollRegions.forEach(({ region }) => resizeObserver.observe(region));
-} else {
-  window.addEventListener('resize', () => scrollRegions.forEach(item => item.update()));
-}
+onResize(scrollRegions.map(item => item.region), () => scrollRegions.forEach(item => item.update()));
 
 const observer = 'IntersectionObserver' in window ? new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
