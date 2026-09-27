@@ -5,7 +5,7 @@
 }
 
 .service-page { color: var(--brand-navy); background: var(--white); }
-.service-page img { height: auto; }
+.service-page :where(main) img { height: auto; }
 
 .sv-container { width: min(calc(100% - 64px), 1340px); margin-inline: auto; }
 .sv-section { position: relative; overflow: hidden; padding: 100px 0; }
