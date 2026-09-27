@@ -250,6 +250,9 @@
 .sv-onboarding-list span { display: grid; place-items: center; width: 34px; height: 34px; margin: 0 auto 14px; border-radius: 50%; color: var(--white); background: var(--brand-blue); font-size: .7rem; font-weight: 800; }
 .sv-onboarding-list b { font-size: .88rem; }
 .sv-onboarding-list p { margin: 8px 0 0; color: var(--muted); font-size: 1rem; }
+.sv-onboarding-list.is-four { grid-template-columns: repeat(4,1fr); }
+.sv-role-flow-title { margin: 64px 0 20px; color: var(--brand-navy); font-size: 1.375rem; text-align: center; }
+.sv-role-flow-note { margin: 20px 0 0; color: var(--brand-navy); font-size: 1.0625rem; font-weight: 700; text-align: center; }
 .sv-final { padding: 0 0 100px; }
 .sv-final-card { min-height: 400px; padding: 70px 54% 64px 60px; border: 1px solid var(--line); border-radius: 18px; background-image: linear-gradient(90deg,color-mix(in srgb, var(--white) 99%, transparent),color-mix(in srgb, var(--white) 96%, transparent) 48%,color-mix(in srgb, var(--white) 18%, transparent) 72%), url("/assets/images/asset_service_bg_office_city.webp"); background-position: center; background-size: cover; box-shadow: var(--sv-shadow); }
 .sv-final h2 { font-size: clamp(2rem,3.5vw,3.25rem); }
@@ -282,7 +285,7 @@
   .sv-writing-arrow > span { width: 74px; height: 74px; font-size: 0; }
   .sv-writing-arrow > span::before { content: "↓"; font-size: 1.3rem; }
   .sv-dashboard { grid-template-columns: 1fr; }
-  .sv-onboarding-list { grid-template-columns: repeat(2,1fr); }
+  .sv-onboarding-list, .sv-onboarding-list.is-four { grid-template-columns: repeat(2,1fr); }
   .sv-onboarding-list li::after { display: none; }
   .sv-final-card { padding-right: 42%; }
 }
@@ -349,7 +352,7 @@
   .sv-operation-cards article { flex: 0 0 155px; scroll-snap-align: start; }
   .sv-dashboard-main, .sv-improvements { padding: 18px 14px; }
   .sv-kpis { grid-template-columns: repeat(2,1fr); }
-  .sv-onboarding-list { grid-template-columns: 1fr; }
+  .sv-onboarding-list, .sv-onboarding-list.is-four { grid-template-columns: 1fr; }
   .sv-final { padding-bottom: 70px; }
   .sv-final-card { min-height: 600px; padding: 38px 22px 260px; background-image: linear-gradient(180deg,color-mix(in srgb, var(--white) 99%, transparent),color-mix(in srgb, var(--white) 97%, transparent) 58%,color-mix(in srgb, var(--white) 15%, transparent)), url("/assets/images/asset_service_bg_office_city.webp"); background-position: 65% center; }
 }

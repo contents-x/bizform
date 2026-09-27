@@ -33,7 +33,7 @@ const footer = `
       <div class="footer-grid">
         <div class="footer-brand">
           <a class="logo logo-plate" href="/"><img src="/assets/images/asset_logo_bizform.webp" width="634" height="128" alt="ビズフォーム" loading="lazy"></a>
-          <p>企業調査・文面作成から営業先企業の問い合わせフォームへの送信まで。新規開拓の実務を担うフォーム営業代行です。</p>
+          <p>企業調査・文章作成から問い合わせフォームへの送信・管理まで。初回接点を増やす新規開拓の一括運用サービスです。</p>
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="/service/">サービス内容</a><a href="/pricing/">料金・契約条件</a><a href="/examples/">文面・運用サンプル</a><a href="/use-cases/">活用シーン</a></div>
         <div class="footer-column"><strong>理解する</strong><a href="/faq/">よくある質問</a><a href="/guide/">フォーム営業ガイド</a><a href="/policy/">送信方針</a><a href="/stop/">送信停止・受信窓口</a></div>
