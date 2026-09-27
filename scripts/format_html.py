@@ -67,6 +67,15 @@ class Tree(HTMLParser):
         self.handle_data(f'<!{decl}>')
 
 
+def line_separated(node):
+    """A block whose inline-only children already start and end on their own lines."""
+    first, last = (node.children or [None])[0], (node.children or [None])[-1]
+    return (node.tag in STRUCTURAL
+            and isinstance(first, str) and '\n' in first
+            and isinstance(last, str) and '\n' in last
+            and all(c.strip() == '' for c in node.children if isinstance(c, str)))
+
+
 def render(node, depth=0):
     indent = '  ' * depth
     if isinstance(node, str):
@@ -81,9 +90,24 @@ def render(node, depth=0):
     # siblings remain one group, so formatting never inserts spaces between them.
     has_text = any(isinstance(c, str) and c.strip() and not c.lstrip().startswith('<!')
                    for c in node.children)
-    if node.tag in PRESERVE or has_text or not any(map(structural, node.children)):
-        return indent + raw(node)
     child_depth = depth + 1 if node.tag else depth
+    if node.tag in PRESERVE or has_text:
+        return indent + raw(node)
+    if not any(map(structural, node.children)):
+        if not line_separated(node):
+            return indent + raw(node)
+        # The line breaks already separate these inline siblings, so only the
+        # amount of whitespace changes when each group gets its own line.
+        groups = [[]]
+        for child in node.children:
+            if isinstance(child, str) and '\n' in child:
+                groups.append([])
+            else:
+                groups[-1].append(child)
+        lines = [render(g[0], child_depth) if len(g) == 1 and isinstance(g[0], Element)
+                 else '  ' * child_depth + ''.join(raw(c) for c in g).strip()
+                 for g in groups if g]
+        return f'{indent}{node.opening}\n' + '\n'.join(lines) + f'\n{indent}{node.closing}'
     lines = []
     inline = []
 
