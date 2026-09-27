@@ -118,8 +118,9 @@ img { max-width: 100%; }
 [data-site-header] { height: var(--header-height, 79px); }
 .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97); backdrop-filter: blur(14px); }
 .header-inner { min-height: 78px; display: flex; align-items: center; gap: 28px; }
-.logo { display: inline-flex; align-items: center; gap: 10px; color: var(--brand-navy); font-size: 1.25rem; font-weight: 900; letter-spacing: -.04em; white-space: nowrap; }
-.logo-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50% 50% 50% 14%; color: var(--white); background: var(--brand-blue); font-size: 1rem; font-weight: 900; }
+/* Official logo (dist/assets/images/asset_logo_bizform.webp). Size it by height only. */
+.logo { display: inline-flex; flex: none; align-items: center; }
+.logo img { display: block; width: auto; height: 32px; }
 .global-nav { display: flex; align-items: center; gap: 25px; margin-left: auto; }
 .global-nav a { position: relative; padding: 8px 0; font-size: .9rem; font-weight: 700; }
 .global-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 1px; height: 2px; background: var(--brand-blue); transition: right .2s ease; }
@@ -261,7 +262,9 @@ details[open] summary::after { content: "−"; }
 /* One footer for every page; no per-page background overrides. */
 .site-footer { padding: 64px 0 26px; color: var(--on-dark-muted); background: var(--brand-navy-darkest); }
 .footer-grid { display: grid; grid-template-columns: 1.25fr repeat(3,1fr); gap: 50px; }
-.footer-brand .logo { color: var(--white); }
+/* The logo's blue disappears on the dark footer, so it sits on a white plate. */
+.logo-plate { padding: 10px 14px; border-radius: 10px; background: var(--white); }
+.logo-plate img { height: 28px; }
 .footer-brand p { max-width: 330px; margin-top: 18px; }
 .footer-column strong { display: block; margin-bottom: 14px; color: var(--white); }
 .footer-column a { display: block; padding: 5px 0; font-size: .9rem; }
@@ -1144,8 +1147,7 @@ details[open] summary::after { content: "−"; }
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 40px); }
   .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 10px; }
-  .header-inner .logo { gap: 7px; font-size: 1.125rem; }
-  .header-inner .logo-mark { width: 30px; height: 30px; }
+  .header-inner .logo img { height: 28px; }
   .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: .875rem; box-shadow: none; }
   .desktop-label { display: none; }
   .mobile-label { display: inline; }
@@ -1354,7 +1356,7 @@ details[open] summary::after { content: "−"; }
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 32px); }
   .header-inner { gap: 8px; }
-  .header-inner .logo { font-size: 1rem; }
+  .header-inner .logo img { height: 24px; }
   .header-actions .button-primary { padding-inline: 12px; }
 
   .uc-industry-grid article { grid-template-columns: minmax(0,1fr); }
