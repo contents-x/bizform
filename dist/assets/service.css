@@ -80,6 +80,14 @@
 .sv-flow-cta { margin: 48px 0 0; text-align: center; }
 .sv-flow-note { position: absolute; bottom: 66px; left: 5%; font-size: 1.55rem; }
 
+/* Outbound vs reply-led appointments. The table reuses .comparison from style.css. */
+.sv-appointment { background: var(--white); }
+.sv-appointment .sv-heading { margin-bottom: 0; }
+.sv-appointment .comparison, .sv-appointment-note { max-width: 1080px; margin-inline: auto; }
+.sv-appointment .comparison td { color: var(--text-body); font-size: 1rem; }
+.sv-appointment .comparison tbody th { color: var(--brand-navy); background: var(--white); font-size: 1rem; }
+.sv-appointment-note { margin-top: 16px; color: var(--muted); font-size: 1rem; }
+
 /* Roles */
 .sv-role { background: linear-gradient(135deg,var(--pale-blue-2),var(--pale-blue)); }
 .sv-role .sv-heading { margin-bottom: 44px; }

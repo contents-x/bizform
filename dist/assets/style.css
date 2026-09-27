@@ -517,7 +517,7 @@ details[open] summary::after { content: "−"; }
 .pricing-section { padding: 104px 0; }
 
 .pricing-heading-center { max-width: 760px; margin: 0 auto 52px; text-align: center; }
-.pricing-heading-center h2, .pricing-heading-left h2, .pricing-express-copy h2, .pricing-final-card h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.2rem,3.5vw,3.2rem); line-height: 1.4; letter-spacing: -.045em; }
+.pricing-heading-center h2, .pricing-heading-left h2, .pricing-final-card h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.2rem,3.5vw,3.2rem); line-height: 1.4; letter-spacing: -.045em; }
 .pricing-heading-center > p:last-child, .pricing-heading-left > p:last-child { margin: 18px 0 0; color: var(--text-body); line-height: 1.9; }
 .pricing-numbered-heading { position: relative; }
 .pricing-heading-number { position: absolute; top: 0; left: -84px; display: flex; align-items: center; gap: 18px; color: #3c6ebe; font-family: var(--font-latin); font-size: 2rem; font-weight: 700; letter-spacing: -.03em; }
@@ -657,18 +657,14 @@ details[open] summary::after { content: "−"; }
 .pricing-method-note p { max-width: 670px; margin: 0; color: var(--muted); font-size: 1rem; }
 .pricing-method-note .button { flex: none; border-radius: 999px; }
 
-.pricing-express { background: var(--white); }
-.pricing-express-heading { max-width: 760px; margin-bottom: 42px; }
-.pricing-express-card { display: grid; grid-template-columns: 28% 1fr 34%; align-items: center; gap: 30px; min-height: 330px; padding: 36px 42px 30px 18px; overflow: hidden; border: 1px solid #f0cf96; border-radius: 22px; background: linear-gradient(120deg,#fff9ef,var(--white) 60%); box-shadow: 0 18px 40px rgba(98,64,12,.08); }
-.pricing-express-image { align-self: stretch; }
-.pricing-express-image img { width: 100%; height: 100%; object-fit: contain; }
-.pricing-express-copy > span { color: var(--brand-orange-text); font-size: .7rem; font-weight: 900; letter-spacing: .18em; }
-.pricing-express-copy h3 { margin: 5px 0 0; color: var(--brand-navy-deep); font-size: 2rem; }
-.pricing-express-copy p { margin: 14px 0 0; color: var(--text-body); line-height: 1.85; }
-.pricing-express-side { padding-left: 30px; border-left: 1px solid #efd8ad; }
-.pricing-express-side > strong { color: var(--brand-navy-deep); }
-.pricing-express-side ul { display: grid; gap: 7px; margin: 13px 0 23px; padding-left: 20px; color: var(--text-body); font-size: 1rem; }
-.pricing-express-side .button { width: 100%; border-radius: 999px; }
+/* Price comparison. Tables reuse .comparison; the service's own rows are marked. */
+.pricing-price-compare { background: var(--white); }
+.pricing-compare-title { margin: 44px 0 0; color: var(--brand-navy-deep); font-size: 1.25rem; }
+.pricing-price-compare .comparison { margin-top: 16px; }
+.pricing-price-compare .comparison td { color: var(--text-body); font-size: 1rem; }
+.pricing-price-compare .comparison tr.is-bizform td { color: var(--brand-navy-deep); background: var(--pale-blue-2); font-weight: 800; }
+.pricing-compare-summary { margin: 24px 0 0; color: var(--brand-navy-deep); font-size: 1.125rem; font-weight: 700; }
+.pricing-compare-notes { display: grid; gap: 6px; margin: 18px 0 0; padding-left: 1.2em; color: var(--muted); font-size: 1rem; }
 
 .pricing-faq { background: var(--pale-blue); }
 .pricing-faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -699,8 +695,6 @@ details[open] summary::after { content: "−"; }
   .pricing-included .pricing-container-1120 { padding-inline: 34px; }
   .pricing-plan-grid { gap: 12px; }
   .pricing-plan-card { padding-inline: 22px; }
-  .pricing-express-card { grid-template-columns: 26% 1fr; }
-  .pricing-express-side { grid-column: 1 / -1; padding: 24px 0 0; border-left: 0; border-top: 1px solid #efd8ad; }
 }
 
 @media (max-width: 768px) {
@@ -730,14 +724,12 @@ details[open] summary::after { content: "−"; }
   .pricing-method-note { align-items: stretch; flex-direction: column; }
   .pricing-method-note .button { width: 100%; }
 
-  .pricing-express-side { grid-column: auto; }
-
   .pricing-final-card > div { flex-direction: column; }
   .pricing-final-card .button { width: 100%; }
 }
 
 @media (max-width: 480px) {
-  .pricing-heading-center h2, .pricing-heading-left h2, .pricing-express-copy h2, .pricing-final-card h2 { font-size: 2rem; }
+  .pricing-heading-center h2, .pricing-heading-left h2, .pricing-final-card h2 { font-size: 2rem; }
   .pricing-fit-image { height: 210px; }
   .pricing-faq-grid details > div { padding-left: 24px; }
 }
@@ -1157,7 +1149,7 @@ details[open] summary::after { content: "−"; }
   .section-title, .home-page .section-title,
   .home-heading-row h2, .home-role h2, .home-scale h2,
   .pricing-heading-center h2, .pricing-heading-left h2, .pricing-included-title h2,
-  .pricing-express-copy h2, .pricing-final-card h2,
+  .pricing-final-card h2,
   .examples-heading h2, .examples-sample .examples-heading h2, .examples-final-card h2,
   .uc-heading h2, .uc-final-copy h2, .home-cta h2, .cta-panel h2 { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
   .section-title br, .home-heading-row h2 br, .home-scale h2 br,
@@ -1223,7 +1215,7 @@ details[open] summary::after { content: "−"; }
   .pricing-hero-plan { padding: 24px 20px 16px; }
   .pricing-hero-plan h2 { font-size: 1.375rem; }
   .pricing-plan-copy, .pricing-fit-copy, .pricing-fit-grid ul,
-  .pricing-included-grid p, .pricing-express-side ul { font-size: 1rem; }
+  .pricing-included-grid p { font-size: 1rem; }
   .pricing-hero-price { margin-top: 12px; padding-top: 12px; }
   .pricing-hero-plan dl { flex-wrap: wrap; font-size: 1rem; }
   .pricing-card-link { min-height: 48px; font-size: .875rem; }
@@ -1235,8 +1227,6 @@ details[open] summary::after { content: "−"; }
   .pricing-plan-card { min-height: 0; padding: 30px 22px 24px; }
   .pricing-plan-card dl div { flex-wrap: wrap; font-size: 1rem; }
   .pricing-fit-image { height: 180px; }
-  .pricing-express-card { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; }
-  .pricing-express-image { height: 170px; }
   .pricing-final-card { padding: 36px 22px; }
   .pricing-table-wrap, .table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
   .pricing-method-table { min-width: 700px; border-collapse: separate; border-spacing: 0; }
