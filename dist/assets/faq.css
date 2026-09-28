@@ -86,13 +86,13 @@
 .faq-jump-links a {
   display: inline-flex;
   align-items: center;
-  min-height: 42px;
+  min-height: 44px;
   padding: 9px 15px;
   border: 1px solid #bfd5f2;
   border-radius: 999px;
   color: #173f78;
   background: rgba(255,255,255,.9);
-  font-size: .79rem;
+  font-size: .875rem;
   font-weight: 800;
   box-shadow: 0 6px 18px rgba(39,94,164,.05);
   transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
@@ -475,7 +475,7 @@
   .faq-hero-lead { font-size: 1rem; line-height: 1.9; }
   .faq-hero-note { font-size: 1rem; line-height: 1.7; }
   .faq-jump-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .faq-jump-links a { justify-content: space-between; padding-inline: 13px; font-size: .75rem; }
+  .faq-jump-links a { justify-content: space-between; padding-inline: 13px; font-size: .875rem; }
   .faq-categories { padding: 74px 0 78px; }
 
   .faq-section-heading h2 { font-size: 2.25rem; }

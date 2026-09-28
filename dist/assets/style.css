@@ -197,7 +197,7 @@ details[open] summary::after { content: "−"; }
 .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .page-hero { padding: 94px 0 72px; color: var(--white); background: var(--ink); }
-.breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; color: #acb6c6; font-size: .8rem; }
+.breadcrumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; color: #acb6c6; font-size: .875rem; }
 .breadcrumbs a:hover { color: var(--white); }
 .page-hero h1 { max-width: 1040px; margin: 0; font-family: var(--font-serif); font-size: clamp(2.6rem,4vw,3.6rem); line-height: 1.2; letter-spacing: -.045em; }
 .page-hero p { max-width: 720px; margin: 24px 0 0; color: var(--on-dark); font-size: 1.08rem; }
@@ -551,7 +551,7 @@ details[open] summary::after { content: "−"; }
 .pricing-hero { position: relative; min-height: 820px; overflow: hidden; background: #eef3fb url('/assets/images/asset_pricing_hero_bg.webp') center / cover no-repeat; }
 .pricing-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.89) 42%,rgba(255,255,255,.2) 76%,rgba(255,255,255,.05) 100%); }
 .pricing-hero-inner { position: relative; z-index: 1; padding: 30px 0 60px; }
-.pricing-breadcrumbs { display: flex; gap: 9px; color: var(--muted); font-size: .8rem; }
+.pricing-breadcrumbs { display: flex; gap: 9px; color: var(--muted); font-size: .875rem; }
 .pricing-breadcrumbs a:hover { color: var(--brand-blue); }
 .pricing-hero-copy { max-width: 660px; margin-top: 48px; }
 .pricing-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(3.25rem,5.2vw,4.85rem); line-height: 1.25; letter-spacing: -.055em; }
@@ -559,12 +559,12 @@ details[open] summary::after { content: "−"; }
 .pricing-hero-plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; width: min(100%,1080px); margin: 70px auto 0; align-items: stretch; }
 .pricing-hero-plan { position: relative; padding: 28px 28px 25px; overflow: hidden; border: 1px solid rgba(215,230,238,.95); border-radius: 18px; background: rgba(255,255,255,.96); box-shadow: 0 18px 45px rgba(7,45,70,.1); }
 .pricing-hero-plan.is-recommended { border: 2px solid var(--brand-orange); transform: translateY(-10px); }
-.pricing-recommend { position: absolute; top: 0; right: 0; padding: 7px 18px; border-radius: 0 16px 0 14px; color: var(--brand-navy-deep); background: var(--brand-orange); font-size: .72rem; font-weight: 900; }
+.pricing-recommend { position: absolute; top: 0; right: 0; padding: 7px 18px; border-radius: 0 16px 0 14px; color: var(--brand-navy-deep); background: var(--brand-orange); font-size: .8125rem; font-weight: 900; }
 
 .pricing-hero-plan h2 { margin: 8px 0 5px; color: var(--brand-navy-deep); font-size: 1.45rem; }
 .pricing-plan-copy { min-height: 52px; margin: 0; color: var(--text-body); font-size: 1rem; line-height: 1.7; }
 .pricing-hero-price { display: grid; gap: 2px; margin-top: 19px; padding-top: 17px; border-top: 1px solid var(--line); }
-.pricing-hero-price span { color: var(--muted); font-size: .73rem; }
+.pricing-hero-price span { color: var(--muted); font-size: .875rem; }
 .pricing-hero-price strong { color: var(--brand-navy-deep); font-size: 1.27rem; }
 .pricing-hero-plan dl { display: flex; justify-content: space-between; gap: 12px; margin: 16px 0; font-size: 1rem; }
 .pricing-hero-plan dt { color: var(--muted); }
@@ -573,6 +573,8 @@ details[open] summary::after { content: "−"; }
 .pricing-card-link span { transition: transform .2s ease; }
 .pricing-card-link:hover span { transform: translateX(4px); }
 .pricing-confirm-note { width: min(100%,1080px); margin: 14px auto 0; color: var(--text-body); font-size: 1rem; }
+/* The hero note sits over the photo, so give it a plate to stay readable. */
+.pricing-hero .pricing-confirm-note { padding: 12px 16px; border-radius: 10px; background: color-mix(in srgb, var(--white) 92%, transparent); }
 
 .pricing-included { position: relative; overflow: hidden; background: linear-gradient(145deg,#f3f6fb 0%,#fcfdfe 48%,#ecf1fa 100%); }
 .pricing-included::before, .pricing-included::after { content: ""; position: absolute; width: 92px; height: 92px; opacity: .6; background-image: radial-gradient(circle,#abc3ea 2px,transparent 2.5px); background-size: 18px 18px; }
@@ -663,9 +665,9 @@ details[open] summary::after { content: "−"; }
 .pricing-method-table th, .pricing-method-table td { padding: 17px 16px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: center; }
 .pricing-method-table tr:last-child > * { border-bottom: 0; }
 .pricing-method-table tr > *:last-child { border-right: 0; }
-.pricing-method-table thead th { color: var(--brand-navy-deep); background: #eef3fa; font-size: .83rem; }
+.pricing-method-table thead th { color: var(--brand-navy-deep); background: #eef3fa; font-size: .9375rem; }
 .pricing-method-table thead th:not(:first-child) { height: 104px; vertical-align: middle; }
-.pricing-method-table thead th small { display: block; margin-top: 5px; color: var(--muted); font-size: .68rem; font-weight: 600; }
+.pricing-method-table thead th small { display: block; margin-top: 5px; color: var(--muted); font-size: .8125rem; font-weight: 600; }
 .pricing-method-table thead th:first-child, .pricing-method-table tbody th { text-align: left; }
 .pricing-method-table tbody th { color: var(--text-body); font-size: 1rem; }
 .pricing-method-table td { color: #6e7787; font-weight: 800; }
@@ -793,7 +795,7 @@ details[open] summary::after { content: "−"; }
 .examples-hero::before { content: ""; position: absolute; width: 900px; height: 540px; right: -250px; top: -190px; border-radius: 48%; background: rgba(197,227,250,.5); transform: rotate(-16deg); }
 .examples-hero::after { content: ""; position: absolute; width: 680px; height: 280px; left: -260px; bottom: -170px; border-radius: 50%; background: rgba(224,241,253,.8); transform: rotate(-8deg); }
 .examples-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 24px; min-height: 720px; padding: 34px 0 60px; }
-.examples-breadcrumbs { display: flex; gap: 8px; margin-bottom: 50px; color: var(--muted); font-size: .78rem; }
+.examples-breadcrumbs { display: flex; gap: 8px; margin-bottom: 50px; color: var(--muted); font-size: .875rem; }
 .examples-breadcrumbs a:hover { color: var(--brand-blue); }
 .examples-kicker { display: flex; align-items: center; gap: 11px; margin: 0 0 18px; color: var(--brand-blue); font-size: 1rem; font-weight: 900; letter-spacing: .04em; }
 .examples-kicker::before { content: ""; width: 33px; height: 2px; background: currentColor; }
@@ -1194,8 +1196,8 @@ details[open] summary::after { content: "−"; }
   .section-lead { margin-top: 16px; }
 
   .examples-heading, .uc-heading, .pricing-heading-center, .pricing-heading-left { margin-bottom: 28px; }
-  .breadcrumbs, .pricing-breadcrumbs, .examples-breadcrumbs { flex-wrap: wrap; gap: 6px; margin-bottom: 24px; line-height: 1.6; }
-  .breadcrumbs a, .pricing-breadcrumbs a, .examples-breadcrumbs a { display: inline-flex; align-items: center; min-height: 32px; }
+  .breadcrumbs, .pricing-breadcrumbs, .examples-breadcrumbs { flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 24px; line-height: 1.6; }
+  .breadcrumbs a, .pricing-breadcrumbs a, .examples-breadcrumbs a { display: inline-flex; align-items: center; min-height: 44px; }
   .button, .examples-button, .uc-button { min-height: 52px; min-width: 0; font-size: 1rem; }
   .home-page .home-button-outline, .home-page .home-button-primary, .home-page .home-button-light, .home-page .home-button-accent { min-width: 0; }
   .hero-actions, .home-hero-actions, .examples-hero-actions { gap: 10px; margin-top: 24px; }

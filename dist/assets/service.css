@@ -139,16 +139,16 @@
 .sv-ui-top { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; height: 70px; padding: 0 18px; border-bottom: 1px solid var(--line); }
 .sv-ui-brand { display: flex; align-items: center; gap: 7px; font-size: 1rem; font-weight: 900; }
 .sv-ui-brand .sv-brand-mark { width: 25px; height: 24px; transform: scale(.68); transform-origin: left center; }
-.sv-ui-top nav { flex: 1; color: var(--muted); font-size: .64rem; text-align: center; }
+.sv-ui-top nav { flex: 1; color: var(--muted); font-size: .75rem; text-align: center; }
 .sv-ui-top nav b { color: var(--brand-blue); }
-.sv-ui-top button { min-height: 32px; padding: 7px 10px; border: 1px solid var(--brand-blue); border-radius: 7px; color: var(--brand-blue); background: var(--white); font-size: .6rem; font-weight: 800; }
+.sv-ui-top button { min-height: 32px; padding: 7px 10px; border: 1px solid var(--brand-blue); border-radius: 7px; color: var(--brand-blue); background: var(--white); font-size: .75rem; font-weight: 800; }
 .sv-filters { padding: 20px 14px; border-right: 1px solid var(--line); background: var(--pale-blue-2); }
-.sv-filters > div { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: .65rem; }
+.sv-filters > div { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: .8125rem; }
 .sv-filters > div a { color: var(--brand-blue); }
 .sv-filters label { display: grid; gap: 5px; margin-bottom: 12px; color: var(--text-body); font-size: .875rem; font-weight: 800; }
 .sv-filters label > span { padding: 7px 8px; border: 1px solid var(--line); border-radius: 6px; color: var(--text-body); background: var(--white); font-size: .875rem; font-weight: 500; }
-.sv-filters label > i { justify-self: start; padding: 3px 6px; border-radius: 5px; color: var(--brand-blue); background: var(--pale-blue); font-size: .56rem; font-style: normal; font-weight: 500; }
-.sv-filters > button { width: 100%; min-height: 38px; border: 0; border-radius: 7px; color: var(--white); background: var(--brand-blue); font-size: .62rem; font-weight: 800; }
+.sv-filters label > i { justify-self: start; padding: 3px 6px; border-radius: 5px; color: var(--brand-blue); background: var(--pale-blue); font-size: .75rem; font-style: normal; font-weight: 500; }
+.sv-filters > button { width: 100%; min-height: 38px; border: 0; border-radius: 7px; color: var(--white); background: var(--brand-blue); font-size: .8125rem; font-weight: 800; }
 .sv-checkbox { display: block !important; }
 .sv-checkbox b { display: block; margin-bottom: 7px; }
 .sv-checkbox em { display: inline-grid; place-items: center; width: 16px; height: 16px; margin-right: 4px; border-radius: 4px; color: var(--white); background: var(--brand-blue); font-style: normal; }
@@ -162,7 +162,7 @@
 .sv-results th, .sv-results td { padding: 10px 7px; border-bottom: 1px solid var(--line); font-size: .875rem; text-align: left; white-space: nowrap; }
 .sv-results th { color: var(--muted); background: var(--pale-blue); }
 .sv-results td:first-child { color: var(--brand-blue); font-weight: 700; }
-.sv-pagination { margin-top: 18px; color: var(--muted); font-size: .6rem; text-align: center; }
+.sv-pagination { margin-top: 18px; color: var(--muted); font-size: .75rem; text-align: center; }
 .sv-pagination b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; color: var(--white); background: var(--brand-blue); }
 
 /* Writing */
@@ -174,7 +174,7 @@
 .sv-research-card, .sv-message-card { border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--white) 94%, transparent); box-shadow: var(--sv-shadow); }
 .sv-card-headline { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 24px; }
 .sv-card-headline h3 { margin: 0; font-size: 1rem; }
-.sv-card-headline > span { color: var(--text-body); font-size: .68rem; }
+.sv-card-headline > span { color: var(--text-body); font-size: .8125rem; }
 .sv-research-card dl { padding: 0 24px 18px; margin: 0; }
 .sv-research-card dl > div { padding: 14px 12px; border-top: 1px solid var(--line); }
 .sv-research-card dt { display: flex; align-items: center; gap: 14px; font-size: .86rem; font-weight: 800; }
@@ -222,14 +222,14 @@
 .sv-kpis > div { min-height: 104px; padding: 14px; border-radius: 8px; background: var(--pale-blue); }
 .sv-kpis small { display: block; color: var(--muted); font-size: .875rem; font-weight: 800; }
 .sv-kpis strong { display: block; margin: 8px 0; font-size: 1.35rem; }
-.sv-kpis strong em { margin-left: 3px; font-size: .62rem; font-style: normal; }
+.sv-kpis strong em { margin-left: 3px; font-size: .75rem; font-style: normal; }
 .sv-kpis span { color: var(--green); font-size: .875rem; font-weight: 800; }
-.sv-dashboard-main h4 { margin: 20px 0 8px; font-size: .76rem; }
+.sv-dashboard-main h4 { margin: 20px 0 8px; font-size: .875rem; }
 .sv-dashboard-main table { width: 100%; min-width: 680px; border-collapse: collapse; }
 .sv-dashboard-main th, .sv-dashboard-main td { padding: 9px 8px; border-bottom: 1px solid var(--line); font-size: .875rem; text-align: left; white-space: nowrap; }
 .sv-dashboard-main th { color: var(--muted); background: var(--pale-blue); }
 .sv-dashboard-main td:last-child { color: var(--green); }
-.sv-dashboard-main > a { display: block; margin-top: 12px; color: var(--brand-blue); font-size: .875rem; font-weight: 800; text-align: right; }
+.sv-dashboard-main > a { display: block; min-height: 44px; margin-top: 12px; padding-block: 10px; color: var(--brand-blue); font-size: .875rem; font-weight: 800; text-align: right; }
 .sv-improvements h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 1rem; }
 .sv-improvements h3 span { font-size: 1.5rem; }
 .sv-improvements > p { margin: 12px 0 15px; color: var(--muted); font-size: 1rem; line-height: 1.7; }
