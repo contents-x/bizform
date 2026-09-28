@@ -371,7 +371,7 @@ details[open] summary::after { content: "−"; }
 .home-service { padding: 88px 0 88px; background: var(--white); }
 .home-service > .container { width: min(calc(100% - 64px),1280px); }
 .home-heading-row { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(310px,1fr); gap: 48px; align-items: end; }
-.home-heading-row h2, .home-role h2, .home-scale h2, .home-problem h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.25rem,3.6vw,3.35rem); line-height: 1.35; letter-spacing: -.045em; }
+.home-heading-row h2, .home-role h2, .home-scale h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.25rem,3.6vw,3.35rem); line-height: 1.35; letter-spacing: -.045em; }
 .home-heading-row > p { margin: 0 0 4px; color: var(--text-body); font-size: 1.125rem; line-height: 1.9; }
 .home-service-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 36px; margin-top: 64px; }
 .home-step { min-width: 0; padding-top: 14px; border-top: 1px solid var(--line); }
@@ -470,7 +470,7 @@ details[open] summary::after { content: "−"; }
 .home-preview-message i { display: block; width: 90%; height: 5px; margin-top: 8px; border-radius: 3px; background: var(--line); }
 .home-preview-message i:last-child { width: 65%; }
 
-/* Campaign band between the hero and the problem section. Red with white text so it stands apart from the orange CTAs. */
+/* Campaign band between the hero and the features section. Red with white text so it stands apart from the orange CTAs. */
 .home-campaign { padding: 28px 0; background: var(--white); }
 .home-campaign-link { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 20px; padding: 22px 32px; border-radius: 16px; color: var(--white); background: var(--campaign-red); box-shadow: 0 14px 30px rgba(217,45,32,.26); text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
 .home-campaign-link:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(217,45,32,.34); }
@@ -479,28 +479,9 @@ details[open] summary::after { content: "−"; }
 .home-campaign-link strong span { display: inline-block; white-space: nowrap; }
 .home-campaign-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
 
-/* Section labels in Japanese, and the sales-problem section from the sales deck. */
+/* Section labels in Japanese. */
 .home-section-sub { margin: 0 0 14px; color: var(--brand-blue); font-size: 1rem; font-weight: 800; letter-spacing: .06em; }
 .home-scale .home-section-sub { color: var(--on-dark); }
-.home-problem { padding: 96px 0; background: var(--white); }
-.home-problem-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,.75fr); gap: 48px; align-items: center; }
-.home-problem-copy > p { margin: 22px 0 0; color: var(--text-body); font-size: 1.125rem; line-height: 1.9; }
-.home-problem-list { display: grid; gap: 12px; margin: 26px 0 0; padding: 0; list-style: none; }
-.home-problem-list li { position: relative; padding: 14px 18px 14px 50px; border: 1px solid var(--line); border-radius: 12px; color: var(--text-body); background: var(--pale-blue-2); font-size: 1.0625rem; }
-.home-problem-list li::before { content: "✓"; position: absolute; top: 16px; left: 16px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: var(--white); background: var(--brand-blue); font-size: .75rem; font-weight: 900; }
-.home-problem-list b { color: var(--brand-navy-deep); }
-.home-problem-grid > img { width: 100%; height: auto; max-height: 420px; object-fit: contain; }
-.home-problem-subtitle { margin: 72px 0 0; color: var(--brand-navy-deep); font-size: 1.5rem; line-height: 1.5; text-align: center; }
-.home-problem-work { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: 24px; margin-top: 28px; }
-.home-problem-work article { padding: 28px; border: 1px solid var(--line); border-radius: 18px; background: var(--white); box-shadow: var(--shadow); }
-.home-problem-work h4 { margin: 0 0 12px; padding: 8px 14px; border-radius: 8px; color: var(--white); background: var(--brand-navy-deep); font-size: 1.125rem; text-align: center; }
-.home-problem-work .is-daily h4 { color: var(--brand-navy-deep); background: var(--brand-orange); }
-.home-problem-work ol { margin: 0; padding: 0; list-style: none; counter-reset: work; }
-.home-problem-work li { display: grid; grid-template-columns: 2em minmax(0,8em) minmax(0,1fr); gap: 4px 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px dashed var(--line); color: var(--text-body); font-size: 1rem; counter-increment: work; }
-.home-problem-work li::before { content: counter(work) "."; color: var(--brand-blue); font-weight: 900; }
-.home-problem-work li:last-child { border-bottom: 0; }
-.home-problem-work li b { color: var(--brand-navy-deep); }
-.home-problem-conclusion { margin: 28px 0 0; padding: 18px 24px; border-radius: 12px; color: var(--white); background: var(--brand-navy-deep); font-size: 1.125rem; font-weight: 700; text-align: center; }
 .error-code { margin: 0 0 16px; color: var(--on-dark); font-size: 1.125rem; font-weight: 800; }
 
 @media (max-width: 900px) {
@@ -541,7 +522,7 @@ details[open] summary::after { content: "−"; }
 
   .home-service, .home-role { padding: 80px 0; }
   .home-heading-row { grid-template-columns: 1fr; gap: 24px; }
-  .home-heading-row h2, .home-role h2, .home-scale h2, .home-problem h2 { font-size: clamp(2rem,9vw,2.75rem); }
+  .home-heading-row h2, .home-role h2, .home-scale h2 { font-size: clamp(2rem,9vw,2.75rem); }
   .home-service-grid, .home-role-grid, .home-scale-cards, .home-judge-grid { grid-template-columns: 1fr; }
 
   .home-step-number, .home-step h3, .home-step p { grid-column: 2; }
@@ -1216,15 +1197,15 @@ details[open] summary::after { content: "−"; }
   .header-actions .button-tel { width: 44px; min-height: 44px; padding: 0; border-radius: 999px; }
   .header-actions .button-tel-text { display: none; }
   .menu-button { width: 44px; height: 44px; border-radius: 10px; }
-  .section, .home-service, .home-role, .home-scale, .home-problem, .pricing-section, .examples-section, .uc-section { padding: 56px 0; }
+  .section, .home-service, .home-role, .home-scale, .pricing-section, .examples-section, .uc-section { padding: 56px 0; }
   .section-sm { padding: 40px 0; }
   .section-title, .home-page .section-title,
-  .home-heading-row h2, .home-role h2, .home-scale h2, .home-problem h2,
+  .home-heading-row h2, .home-role h2, .home-scale h2,
   .pricing-heading-center h2, .pricing-heading-left h2, .pricing-included-title h2,
   .pricing-final-card h2,
   .examples-heading h2, .examples-sample .examples-heading h2, .examples-final-card h2,
   .uc-heading h2, .uc-final-copy h2, .home-cta h2, .cta-panel h2 { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
-  .section-title br, .home-heading-row h2 br, .home-scale h2 br, .home-problem h2 br,
+  .section-title br, .home-heading-row h2 br, .home-scale h2 br,
   .pricing-heading-center h2 br, .pricing-heading-left h2 br, .pricing-final-card h2 br,
   .examples-heading h2 br, .examples-final-card h2 br, .uc-heading h2 br,
   .uc-final-copy h2 br, .home-cta h2 br, .cta-panel h2 br { display: none; }
@@ -1263,16 +1244,6 @@ details[open] summary::after { content: "−"; }
   .home-step h3 { margin: 0; font-size: 1.125rem; }
   .home-step p { grid-column: 1 / -1; margin-top: 10px; font-size: 1rem; }
   .home-step ul { grid-column: 1 / -1; margin-top: 12px; }
-  .home-problem-grid { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .home-problem-grid > img { justify-self: center; max-width: 260px; }
-  .home-problem-copy > p, .home-problem-list li { font-size: 1rem; }
-  .home-problem-subtitle { margin-top: 48px; font-size: 1.25rem; }
-  .home-problem-work { grid-template-columns: minmax(0,1fr); gap: 16px; }
-  .home-problem-work article { padding: 20px; }
-  .home-problem-work li { display: block; }
-  .home-problem-work li::before { margin-right: 8px; }
-  .home-problem-work li b { margin-right: 10px; }
-  .home-problem-conclusion { font-size: 1rem; text-align: left; }
   .home-role-card { min-height: 0; grid-template-columns: 1fr; }
   .home-role-content { padding: 24px 22px 0; }
   .home-role-card h3 { margin: 8px 0 18px; font-size: 1.25rem; }
