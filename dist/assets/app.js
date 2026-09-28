@@ -1,6 +1,10 @@
 const path = window.location.pathname;
 const active = (segment) => path.includes(segment) ? ' aria-current="page"' : '';
 
+// Phone consultation uses the same number as BizManga.
+const TEL = '03-6261-0764';
+const telIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>';
+
 const header = `
   <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
@@ -17,12 +21,14 @@ const header = `
         <div class="nav-actions">
           <a class="button button-secondary" href="/resources/">資料を見る</a>
           <a class="button button-primary" href="/contact/">無料で相談する</a>
+          <a class="button button-tel" href="tel:${TEL}">${telIcon}電話で相談（${TEL}）</a>
         </div>
       </nav>
       <button class="menu-button" type="button" aria-label="メニューを開く" aria-controls="global-nav" aria-expanded="false"><span></span></button>
       <div class="header-actions">
         <a class="button button-secondary" href="/resources/">資料を見る</a>
         <a class="button button-primary" href="/contact/"><span class="desktop-label">無料で相談する</span><span class="mobile-label">無料相談</span></a>
+        <a class="button button-tel" href="tel:${TEL}" aria-label="電話で相談 ${TEL}" title="電話で相談 ${TEL}">${telIcon}<span class="button-tel-text"><small>電話で相談</small><span>${TEL}</span></span></a>
       </div>
     </div>
   </header>`;
@@ -110,14 +116,22 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
       [
         { text: '無料で相談する', className: 'floating-cta-label-long' },
         { text: '無料相談', className: 'floating-cta-label-short', hidden: true }
+      ]),
+    ctaLink('floating-cta-tel', `tel:${TEL}`,
+      svgIcon(['M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z']),
+      [
+        { text: `電話で相談 ${TEL}`, className: 'floating-cta-label-long' },
+        { text: '電話', className: 'floating-cta-label-short', hidden: true }
       ])
   );
+  // The short "電話" label alone would not say what the link is for.
+  cta.querySelector('.floating-cta-tel')?.setAttribute('aria-label', `電話で相談 ${TEL}`);
   document.body.append(cta);
   document.body.classList.add('has-floating-cta');
 
-  const shortLabel = cta.querySelector('.floating-cta-label-short');
+  const shortLabels = cta.querySelectorAll('.floating-cta-label-short');
   const narrow = window.matchMedia('(max-width: 768px)');
-  const syncLabel = () => { if (shortLabel) shortLabel.hidden = !narrow.matches; };
+  const syncLabel = () => shortLabels.forEach(label => { label.hidden = !narrow.matches; });
   syncLabel();
   narrow.addEventListener('change', syncLabel);
 

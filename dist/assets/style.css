@@ -13,6 +13,7 @@
   --brand-orange: #f5a623;
   --brand-orange-dark: #d88719;
   --brand-orange-text: #9a5900;  /* 白 5.52:1。--brand-orange は 2.03:1 で文字に使えない */
+  --campaign-red: #d92d20;       /* キャンペーン帯。白文字 4.83:1 */
 
   /* Surfaces */
   --pale-blue: #eff5ff;
@@ -143,6 +144,22 @@ img { max-width: 100%; }
 .button-secondary { color: var(--brand-blue); border-color: var(--brand-blue); background: var(--white); }
 .button[aria-disabled="true"] { color: var(--muted); background: var(--surface-disabled); cursor: not-allowed; }
 .button-ghost { color: var(--white); border-color: rgba(255,255,255,.38); background: transparent; }
+/* Phone consultation next to the consultation CTA. Navy keeps it apart from the orange and blue CTAs. */
+.button-tel { color: var(--white); background: var(--brand-navy); }
+.button-tel:hover { background: var(--brand-blue-dark); }
+.button-tel svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
+.header-actions .button-tel { gap: 8px; padding: 8px 14px; }
+.button-tel-text { display: grid; line-height: 1.2; text-align: left; }
+.button-tel-text small { color: var(--on-dark); font-size: .75rem; }
+.button-tel-text span { font-size: .95rem; letter-spacing: .02em; }
+/* Below 1200px the number no longer fits beside the menu; keep the phone as an icon. */
+@media (min-width: 1041px) and (max-width: 1199px) {
+  .header-inner { gap: 20px; }
+  .global-nav { gap: 18px; }
+  .header-actions .button { padding-inline: 14px; }
+  .header-actions .button-tel { width: 50px; padding: 0; }
+  .header-actions .button-tel-text { display: none; }
+}
 .text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--brand-blue); font-weight: 800; }
 .guide-long-title { font-size: 1.1rem !important; }
 .text-link::after { content: "→"; transition: transform .2s ease; }
@@ -218,8 +235,7 @@ details[open] summary::after { content: "−"; }
 .notice { padding: 22px 24px; border-left: 4px solid var(--brand-orange); border-radius: 0 14px 14px 0; background: #fff2ed; }
 .notice strong { display: block; margin-bottom: 5px; }
 /* app.js wraps table.comparison in .table-scroll, so match both shapes. */
-.table-scroll + .notice, .comparison + .notice,
-.contact-flow + .notice { margin-top: 30px; }
+.table-scroll + .notice, .comparison + .notice { margin-top: 30px; }
 .notice + .section-title { margin-top: 55px; }
 .pending { display: inline-flex; padding: 5px 9px; border-radius: 99px; color: #8a3b20; background: #ffe7dd; font-size: .76rem; font-weight: 800; }
 
@@ -229,7 +245,12 @@ details[open] summary::after { content: "−"; }
 .resource-card p { margin: 0; color: var(--muted); }
 .resource-card + .resource-card { margin-top: 16px; }
 
-.form-shell { display: grid; grid-template-columns: .7fr 1.3fr; gap: 48px; align-items: start; }
+.form-shell { display: grid; gap: 24px; }
+.contact-tel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 24px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--pale-blue); }
+.contact-tel p { margin: 4px 0 0; color: var(--muted); }
+.contact-tel .contact-tel-label { margin: 0; color: var(--ink); font-size: 1.25rem; font-weight: 800; }
+.contact-tel-link { font-size: 1.375rem; letter-spacing: .02em; }
+.contact-tel-link svg { width: 22px; height: 22px; fill: currentColor; }
 .form-card { padding: 34px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); }
 .form-card button:disabled { opacity: .55; cursor: not-allowed; }
 .field { display: grid; gap: 8px; margin-bottom: 20px; }
@@ -239,7 +260,6 @@ details[open] summary::after { content: "−"; }
 .field input, .field select, .field textarea { width: 100%; padding: 13px 14px; border: 1px solid #bbc2cf; border-radius: 10px; color: var(--ink); background: var(--white); }
 .field textarea { min-height: 150px; resize: vertical; }
 .field-help { margin: -2px 0 0; color: var(--muted); font-size: 1rem; }
-.form-shell aside .section-title { font-size: 2.3rem; }
 .form-card > button + .field-help,
 .form-card > .field-help + .field-help { margin-top: 14px; }
 .form-honeypot { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
@@ -252,9 +272,6 @@ details[open] summary::after { content: "−"; }
 .form-complete-steps { margin: 0 0 18px; padding-left: 1.4em; }
 .form-complete-steps li + li { margin-top: 6px; }
 .form-complete .text-link { display: inline; overflow-wrap: anywhere; }
-.contact-flow { display: grid; gap: 15px; margin-top: 28px; }
-.contact-flow div { display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
-.contact-flow b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: var(--white); background: var(--brand-blue); font-size: .78rem; }
 
 .article-layout { display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 70px; align-items: start; }
 .toc { position: sticky; top: 110px; padding: 22px; border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
@@ -300,7 +317,7 @@ details[open] summary::after { content: "−"; }
   .global-nav { inset: 68px 0 0; }
   .header-actions .button-primary { display: none; }
   .hero-actions .button { width: 100%; }
-   .sample-shell, .cards-3, .form-shell, .split, .article-layout{ grid-template-columns: 1fr; }
+   .sample-shell, .cards-3, .split, .article-layout{ grid-template-columns: 1fr; }
   .cta-panel { grid-template-columns: 1fr; padding: 34px 26px; }
   .cta-actions .button { width: 100%; }
   .page-hero { padding: 68px 0 56px; }
@@ -453,11 +470,11 @@ details[open] summary::after { content: "−"; }
 .home-preview-message i { display: block; width: 90%; height: 5px; margin-top: 8px; border-radius: 3px; background: var(--line); }
 .home-preview-message i:last-child { width: 65%; }
 
-/* Campaign band between the hero and the problem section. Uses the CTA orange so it stands out. */
+/* Campaign band between the hero and the problem section. Red with white text so it stands apart from the orange CTAs. */
 .home-campaign { padding: 28px 0; background: var(--white); }
-.home-campaign-link { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 20px; padding: 22px 32px; border-radius: 16px; color: var(--brand-navy-deep); background: var(--brand-orange); box-shadow: 0 14px 30px rgba(245,166,35,.28); text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
-.home-campaign-link:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(245,166,35,.36); }
-.home-campaign-badge { padding: 4px 12px; border-radius: 999px; color: var(--white); background: var(--brand-navy-deep); font-size: .875rem; font-weight: 800; }
+.home-campaign-link { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 20px; padding: 22px 32px; border-radius: 16px; color: var(--white); background: var(--campaign-red); box-shadow: 0 14px 30px rgba(217,45,32,.26); text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
+.home-campaign-link:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(217,45,32,.34); }
+.home-campaign-badge { padding: 3px 12px; border: 1px solid var(--white); border-radius: 999px; color: var(--white); font-size: .875rem; font-weight: 800; }
 .home-campaign-link strong { font-size: clamp(1.25rem,2vw,1.625rem); line-height: 1.4; }
 .home-campaign-link strong span { display: inline-block; white-space: nowrap; }
 .home-campaign-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
@@ -1179,6 +1196,7 @@ details[open] summary::after { content: "−"; }
   .global-nav .nav-actions { display: grid; flex: none; gap: 12px; margin-top: 24px; padding-bottom: 12px; }
   .global-nav .nav-actions .button { min-height: 52px; padding: 14px 20px; font-size: 1rem; }
   .global-nav .nav-actions .button-primary { color: var(--brand-navy); }
+  .global-nav .nav-actions .button-tel { color: var(--white); }
   .global-nav .nav-actions .button::after { display: none; }
   body.nav-open { position: fixed; top: var(--nav-scroll-top); left: 0; right: 0; width: 100%; }
 }
@@ -1189,11 +1207,14 @@ details[open] summary::after { content: "−"; }
   .container, .narrow, .home-role-container,
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 40px); }
-  .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 10px; }
+  .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 8px; }
   .header-inner .logo img { height: 28px; }
   .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: .875rem; box-shadow: none; }
   .desktop-label { display: none; }
   .mobile-label { display: inline; }
+  .header-actions { gap: 6px; }
+  .header-actions .button-tel { width: 44px; min-height: 44px; padding: 0; border-radius: 999px; }
+  .header-actions .button-tel-text { display: none; }
   .menu-button { width: 44px; height: 44px; border-radius: 10px; }
   .section, .home-service, .home-role, .home-scale, .home-problem, .pricing-section, .examples-section, .uc-section { padding: 56px 0; }
   .section-sm { padding: 40px 0; }
@@ -1219,7 +1240,7 @@ details[open] summary::after { content: "−"; }
   .home-page .home-button-outline, .home-page .home-button-primary, .home-page .home-button-light, .home-page .home-button-accent { min-width: 0; }
   .hero-actions, .home-hero-actions, .examples-hero-actions { gap: 10px; margin-top: 24px; }
   .hero-actions .button, .home-hero-actions .button, .examples-hero-actions .examples-button,
-  .home-scale-copy > .button, .cta-actions, .cta-actions .button, .form-card > .button { width: 100%; }
+  .home-scale-copy > .button, .cta-actions, .cta-actions .button, .form-card > .button, .contact-tel-link { width: 100%; }
   .text-link, .home-text-link, .pricing-text-link { min-height: 44px; }
   .page-links { display: grid; grid-template-columns: 1fr; }
   .reveal { opacity: 1; transform: none; transition: none; }
@@ -1353,7 +1374,7 @@ details[open] summary::after { content: "−"; }
   .page-hero h1 br { display: none; }
   .heading-line { display: inline; white-space: normal; }
    .sample-shell, .cards-3,
-  .form-shell, .split, .article-layout{ grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .split, .article-layout{ grid-template-columns: minmax(0,1fr); gap: 24px; }
    .sample-shell, .cards-3, .faq-list{ margin-top: 28px; }
    .info-card, .source-card, .message-body, .form-card{ padding: 22px; }
   .message-bar { flex-wrap: wrap; gap: 6px 12px; padding: 14px 20px; font-size: .875rem; }
@@ -1361,9 +1382,8 @@ details[open] summary::after { content: "−"; }
   .message-body > p:last-child { margin-bottom: 0; }
   .resource-card { grid-template-columns: minmax(0,1fr); padding: 22px; gap: 18px; }
   .resource-icon { width: 46px; height: 54px; }
-  .form-shell { display: flex; flex-direction: column; }
-  .form-shell > * { width: 100%; min-width: 0; }
-  .form-shell .form-card { order: -1; }
+  .form-shell > * { min-width: 0; }
+  .contact-tel { padding: 22px; }
   .field input, .field select, .field textarea { min-width: 0; min-height: 50px; font-size: 1rem; }
   .field textarea { min-height: 180px; }
   .field-help, .optional, .required { font-size: 1rem; }
@@ -1410,7 +1430,6 @@ details[open] summary::after { content: "−"; }
   .container, .narrow, .home-role-container,
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 32px); }
-  .header-inner { gap: 8px; }
   .header-inner .logo img { height: 24px; }
   .header-actions .button-primary { padding-inline: 12px; }
 
@@ -1465,15 +1484,26 @@ details[open] summary::after { content: "−"; }
   border: 1.5px solid var(--line);
 }
 .floating-cta .floating-cta-secondary:hover { border-color: var(--brand-blue); color: var(--brand-blue); transform: translateY(-2px); }
+.floating-cta .floating-cta-tel { color: var(--white); background: var(--brand-navy); }
+.floating-cta .floating-cta-tel:hover { background: var(--brand-blue-dark); transform: translateY(-2px); }
 .floating-cta svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Keep the footer clear of the bar so the last links stay clickable. */
 body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-height, 80px) + 16px); }
 
 @media (max-width: 768px) {
-  .floating-cta { gap: 10px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
-  .floating-cta a { flex: 1 1 0; min-height: 50px; padding: 10px 14px; font-size: .9rem; }
+  .floating-cta { gap: 8px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+  .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: .9rem; }
   .floating-cta .floating-cta-label-long { display: none; }
+  .floating-cta .floating-cta-tel { flex: none; }
+}
+/* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
+@media (max-width: 374px) {
+  .floating-cta-secondary svg, .floating-cta-primary svg { display: none; }
+}
+/* No room for a third header button; the phone stays in the menu and the floating bar. */
+@media (max-width: 349px) {
+  .header-actions .button-tel { display: none; }
 }
 
 /* Keep 44px touch targets and room for focus outlines in short landscape views. */
