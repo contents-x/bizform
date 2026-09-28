@@ -157,18 +157,18 @@ img { max-width: 100%; }
    one line and make the row fit instead. */
 .global-nav > a, .header-actions .button, .button-tel-text span { white-space: nowrap; }
 .header-dl-short { display: none; }
-@media (min-width: 1240px) {
+@media (min-width: 1041px) {
   .header-inner { gap: 20px; }
-  .global-nav { gap: 20px; }
-  .header-actions { gap: 8px; }
   .header-actions .button { padding-inline: 14px; }
 }
+@media (min-width: 1240px) {
+  .global-nav { gap: 20px; }
+  .header-actions { gap: 8px; }
+}
 /* Below 1240px the number no longer fits beside the menu; keep the phone as an icon
-   and shorten 資料ダウンロード to 資料DL. */
-@media (min-width: 1041px) and (max-width: 1239px) {
-  .header-inner { gap: 20px; }
+   and shorten 資料ダウンロード to 資料DL. .98 covers fractional widths under zoom. */
+@media (min-width: 1041px) and (max-width: 1239.98px) {
   .global-nav { gap: 18px; }
-  .header-actions .button { padding-inline: 14px; }
   .header-actions .button-tel { width: 50px; padding: 0; }
   .header-actions .button-tel-text { display: none; }
   .header-dl-long { display: none; }

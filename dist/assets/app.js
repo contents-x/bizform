@@ -6,6 +6,31 @@ const TEL = '03-6261-0764';
 // The shared Contents X HubSpot form (also used by BizManga and ContentsX).
 const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
 const formField = (data, name) => String(data.get(name) || '').trim();
+
+// The tail HubSpot shows staff: which form, where the visitor came from, which page.
+const hubspotTrackingNote = (label) => {
+  const params = new URLSearchParams(window.location.search);
+  const lines = [label];
+  [['utm_source', '流入元'], ['utm_medium', '媒体'], ['utm_campaign', 'キャンペーン']].forEach(([key, name]) => {
+    const value = params.get(key);
+    if (value) lines.push(`${name}: ${value}`);
+  });
+  lines.push(`ページ: ${window.location.href}`);
+  return `---\n${lines.join('\n')}`;
+};
+
+// Hand a form to the CRM embed script, which loads async (data-auto="false").
+// A visitor on a slow connection can submit before it arrives, so wait for it
+// rather than dropping the copy; the form keeps its values after it is hidden.
+const copyToCrm = (form) => {
+  if (window.BizcarteInbound) {
+    window.BizcarteInbound.sendForm(form);
+    return;
+  }
+  document.querySelector('script[src*="/embed/inbound-v1.js"]')?.addEventListener('load', () => {
+    window.BizcarteInbound?.sendForm(form);
+  }, { once: true });
+};
 const telIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>';
 
 const header = `
@@ -130,6 +155,9 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
         { text: '電話', className: 'floating-cta-label-short', hidden: true }
       ])
   );
+  // On /resources/ the download form is already on screen; a second way to it
+  // would only compete with the form, as on the contact page.
+  if (document.querySelector('[data-download-form]')) cta.querySelector('.floating-cta-secondary')?.remove();
   // The short "電話" label alone would not say what the link is for.
   cta.querySelector('.floating-cta-tel')?.setAttribute('aria-label', `電話で相談 ${TEL}`);
   document.body.append(cta);
@@ -320,8 +348,6 @@ if (contactForm && contactSubmit) {
   const submitLabel = contactSubmit.textContent;
   let submitting = false;
 
-  const field = formField;
-
   const sendToHubSpot = (payload) => {
     const controller = 'AbortController' in window ? new AbortController() : null;
     const timer = controller && setTimeout(() => controller.abort(), HUBSPOT_TIMEOUT_MS);
@@ -359,18 +385,14 @@ if (contactForm && contactSubmit) {
     Object.values(failures).forEach((el) => { if (el) el.hidden = true; });
 
     const data = new FormData(contactForm);
-    const company = field(data, 'company');
-    const name = field(data, 'name');
-    const email = field(data, 'email');
-    const message = `【相談内容】${field(data, 'topic') || '未選択'}\n\n${field(data, 'message')}`;
-    const honeypot = field(data, 'website');
-    const params = new URLSearchParams(window.location.search);
-    const utmSource = params.get('utm_source');
-    const utmMedium = params.get('utm_medium');
-    const utmCampaign = params.get('utm_campaign');
+    const company = formField(data, 'company');
+    const name = formField(data, 'name');
+    const email = formField(data, 'email');
+    const message = `【相談内容】${formField(data, 'topic') || '未選択'}\n\n${formField(data, 'message')}`;
+    const honeypot = formField(data, 'website');
 
     // CRM の受信箱へも送る（失敗しても HubSpot の受付・完了表示には影響しない）
-    if (window.BizcarteInbound) window.BizcarteInbound.sendForm(contactForm);
+    copyToCrm(contactForm);
 
     // Only bots fill the off-screen field. Pretend it worked and keep them out
     // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
@@ -378,12 +400,6 @@ if (contactForm && contactSubmit) {
       showComplete();
       return;
     }
-
-    const tracking = ['[ビズフォーム経由のお問い合わせ]'];
-    if (utmSource) tracking.push(`流入元: ${utmSource}`);
-    if (utmMedium) tracking.push(`媒体: ${utmMedium}`);
-    if (utmCampaign) tracking.push(`キャンペーン: ${utmCampaign}`);
-    tracking.push(`ページ: ${window.location.href}`);
 
     sendToHubSpot({
       fields: [
@@ -393,7 +409,7 @@ if (contactForm && contactSubmit) {
         { name: 'lastname', value: name },
         { name: 'firstname', value: name },
         { name: 'email', value: email },
-        { name: 'message', value: `${message}\n\n---\n${tracking.join('\n')}` }
+        { name: 'message', value: `${message}\n\n${hubspotTrackingNote('[ビズフォーム経由のお問い合わせ]')}` }
       ],
       context: {
         pageUri: window.location.href,
@@ -436,6 +452,10 @@ if (downloadForm && downloadSubmit) {
     const link = document.createElement('a');
     link.href = fileUrl;
     link.download = '';
+    // Browsers that ignore download (some in-app browsers) open a new tab
+    // instead of replacing this one, so the completion panel stays visible.
+    link.target = '_blank';
+    link.rel = 'noopener';
     document.body.append(link);
     link.click();
     link.remove();
@@ -446,21 +466,14 @@ if (downloadForm && downloadSubmit) {
   // property carries what was downloaded (and the phone number, which is not
   // a field on the shared HubSpot form).
   const copyToHubSpot = (data) => {
-    const params = new URLSearchParams(window.location.search);
     const lines = [`【資料ダウンロード】${documentName}`];
     const tel = formField(data, 'tel');
     if (tel) lines.push(`電話番号: ${tel}`);
-    const tracking = ['[ビズフォーム経由の資料ダウンロード]'];
-    if (params.get('utm_source')) tracking.push(`流入元: ${params.get('utm_source')}`);
-    if (params.get('utm_medium')) tracking.push(`媒体: ${params.get('utm_medium')}`);
-    if (params.get('utm_campaign')) tracking.push(`キャンペーン: ${params.get('utm_campaign')}`);
-    tracking.push(`ページ: ${window.location.href}`);
     const name = formField(data, 'name');
     try {
       fetch(HUBSPOT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        keepalive: true,
         body: JSON.stringify({
           fields: [
             { name: 'company', value: formField(data, 'company') },
@@ -468,7 +481,7 @@ if (downloadForm && downloadSubmit) {
             { name: 'lastname', value: name },
             { name: 'firstname', value: name },
             { name: 'email', value: formField(data, 'email') },
-            { name: 'message', value: `${lines.join('\n')}\n\n---\n${tracking.join('\n')}` }
+            { name: 'message', value: `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズフォーム経由の資料ダウンロード]')}` }
           ],
           context: {
             pageUri: window.location.href,
@@ -496,7 +509,7 @@ if (downloadForm && downloadSubmit) {
     // script sends it as hp and the CRM drops that copy.
     if (!formField(data, 'website')) copyToHubSpot(data);
     // CRM の受信箱（資料DL）へも送る。失敗してもダウンロードは止めない
-    if (window.BizcarteInbound) window.BizcarteInbound.sendForm(downloadForm);
+    copyToCrm(downloadForm);
 
     startDownload();
     if (retryLink) retryLink.href = fileUrl;
