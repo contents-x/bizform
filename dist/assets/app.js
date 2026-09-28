@@ -3,6 +3,9 @@ const active = (segment) => path.includes(segment) ? ' aria-current="page"' : ''
 
 // Phone consultation uses the same number as BizManga.
 const TEL = '03-6261-0764';
+// The shared Contents X HubSpot form (also used by BizManga and ContentsX).
+const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
+const formField = (data, name) => String(data.get(name) || '').trim();
 const telIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>';
 
 const header = `
@@ -19,14 +22,14 @@ const header = `
         <a href="/use-cases/"${active('/use-cases/')}>活用シーン</a>
         <a href="/faq/"${active('/faq/')}>よくある質問</a>
         <div class="nav-actions">
-          <a class="button button-secondary" href="/resources/">資料を見る</a>
+          <a class="button button-secondary" href="/resources/#download">資料ダウンロード</a>
           <a class="button button-primary" href="/contact/">無料で相談する</a>
           <a class="button button-tel" href="tel:${TEL}">${telIcon}電話で相談（${TEL}）</a>
         </div>
       </nav>
       <button class="menu-button" type="button" aria-label="メニューを開く" aria-controls="global-nav" aria-expanded="false"><span></span></button>
       <div class="header-actions">
-        <a class="button button-secondary" href="/resources/">資料を見る</a>
+        <a class="button button-secondary" href="/resources/#download"><span class="header-dl-long">資料ダウンロード</span><span class="header-dl-short">資料DL</span></a>
         <a class="button button-primary" href="/contact/"><span class="desktop-label">無料で相談する</span><span class="mobile-label">無料相談</span></a>
         <a class="button button-tel" href="tel:${TEL}" aria-label="電話で相談 ${TEL}" title="電話で相談 ${TEL}">${telIcon}<span class="button-tel-text"><small>電話で相談</small><span>${TEL}</span></span></a>
       </div>
@@ -43,7 +46,7 @@ const footer = `
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="/service/">サービス内容</a><a href="/pricing/">料金・契約条件</a><a href="/examples/">文面・運用サンプル</a><a href="/use-cases/">活用シーン</a></div>
         <div class="footer-column"><strong>理解する</strong><a href="/faq/">よくある質問</a><a href="/guide/">フォーム営業ガイド</a><a href="/policy/">送信方針</a><a href="/stop/">送信停止・受信窓口</a></div>
-        <div class="footer-column"><strong>会社・相談</strong><a href="/resources/">サービス資料</a><a href="/contact/">導入相談</a><a href="/company/">運営会社</a><a href="/policy/#privacy">プライバシーポリシー</a></div>
+        <div class="footer-column"><strong>会社・相談</strong><a href="/resources/#download">資料ダウンロード</a><a href="/contact/">導入相談</a><a href="/company/">運営会社</a><a href="/policy/#privacy">プライバシーポリシー</a></div>
       </div>
       <div class="footer-bottom"><span>© 2026 Contents X Inc.</span><span>フォーム営業を、判断できる情報から。</span></div>
     </div>
@@ -108,9 +111,12 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   cta.className = 'floating-cta';
   cta.setAttribute('aria-label', 'お問い合わせ');
   cta.append(
-    ctaLink('floating-cta-secondary', '/resources/',
+    ctaLink('floating-cta-secondary', '/resources/#download',
       svgIcon(['M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z', 'M14 3v5h5']),
-      [{ text: '資料を見る' }]),
+      [
+        { text: '資料ダウンロード', className: 'floating-cta-label-long' },
+        { text: '資料DL', className: 'floating-cta-label-short', hidden: true }
+      ]),
     ctaLink('floating-cta-primary', '/contact/',
       svgIcon(['M3 6h18v12H3z', 'm3 7 9 6 9-6']),
       [
@@ -304,7 +310,6 @@ if (contactForm && contactSubmit) {
   // (loaded on the contact page with data-auto="false"), which never throws,
   // never waits for a reply and cannot block the HubSpot submission. Same
   // arrangement as BizManga, ContentsX and イチオシ採用 (README: 外部連携).
-  const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
   const HUBSPOT_TIMEOUT_MS = 20000;
 
   const complete = document.querySelector('[data-contact-complete]');
@@ -315,7 +320,7 @@ if (contactForm && contactSubmit) {
   const submitLabel = contactSubmit.textContent;
   let submitting = false;
 
-  const field = (data, name) => String(data.get(name) || '').trim();
+  const field = formField;
 
   const sendToHubSpot = (payload) => {
     const controller = 'AbortController' in window ? new AbortController() : null;
@@ -413,4 +418,96 @@ if (contactForm && contactSubmit) {
   // Enable only after the handler is installed. method="dialog" keeps the
   // fields from being posted over HTTP when JavaScript fails to load.
   contactSubmit.disabled = false;
+}
+
+// Resource download (/resources/#download). The download starts as soon as the
+// form is valid; HubSpot and the CRM each get a copy, but neither reply is
+// awaited, so an outage on either side can never hold back the PDF.
+const downloadForm = document.querySelector('[data-download-form]');
+const downloadSubmit = downloadForm?.querySelector('[data-download-submit]');
+if (downloadForm && downloadSubmit) {
+  const fileUrl = downloadForm.dataset.downloadUrl;
+  const documentName = downloadForm.dataset.crmDocument;
+  const complete = document.querySelector('[data-download-complete]');
+  const retryLink = complete?.querySelector('[data-download-link]');
+  let sent = false;
+
+  const startDownload = () => {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = '';
+    document.body.append(link);
+    link.click();
+    link.remove();
+  };
+
+  // HubSpot is being retired, so this copy is fire-and-forget: a refusal only
+  // leaves a console warning. The form has no message field, so the message
+  // property carries what was downloaded (and the phone number, which is not
+  // a field on the shared HubSpot form).
+  const copyToHubSpot = (data) => {
+    const params = new URLSearchParams(window.location.search);
+    const lines = [`【資料ダウンロード】${documentName}`];
+    const tel = formField(data, 'tel');
+    if (tel) lines.push(`電話番号: ${tel}`);
+    const tracking = ['[ビズフォーム経由の資料ダウンロード]'];
+    if (params.get('utm_source')) tracking.push(`流入元: ${params.get('utm_source')}`);
+    if (params.get('utm_medium')) tracking.push(`媒体: ${params.get('utm_medium')}`);
+    if (params.get('utm_campaign')) tracking.push(`キャンペーン: ${params.get('utm_campaign')}`);
+    tracking.push(`ページ: ${window.location.href}`);
+    const name = formField(data, 'name');
+    try {
+      fetch(HUBSPOT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({
+          fields: [
+            { name: 'company', value: formField(data, 'company') },
+            { name: 'busyo', value: formField(data, 'busyo') },
+            { name: 'lastname', value: name },
+            { name: 'firstname', value: name },
+            { name: 'email', value: formField(data, 'email') },
+            { name: 'message', value: `${lines.join('\n')}\n\n---\n${tracking.join('\n')}` }
+          ],
+          context: {
+            pageUri: window.location.href,
+            pageName: 'ビズフォーム - 資料ダウンロード'
+          }
+        })
+      }).then((res) => {
+        if (!res.ok) console.warn('HubSpot download copy refused (ignored):', res.status);
+      }).catch((err) => console.warn('HubSpot download copy failed (ignored):', err));
+    } catch (err) {
+      console.warn('HubSpot download copy skipped:', err);
+    }
+  };
+
+  downloadForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    // Enter in a field and requestSubmit() skip the disabled button.
+    if (sent) return;
+    if (!downloadForm.reportValidity()) return;
+    sent = true;
+    downloadSubmit.disabled = true;
+
+    const data = new FormData(downloadForm);
+    // Only bots fill the off-screen field; keep them out of HubSpot. The embed
+    // script sends it as hp and the CRM drops that copy.
+    if (!formField(data, 'website')) copyToHubSpot(data);
+    // CRM の受信箱（資料DL）へも送る。失敗してもダウンロードは止めない
+    if (window.BizcarteInbound) window.BizcarteInbound.sendForm(downloadForm);
+
+    startDownload();
+    if (retryLink) retryLink.href = fileUrl;
+    downloadForm.hidden = true;
+    if (complete) {
+      complete.hidden = false;
+      complete.focus();
+    }
+  });
+
+  // Enable only after the handler is installed. method="dialog" keeps the
+  // fields from being posted over HTTP when JavaScript fails to load.
+  downloadSubmit.disabled = false;
 }

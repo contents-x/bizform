@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+# The resource PDF is handed out through the form on /resources/.
+Disallow: /assets/docs/
 
 Sitemap: https://bizform.contentsx.jp/sitemap.xml
