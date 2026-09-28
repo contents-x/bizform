@@ -445,6 +445,15 @@ details[open] summary::after { content: "−"; }
 .home-preview-message i { display: block; width: 90%; height: 5px; margin-top: 8px; border-radius: 3px; background: var(--line); }
 .home-preview-message i:last-child { width: 65%; }
 
+/* Campaign band between the hero and the problem section. Uses the CTA orange so it stands out. */
+.home-campaign { padding: 28px 0; background: var(--white); }
+.home-campaign-link { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 20px; padding: 22px 32px; border-radius: 16px; color: var(--brand-navy-deep); background: var(--brand-orange); box-shadow: 0 14px 30px rgba(245,166,35,.28); text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
+.home-campaign-link:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(245,166,35,.36); }
+.home-campaign-badge { padding: 4px 12px; border-radius: 999px; color: var(--white); background: var(--brand-navy-deep); font-size: .875rem; font-weight: 800; }
+.home-campaign-link strong { font-size: clamp(1.25rem,2vw,1.625rem); line-height: 1.4; }
+.home-campaign-link strong span { display: inline-block; white-space: nowrap; }
+.home-campaign-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
+
 /* Section labels in Japanese, and the sales-problem section from the sales deck. */
 .home-section-sub { margin: 0 0 14px; color: var(--brand-blue); font-size: 1rem; font-weight: 800; letter-spacing: .06em; }
 .home-scale .home-section-sub { color: var(--on-dark); }
