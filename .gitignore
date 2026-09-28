@@ -1,5 +1,7 @@
 # Local audit output and working documents
 /artifacts/
+/reports/
+/research_notes/
 /docs/*
 !/docs/CONTENT-RULES.md
 
