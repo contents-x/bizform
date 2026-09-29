@@ -25,7 +25,7 @@ HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `
 
 | 送信先 | 内容 |
 |---|---|
-| HubSpot | Portal `48367061` / Form `b6da14d0-d60d-4357-89fc-0015ed32b704`（BizManga・ContentsX と同じフォーム。送信先は `app.js` 冒頭の `HUBSPOT_ENDPOINT`）。`pageName` は `ビズフォーム - お問い合わせ` / `ビズフォーム - 資料ダウンロード`。導入相談は部署の項目が無いので `busyo` を送らない。資料ダウンロードは `busyo` を送り、電話番号と資料名は `message` に入れる |
+| HubSpot | Portal `48367061` / Form `b6da14d0-d60d-4357-89fc-0015ed32b704`（BizManga・ContentsX と同じフォーム。送信先は `app.js` 冒頭の `HUBSPOT_ENDPOINT`）。`pageName` は `ビズフォーム - お問い合わせ` / `ビズフォーム - 資料ダウンロード`。⚠️ **HubSpot 側で部署 `busyo` が必須**（空欄も拒否＝`REQUIRED_FIELD`。2026-09-29 に確認）。両フォームとも部署は任意なので、空なら `未入力` を送る（`app.js` の `hubspotDepartment`）。資料ダウンロードは電話番号と資料名を `message` に入れる |
 | Contents X CRM | CRM の埋め込みスクリプト `https://contentsx-crm.vercel.app/embed/inbound-v1.js` を、フォームのある `dist/contact/index.html` と `dist/resources/index.html` の `</body>` 直前で1回ずつ読み込み（公開キー `data-source-key`・`data-auto="false"`）、`app.js` が入力チェック後に `BizcarteInbound.sendForm(form)` を呼ぶ。資料ダウンロードのフォームには `data-crm-form="download"` と `data-crm-document`（資料名）を付けてある。受信箱 `/inbox` に入り、人が承認するまで顧客データにはならない |
 
 - **公開キーは秘密ではない**（ブラウザに出る前提の値）。CRM 側はこのキーに登録したドメイン（`https://bizform.contentsx.jp`）からの送信だけを受け付ける。ドメインが変わる・別ドメインで開かれるようになったら、コードではなく CRM 側の許可ドメインを足してもらう。localhost からの送信は拒否されるのが正常。

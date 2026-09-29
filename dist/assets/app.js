@@ -6,6 +6,15 @@ const TEL = '03-6261-0764';
 // The shared Contents X HubSpot form (also used by BizManga and ContentsX).
 const HUBSPOT_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/48367061/b6da14d0-d60d-4357-89fc-0015ed32b704';
 const formField = (data, name) => String(data.get(name) || '').trim();
+// The shared HubSpot form makes 部署 (busyo) required and refuses a blank value
+// (REQUIRED_FIELD, confirmed 2026-09-29), while both forms here leave it
+// optional. Send a placeholder instead of losing the submission.
+const hubspotDepartment = (data) => formField(data, 'busyo') || '未入力';
+// HubSpot names the failing field in its error body (field names only, no
+// visitor input); keep it in the console so a refusal can be diagnosed.
+const hubspotErrors = (res) => res.json()
+  .then((body) => (body.errors || []).map((e) => e.message))
+  .catch(() => []);
 
 // The tail HubSpot shows staff: which form, where the visitor came from, which page.
 const hubspotTrackingNote = (label) => {
@@ -378,12 +387,15 @@ if (contactForm && contactSubmit) {
       body: JSON.stringify(payload),
       signal: controller?.signal
     }).then((res) => {
-      if (res.ok) return;
-      const error = new Error(`HubSpot responded ${res.status}`);
-      // A 4xx is a definite refusal (HubSpot validates before storing), so
-      // nothing arrived and resending is safe. Anything else may have landed.
-      error.rejected = res.status >= 400 && res.status < 500;
-      throw error;
+      if (res.ok) return undefined;
+      return hubspotErrors(res).then((details) => {
+        const error = new Error(`HubSpot responded ${res.status}`);
+        // A 4xx is a definite refusal (HubSpot validates before storing), so
+        // nothing arrived and resending is safe. Anything else may have landed.
+        error.rejected = res.status >= 400 && res.status < 500;
+        error.details = details;
+        throw error;
+      });
     }).finally(() => clearTimeout(timer));
   };
 
@@ -425,6 +437,7 @@ if (contactForm && contactSubmit) {
     sendToHubSpot({
       fields: [
         { name: 'company', value: company },
+        { name: 'busyo', value: hubspotDepartment(data) },
         // The form has one name field; the other Contents X sites fill both
         // HubSpot name properties with it, so do the same here.
         { name: 'lastname', value: name },
@@ -437,7 +450,7 @@ if (contactForm && contactSubmit) {
         pageName: 'ビズフォーム - お問い合わせ'
       }
     }).then(showComplete).catch((err) => {
-      console.error('HubSpot submission error:', err);
+      console.error('HubSpot submission error:', err, err?.details || []);
       submitting = false;
       contactSubmit.disabled = false;
       contactSubmit.textContent = submitLabel;
@@ -498,7 +511,7 @@ if (downloadForm && downloadSubmit) {
         body: JSON.stringify({
           fields: [
             { name: 'company', value: formField(data, 'company') },
-            { name: 'busyo', value: formField(data, 'busyo') },
+            { name: 'busyo', value: hubspotDepartment(data) },
             { name: 'lastname', value: name },
             { name: 'firstname', value: name },
             { name: 'email', value: formField(data, 'email') },
@@ -510,7 +523,7 @@ if (downloadForm && downloadSubmit) {
           }
         })
       }).then((res) => {
-        if (!res.ok) console.warn('HubSpot download copy refused (ignored):', res.status);
+        if (!res.ok) hubspotErrors(res).then((details) => console.warn('HubSpot download copy refused (ignored):', res.status, details));
       }).catch((err) => console.warn('HubSpot download copy failed (ignored):', err));
     } catch (err) {
       console.warn('HubSpot download copy skipped:', err);
