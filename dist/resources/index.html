@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>サービス資料｜ビズフォーム</title>
-    <meta name="description" content="ビズフォームのサービス内容、役割分担、料金確認項目、導入条件をWeb上で確認し、社内共有できます。">
+    <title>サービス資料ダウンロード｜ビズフォーム</title>
+    <meta name="description" content="ビズフォームのサービス資料（PDF）をダウンロードできます。サービス内容、料金プラン、他社との費用比較、導入の流れをまとめています。">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -13,8 +13,8 @@
     <meta property="og:site_name" content="ビズフォーム">
     <meta property="og:locale" content="ja_JP">
     <meta property="og:url" content="https://bizform.contentsx.jp/resources/">
-    <meta property="og:title" content="サービス資料｜ビズフォーム">
-    <meta property="og:description" content="ビズフォームのサービス内容、役割分担、料金確認項目、導入条件をWeb上で確認し、社内共有できます。">
+    <meta property="og:title" content="サービス資料ダウンロード｜ビズフォーム">
+    <meta property="og:description" content="ビズフォームのサービス資料（PDF）をダウンロードできます。サービス内容、料金プラン、他社との費用比較、導入の流れをまとめています。">
     <meta name="twitter:card" content="summary">
   </head>
   <body>
@@ -24,7 +24,7 @@
         <div class="container">
           <nav class="breadcrumbs" aria-label="パンくず"><a href="/">トップ</a><span>›</span><span>サービス資料</span></nav>
           <h1>サービス内容と導入前の<br>確認事項をまとめました。</h1>
-          <p>フォーム入力をしなくても、サービスの基本情報をWeb上で確認できます。PDF版は公開条件の確定後に掲載します。</p>
+          <p>サービスの基本情報はWeb上で確認できます。社内共有用のPDF資料は、簡単なフォームにご入力いただくと、その場でダウンロードできます。</p>
         </div>
       </section>
       <section class="section">
@@ -40,15 +40,70 @@
           <article class="resource-card">
             <span class="resource-icon">PDF</span>
             <div>
-              <h2>社内共有用PDF</h2>
-              <p>最新の料金・契約条件を反映した保存用PDFを準備しています。</p>
-              <span class="pending">公開準備中</span>
+              <h2>サービス資料（PDF）</h2>
+              <p>サービス内容、料金プラン、他社との費用比較、導入の流れを29ページにまとめた社内共有用の資料です。</p>
             </div>
-            <span class="button" aria-disabled="true">準備中</span>
+            <a class="button button-primary" href="#download">ダウンロード</a>
           </article>
         </div>
       </section>
-      <section class="section section-blue">
+      <section class="section section-blue download-section" id="download" aria-labelledby="download-title">
+        <div class="narrow form-shell">
+          <aside>
+            <h2 class="section-title" id="download-title">資料ダウンロード</h2>
+            <p>ご入力いただくと、その場でPDF資料のダウンロードが始まります。</p>
+            <ul class="check-list download-contents">
+              <li>新規開拓の課題とビズフォームの特徴</li>
+              <li>サービス内容と、営業への引き継ぎまでの流れ</li>
+              <li>手作業・他社サービスとの費用比較</li>
+              <li>料金プラン（ライト・スタンダード・プレミアム）と初期費用</li>
+              <li>導入までの流れと、よくある質問</li>
+            </ul>
+            <p class="field-help">PDF・29ページ・約11MB。通信環境のよい場所でのダウンロードをおすすめします。</p>
+          </aside>
+          <!-- app.js starts the download and hands the entries to the CRM embed script. method="dialog" keeps it from ever falling back to an HTTP submission. -->
+          <form class="form-card" id="download-form" method="dialog" data-download-form data-crm-form="download" data-crm-document="ビズフォーム サービス資料（2026年9月版）" data-download-url="/assets/docs/bizform-service-guide-202609.pdf">
+            <div class="field">
+              <label for="dl-company">会社名<span class="required">必須</span></label>
+              <input id="dl-company" name="company" autocomplete="organization" maxlength="200" required>
+            </div>
+            <div class="field">
+              <label for="dl-busyo">部署名<span class="optional">任意</span></label>
+              <input id="dl-busyo" name="busyo" maxlength="200">
+            </div>
+            <div class="field">
+              <label for="dl-name">お名前<span class="required">必須</span></label>
+              <input id="dl-name" name="name" autocomplete="name" maxlength="200" required>
+            </div>
+            <div class="field">
+              <label for="dl-email">メールアドレス<span class="required">必須</span></label>
+              <input id="dl-email" name="email" type="email" autocomplete="email" maxlength="320" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="例：name@example.co.jp の形式でご入力ください。" required>
+            </div>
+            <div class="field">
+              <label for="dl-tel">電話番号<span class="optional">任意</span></label>
+              <input id="dl-tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" maxlength="20">
+            </div>
+            <!-- Honeypot: off-screen rather than display:none, which some bots skip. Filled only by bots. -->
+            <div class="form-honeypot" aria-hidden="true">
+              <label for="bfDlWebsite">Website (do not fill)</label>
+              <input type="text" id="bfDlWebsite" name="website" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="field field-check">
+              <label for="dl-privacy"><input id="dl-privacy" name="privacy_agree" type="checkbox" value="同意する" required><span><a class="text-link" href="/policy/#privacy" target="_blank" rel="noopener">プライバシーポリシー</a>に同意する<span class="required">必須</span></span></label>
+            </div>
+            <p class="field-help">お送りいただく情報は、当社の顧客管理ツールに保存し、資料をお受け取りになった方へのご案内やご相談への対応に利用します。</p>
+            <button class="button button-primary" type="submit" data-download-submit disabled>資料をダウンロードする</button>
+            <p class="field-help">フォームが動作しない場合は、<a class="text-link" href="/contact/">導入相談</a>から資料をご請求ください。</p>
+          </form>
+          <section class="form-card form-complete" tabindex="-1" aria-labelledby="download-complete-title" data-download-complete hidden>
+            <h2 id="download-complete-title">ダウンロードを開始しました</h2>
+            <p>ご入力ありがとうございます。ビズフォームのサービス資料（PDF）のダウンロードを開始しました。社内でのご検討にお役立てください。</p>
+            <p>ダウンロードが始まらない場合は、<a class="text-link" href="#download" data-download-link download target="_blank" rel="noopener">こちらからダウンロード</a>してください。</p>
+            <p class="field-help">資料についてのご質問や、自社の条件でのお見積もりは、<a class="text-link" href="/contact/">導入相談</a>からお気軽にどうぞ。</p>
+          </section>
+        </div>
+      </section>
+      <section class="section">
         <div class="container">
           <h2 class="section-title">社内検討で確認したい6項目。</h2>
           <div class="cards-3">
@@ -99,5 +154,6 @@
     </main>
     <div data-site-footer></div>
     <script src="/assets/app.js"></script>
+    <script src="https://contentsx-crm.vercel.app/embed/inbound-v1.js" data-source-key="16162da3434e0b650c94692987d86916" data-auto="false" async></script>
   </body>
 </html>
