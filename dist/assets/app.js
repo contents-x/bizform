@@ -190,6 +190,37 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   if (document.querySelector('[data-download-form]')) cta.querySelector('.floating-cta-secondary')?.remove();
   // The short "電話" label alone would not say what the link is for.
   cta.querySelector('.floating-cta-tel')?.setAttribute('aria-label', `電話で相談 ${TEL}`);
+
+  // Visitors can tuck the bar away; its tab stays at the bottom edge to bring
+  // it back. Remembered for the visit so the bar does not return on every page.
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'floating-cta-toggle';
+  const toggleLabel = document.createElement('span');
+  toggle.append(toggleLabel, svgIcon(['m6 9 6 6 6-6']));
+  cta.append(toggle);
+  const minimizedKey = 'bizform-floating-cta-minimized';
+  const setMinimized = (minimized) => {
+    cta.classList.toggle('is-minimized', minimized);
+    toggle.setAttribute('aria-expanded', String(!minimized));
+    toggleLabel.textContent = minimized ? 'お問い合わせ' : 'しまう';
+  };
+  try {
+    setMinimized(sessionStorage.getItem(minimizedKey) === '1');
+  } catch {
+    setMinimized(false);
+  }
+  toggle.addEventListener('click', () => {
+    const minimized = !cta.classList.contains('is-minimized');
+    setMinimized(minimized);
+    try {
+      if (minimized) sessionStorage.setItem(minimizedKey, '1');
+      else sessionStorage.removeItem(minimizedKey);
+    } catch {
+      // Storage blocked (private mode, site data off): the bar still toggles on this page.
+    }
+  });
+
   document.body.append(cta);
   document.body.classList.add('has-floating-cta');
 
@@ -199,14 +230,14 @@ if (!isContactPage && !document.querySelector('.floating-cta')) {
   syncLabel();
   narrow.addEventListener('change', syncLabel);
 
-  // Reserve the bar's full height even while hidden: focusing a link can
-  // scroll far enough to reveal it before the next frame.
+  // Reserve the bar's full height, tab included, even while hidden or tucked
+  // away: focusing a link can scroll far enough to reveal it before the next frame.
   const syncCtaHeight = () => {
-    document.documentElement.style.setProperty('--floating-cta-height', `${cta.offsetHeight}px`);
+    document.documentElement.style.setProperty('--floating-cta-height', `${cta.offsetHeight + toggle.offsetHeight}px`);
     keepFocusVisible();
   };
   syncCtaHeight();
-  onResize([cta], syncCtaHeight);
+  onResize([cta, toggle], syncCtaHeight);
 
   const revealAfter = () => Math.max(window.innerHeight * 0.6, 420);
   let ctaVisible = false;

@@ -1398,6 +1398,43 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .floating-cta .floating-cta-tel:hover { background: var(--brand-blue-dark); transform: translateY(-2px); }
 .floating-cta svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+/* The tab on the bar's top edge tucks the bar away. Tucked, the bar slides below the
+   screen (the home-indicator strip stays) and only the tab is left to bring it back. */
+.floating-cta-toggle {
+  position: absolute;
+  right: max(20px, env(safe-area-inset-right));
+  /* Overlap the bar's top border so the tab and bar read as one piece. */
+  bottom: calc(100% - 1px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  color: var(--brand-navy);
+  background: var(--white);
+  box-shadow: 0 -6px 14px rgba(7, 30, 69, .07);
+  /* px like the bar's buttons. */
+  font-size: 13.6px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* A 44px touch target without a taller tab. */
+.floating-cta-toggle::before { content: ""; position: absolute; inset: -8px -4px 0; }
+.floating-cta-toggle:hover { color: var(--brand-blue); }
+.floating-cta .floating-cta-toggle svg { width: 16px; height: 16px; transition: transform .2s ease; }
+/* Tucked away, the tab is the only way back to the inquiry links; fill it like 無料で相談する. */
+.floating-cta.is-minimized .floating-cta-toggle { color: var(--white); background: var(--brand-blue); border-color: var(--brand-blue); }
+.floating-cta.is-minimized .floating-cta-toggle:hover { background: var(--brand-blue-dark); }
+.floating-cta.is-minimized .floating-cta-toggle svg { transform: rotate(180deg); }
+.floating-cta.is-visible.is-minimized { transform: translateY(calc(100% - env(safe-area-inset-bottom, 0px))); box-shadow: none; }
+/* Out of reach once tucked away: hidden links leave the tab order after the slide. */
+.floating-cta.is-minimized a { visibility: hidden; transition: visibility 0s .28s; }
+
 /* Keep the footer clear of the bar so the last links stay clickable. */
 body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-height, 80px) + 16px); }
 
@@ -1406,6 +1443,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: 14.4px; }
   .floating-cta .floating-cta-label-long { display: none; }
   .floating-cta .floating-cta-tel { flex: none; }
+  .floating-cta-toggle { right: max(12px, env(safe-area-inset-right)); }
 }
 /* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
 @media (max-width: 374px) {
@@ -1441,7 +1479,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floating-cta { transition: none; }
+  .floating-cta, .floating-cta .floating-cta-toggle svg { transition: none; }
 }
 
 @media print {
