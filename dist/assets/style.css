@@ -125,7 +125,7 @@ img { max-width: 100%; }
 .logo { display: inline-flex; flex: none; align-items: center; }
 .site-header .logo img, .site-footer .logo img { display: block; width: auto; height: 32px; }
 .global-nav { display: flex; align-items: center; gap: 25px; margin-left: auto; }
-.global-nav a { position: relative; padding: 8px 0; font-size: .9rem; font-weight: 700; }
+.global-nav a { position: relative; padding: 8px 0; font-size: 14.4px; font-weight: 700; }
 .global-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 1px; height: 2px; background: var(--brand-blue); transition: right .2s ease; }
 .global-nav a:hover::after, .global-nav a[aria-current="page"]::after { right: 0; }
 .header-actions { display: flex; align-items: center; gap: 10px; }
@@ -150,16 +150,25 @@ img { max-width: 100%; }
 .button-tel svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
 .header-actions .button-tel { gap: 8px; padding: 8px 14px; }
 .button-tel-text { display: grid; line-height: 1.2; text-align: left; }
-.button-tel-text small { color: var(--on-dark); font-size: .75rem; }
-.button-tel-text span { font-size: .95rem; letter-spacing: .02em; }
+.button-tel-text small { color: var(--on-dark); font-size: 12px; }
+.button-tel-text span { font-size: 15.2px; letter-spacing: .02em; }
 /* Japanese text may break between any two characters, so a tight header used
    to wrap every link onto two lines instead of overflowing. Keep each label on
-   one line and make the row fit instead. */
+   one line and make the row fit instead. Header row text is in px, like the
+   buttons, so a larger browser font setting cannot push the row off screen.
+   Desktop ranges start at 1040.02px, not 1041px: zoom and OS scaling produce
+   fractional widths such as 1040.9px that would fall between the queries. */
 .global-nav > a, .header-actions .button, .button-tel-text span { white-space: nowrap; }
 .header-dl-short { display: none; }
-@media (min-width: 1041px) {
+@media (min-width: 1040.02px) {
   .header-inner { gap: 20px; }
   .header-actions .button { padding-inline: 14px; }
+  /* app.js adds .header-compact when the row does not fit anyway (fonts,
+     scrollbars and text scaling vary by device): the same short labels as below 1240px. */
+  .header-compact .header-actions .button-tel { width: 50px; padding: 0; }
+  .header-compact .header-actions .button-tel-text { display: none; }
+  .header-compact .header-dl-long { display: none; }
+  .header-compact .header-dl-short { display: inline; }
 }
 @media (min-width: 1240px) {
   .global-nav { gap: 20px; }
@@ -167,13 +176,16 @@ img { max-width: 100%; }
 }
 /* Below 1240px the number no longer fits beside the menu; keep the phone as an icon
    and shorten 資料ダウンロード to 資料DL. .98 covers fractional widths under zoom. */
-@media (min-width: 1041px) and (max-width: 1239.98px) {
+@media (min-width: 1040.02px) and (max-width: 1239.98px) {
   .global-nav { gap: 18px; }
   .header-actions .button-tel { width: 50px; padding: 0; }
   .header-actions .button-tel-text { display: none; }
   .header-dl-long { display: none; }
   .header-dl-short { display: inline; }
 }
+/* app.js adds .header-no-tel when the row still does not fit after .header-compact.
+   The menu and the floating bar still offer the phone. */
+.header-no-tel .header-actions .button-tel { display: none; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--brand-blue); font-weight: 800; }
 .guide-long-title { font-size: 1.1rem !important; }
 .text-link::after { content: "→"; transition: transform .2s ease; }
@@ -1208,7 +1220,7 @@ details[open] summary::after { content: "−"; }
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 40px); }
   .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 8px; }
   .header-inner .logo img { height: 28px; }
-  .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: .875rem; box-shadow: none; }
+  .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: 14px; box-shadow: none; }
   .desktop-label { display: none; }
   .mobile-label { display: inline; }
   .header-actions { gap: 6px; }
@@ -1419,8 +1431,6 @@ details[open] summary::after { content: "−"; }
   .container, .narrow, .home-role-container,
   .pricing-container-1080, .pricing-container-1100, .pricing-container-1120,
   .examples-container, .examples-container-narrow, .uc-container, .uc-container-narrow { width: calc(100% - 32px); }
-  .header-inner .logo img { height: 24px; }
-  .header-actions .button-primary { padding-inline: 12px; }
 
   .uc-industry-grid article { grid-template-columns: minmax(0,1fr); }
   .uc-industry-image { grid-template: minmax(0,1fr) / minmax(0,1fr); height: 116px; }
@@ -1456,7 +1466,8 @@ details[open] summary::after { content: "−"; }
   min-height: 52px;
   padding: 12px 30px;
   border-radius: 999px;
-  font-size: .95rem;
+  /* px like the header, so a larger browser font setting cannot push a button off screen. */
+  font-size: 15.2px;
   font-weight: 800;
   white-space: nowrap;
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
@@ -1482,13 +1493,18 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 
 @media (max-width: 768px) {
   .floating-cta { gap: 8px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
-  .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: .9rem; }
+  .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: 14.4px; }
   .floating-cta .floating-cta-label-long { display: none; }
   .floating-cta .floating-cta-tel { flex: none; }
 }
 /* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
 @media (max-width: 374px) {
   .floating-cta-secondary svg, .floating-cta-primary svg { display: none; }
+}
+/* Up to 389px the full-size logo leaves no room beside the phone button. */
+@media (max-width: 389px) {
+  .header-inner .logo img { height: 24px; }
+  .header-actions .button-primary { padding-inline: 12px; }
 }
 /* No room for a third header button; the phone stays in the menu and the floating bar. */
 @media (max-width: 349px) {

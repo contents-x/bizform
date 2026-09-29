@@ -358,7 +358,7 @@
 }
 
 /* Tablet and desktop hero: responsive process columns and room for the copy. */
-@media (min-width: 641px) {
+@media (min-width: 640.02px) {
   .sv-hero {
     background-image: linear-gradient(180deg,color-mix(in srgb, var(--white) 97%, transparent) 0%,color-mix(in srgb, var(--white) 90%, transparent) 58%,color-mix(in srgb, var(--pale-blue) 72%, transparent) 100%), url("/assets/images/asset_service_bg_office_city.webp");
     background-position: center top;
@@ -425,7 +425,7 @@
   .sv-hero-note { display: none; }
 }
 
-@media (min-width: 1161px) {
+@media (min-width: 1160.02px) {
   .sv-hero-container { width: min(calc(100% - 64px), 1340px); padding-block: 48px 64px; }
   .sv-hero-copy { max-width: none; }
   .sv-hero-copy h1 br { display: none; }
@@ -434,7 +434,7 @@
   .sv-hero-process ol { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 20px; }
 }
 
-@media (min-width: 641px) and (max-width: 900px) {
+@media (min-width: 640.02px) and (max-width: 900px) {
   .sv-hero-process ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

@@ -92,8 +92,29 @@ const onResize = (elements, callback) => {
 
 // The header is fixed, so its wrapper has to reserve the matching height.
 const siteHeader = document.querySelector('.site-header');
+
+// Fonts, scrollbars and text scaling differ by device, so the breakpoints alone
+// cannot promise the header row fits. Measure the row itself: fall back to the
+// short labels, then drop the header phone (the menu and floating bar keep it).
+const headerRow = siteHeader?.querySelector('.header-inner');
+const headerOverflows = () => {
+  const limit = headerRow.getBoundingClientRect().right + 0.5;
+  // The mobile menu is position: fixed and spans the screen; it is not in the row.
+  return [...headerRow.children].some(el => el.getClientRects().length &&
+    getComputedStyle(el).position !== 'fixed' && el.getBoundingClientRect().right > limit);
+};
+const fitHeader = () => {
+  if (!headerRow) return;
+  const root = document.documentElement;
+  root.classList.remove('header-compact', 'header-no-tel');
+  if (!headerOverflows()) return;
+  root.classList.add('header-compact');
+  if (headerOverflows()) root.classList.add('header-no-tel');
+};
+
 const syncHeaderHeight = () => {
   if (!siteHeader) return;
+  fitHeader();
   const height = siteHeader.offsetHeight;
   if (height) document.documentElement.style.setProperty('--header-height', `${height}px`);
   keepFocusVisible();
