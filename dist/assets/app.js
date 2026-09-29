@@ -377,6 +377,11 @@ if (contactForm && contactSubmit) {
   };
   const submitLabel = contactSubmit.textContent;
   let submitting = false;
+  // A refused or unconfirmed HubSpot send re-enables the button, and each
+  // resend used to add the same inquiry to the CRM inbox again (two identical
+  // rows on 2026-09-29). Copy each distinct set of answers only once; a
+  // corrected resend still goes through as a new copy.
+  let copiedToCrm = '';
 
   const sendToHubSpot = (payload) => {
     const controller = 'AbortController' in window ? new AbortController() : null;
@@ -425,7 +430,11 @@ if (contactForm && contactSubmit) {
     const honeypot = formField(data, 'website');
 
     // CRM の受信箱へも送る（失敗しても HubSpot の受付・完了表示には影響しない）
-    copyToCrm(contactForm);
+    const answers = JSON.stringify([...data.entries()]);
+    if (answers !== copiedToCrm) {
+      copiedToCrm = answers;
+      copyToCrm(contactForm);
+    }
 
     // Only bots fill the off-screen field. Pretend it worked and keep them out
     // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
