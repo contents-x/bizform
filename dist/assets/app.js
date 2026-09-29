@@ -370,6 +370,13 @@ if (contactForm && contactSubmit) {
   // arrangement as BizManga, ContentsX and イチオシ採用 (README: 外部連携).
   const HUBSPOT_TIMEOUT_MS = 20000;
 
+  // The TOP campaign links open the form with ?topic=campaign; start on that
+  // topic so staff can tell the inquiry asks for the campaign discount.
+  const presetTopic = new URLSearchParams(window.location.search).get('topic');
+  contactForm.querySelectorAll('#topic option[data-topic]').forEach((option) => {
+    if (option.dataset.topic === presetTopic) option.selected = true;
+  });
+
   const complete = document.querySelector('[data-contact-complete]');
   const failures = {
     rejected: contactForm.querySelector('[data-contact-error="rejected"]'),

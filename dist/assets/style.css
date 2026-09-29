@@ -384,14 +384,20 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .home-campaign-badge { padding: 2px 10px; border: 1px solid var(--white); border-radius: 999px; font-size: .8125rem; font-weight: 800; }
 .home-campaign-arrow { display: inline-block; margin-left: .5em; transition: transform .2s ease; }
 .home-campaign-link:hover .home-campaign-arrow { transform: translateX(4px); }
-/* The same campaign as a band right after the hero, where it sat before the redesign. */
+/* The same campaign as a band right after the hero, where it sat before the redesign.
+   The conditions sit right under the offer at body size, not in fine print elsewhere. */
 .home-campaign-band { padding: 28px 0; background: var(--white); }
-.home-campaign-band-link { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; padding: 22px 32px; border-radius: 16px; color: var(--white); background: var(--campaign-red); box-shadow: 0 14px 30px rgba(217,45,32,.26); text-align: center; transition: transform .2s ease, box-shadow .2s ease; }
-.home-campaign-band-link:hover { transform: translateY(-2px); box-shadow: 0 18px 36px rgba(217,45,32,.34); }
+.home-campaign-band-box { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 20px 36px; padding: 28px 36px; border-radius: 16px; color: var(--white); background: var(--campaign-red); box-shadow: 0 14px 30px rgba(217,45,32,.26); }
+.home-campaign-band-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0; }
 .home-campaign-band-badge { padding: 3px 12px; border: 1px solid var(--white); border-radius: 999px; font-size: .875rem; font-weight: 800; }
-.home-campaign-band-link strong { font-size: clamp(1.25rem,2vw,1.625rem); line-height: 1.4; }
-.home-campaign-band-link strong span { display: inline-block; white-space: nowrap; }
-.home-campaign-band-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
+.home-campaign-band-title strong { font-size: clamp(1.375rem,2.4vw,1.875rem); line-height: 1.35; }
+/* Break between the phrases first; inside one only when it alone is wider than the band (enlarged text on 280px). */
+.home-campaign-band-title strong span { display: inline-block; }
+.home-campaign-band-title em { font-size: 1.3em; font-style: normal; }
+.home-campaign-band-terms { margin: 14px 0 0; padding-left: 1.25em; font-size: 1rem; line-height: 1.7; }
+.home-campaign-band-terms li + li { margin-top: 4px; }
+.home-campaign-band-cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 10px 24px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; transition: transform .2s ease, box-shadow .2s ease; }
+.home-campaign-band-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(5,23,52,.24); }
 
 /* Hero: headline, one sentence, two buttons; the key facts sit in one strip below. */
 .home-hero { position: relative; overflow: hidden; background: var(--paper) url('/assets/images/asset_hero_wall.webp') center / cover no-repeat; }
@@ -462,6 +468,9 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .error-code { margin: 0 0 16px; color: var(--on-dark); font-size: 1.125rem; font-weight: 800; }
 
 @media (max-width: 1024px) {
+  /* Beside the button the conditions shrink to a narrow column; put the button under them. */
+  .home-campaign-band-box { grid-template-columns: minmax(0,1fr); }
+  .home-campaign-band-cta { justify-self: start; }
   .home-hero-inner { grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); }
   .home-flow-steps { gap: 20px; }
   .home-flow-steps img { height: 130px; }
@@ -473,6 +482,9 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 
 @media (max-width: 768px) {
   .home-campaign-link { font-size: .9375rem; }
+  .home-campaign-band { padding: 20px 0; }
+  .home-campaign-band-box { padding: 22px 20px; }
+  .home-campaign-band-cta { justify-self: stretch; }
   .home-hero::before { background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.94) 60%, rgba(255,255,255,.6) 100%); }
   .home-hero-inner { grid-template-columns: minmax(0,1fr); padding: 36px 0 28px; }
   .home-hero-copy h1 { font-size: clamp(2.25rem,10vw,3.5rem); line-height: 1.3; }
@@ -1423,6 +1435,9 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 /* The campaign line already says キャンペーン; drop the badge where it would push the line to four rows. */
 @media (max-width: 359px) {
   .home-campaign-badge { display: none; }
+  /* Keeps お問い合わせはこちら on one line on a 280px cover screen. */
+  .home-campaign-band-box { padding-inline: 16px; }
+  .home-campaign-band-cta { padding-inline: 12px; font-size: 1rem; }
 }
 
 /* Keep 44px touch targets and room for focus outlines in short landscape views. */
