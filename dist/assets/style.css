@@ -382,7 +382,7 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .home-campaign { background: var(--campaign-red); }
 .home-campaign-link { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 14px; min-height: 48px; padding: 8px 20px; color: var(--white); font-weight: 700; text-align: center; }
 .home-campaign-badge { padding: 2px 10px; border: 1px solid var(--white); border-radius: 999px; font-size: .8125rem; font-weight: 800; }
-.home-campaign-arrow { transition: transform .2s ease; }
+.home-campaign-arrow { display: inline-block; margin-left: .5em; transition: transform .2s ease; }
 .home-campaign-link:hover .home-campaign-arrow { transform: translateX(4px); }
 /* The same campaign as a band right after the hero, where it sat before the redesign. */
 .home-campaign-band { padding: 28px 0; background: var(--white); }
@@ -498,6 +498,20 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
   .home-plan-badge { left: 20px; transform: none; }
   .home-links { flex-direction: column; gap: 4px; margin-top: 24px; }
   .home-cta-actions { flex-direction: column; justify-content: flex-start; }
+}
+
+/* Phones held sideways are only 375-430px tall: shrink the headline to two lines,
+   drop the artwork and tighten the spacing so the consultation button is on the first screen. */
+@media (max-height: 480px) and (orientation: landscape) {
+  .home-campaign-link { min-height: 40px; padding-block: 6px; }
+  .home-hero-inner { grid-template-columns: minmax(0,1fr); padding: 20px 0 24px; }
+  .home-hero-copy h1 { font-size: 2.25rem; line-height: 1.25; }
+  .home-hero-lead { margin-top: 12px; font-size: 1rem; line-height: 1.8; }
+  /* .home-page raises specificity over the shared mobile rules that come later. */
+  .home-page .home-hero-actions { flex-direction: row; margin-top: 18px; }
+  .home-page .home-hero-actions .button { width: auto; min-height: 44px; }
+  .home-hero-visual { display: none; }
+  .home-facts { margin-top: 20px; }
 }
 
 /* Pricing page */
@@ -1401,6 +1415,14 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 /* No room for a third header button; the phone stays in the menu and the floating bar. */
 @media (max-width: 349px) {
   .header-actions .button-tel { display: none; }
+}
+/* Folded phones such as the Galaxy Fold cover screen (280px): a smaller logo keeps the row on screen. */
+@media (max-width: 319px) {
+  .header-inner .logo img { height: 20px; }
+}
+/* The campaign line already says キャンペーン; drop the badge where it would push the line to four rows. */
+@media (max-width: 359px) {
+  .home-campaign-badge { display: none; }
 }
 
 /* Keep 44px touch targets and room for focus outlines in short landscape views. */
