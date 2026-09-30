@@ -1,3 +1,5 @@
+// LEGACY COPY - do not edit. Kept only for pages cached before the 2026-09-30 reorganisation;
+// no page links it any more. The live files are in assets/css/ and assets/js/. Delete in the next deploy.
 const path = window.location.pathname;
 const active = (segment) => path.includes(segment) ? ' aria-current="page"' : '';
 

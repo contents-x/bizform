@@ -1,5 +1,3 @@
-// LEGACY COPY - do not edit. Kept only for pages cached before the 2026-09-30 reorganisation;
-// no page links it any more. The live files are in assets/css/ and assets/js/. Delete in the next deploy.
 document.querySelectorAll('.faq-accordion details').forEach((details, index) => {
   const summary = details.querySelector('summary');
   const answer = details.querySelector('.faq-answer');

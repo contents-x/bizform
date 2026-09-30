@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>導入相談・お問い合わせ｜ビズフォーム</title>
     <meta name="description" content="ビズフォームが自社に合うか、料金・見積もり、サービス内容について、お電話またはフォームから相談できます。">
-    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/assets/css/site.css?v=145e572d7a">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="canonical" href="https://bizform.contentsx.jp/contact/">
@@ -36,7 +36,7 @@
             </div>
             <a class="button button-secondary contact-tel-link" href="tel:03-6261-0764" aria-label="電話で相談 03-6261-0764"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>03-6261-0764</a>
           </div>
-          <!-- app.js sends this form to HubSpot and hands it to the CRM embed script. method="dialog" keeps it from ever falling back to an HTTP submission. -->
+          <!-- forms.js sends this form to HubSpot and hands it to the CRM embed script. method="dialog" keeps it from ever falling back to an HTTP submission. -->
           <form class="form-card" method="dialog" data-contact-form>
             <div class="field">
               <label for="company">会社名<span class="required">必須</span></label>
@@ -93,7 +93,8 @@
       </section>
     </main>
     <div data-site-footer></div>
-    <script src="/assets/app.js"></script>
+    <script src="/assets/js/site.js?v=fc48341d48"></script>
+    <script src="/assets/js/forms.js?v=94054299f7"></script>
     <script src="https://contentsx-crm.vercel.app/embed/inbound-v1.js" data-source-key="16162da3434e0b650c94692987d86916" data-auto="false" async></script>
   </body>
 </html>

@@ -1,8 +1,5 @@
-/* LEGACY COPY - do not edit. Kept only for pages cached before the 2026-09-30 reorganisation;
-   no page links it any more. The live files are in assets/css/ and assets/js/. Delete in the next deploy. */
 .faq-page {
-  /* Colour comes from the brand tokens in style.css.
-     Do not hardcode colours here; add a token there instead. */
+  /* Brand colours come from the tokens in site.css; the soft tints below match the artwork. */
   background: var(--white);
 }
 
@@ -43,11 +40,6 @@
 
 .faq-breadcrumbs {
   margin-bottom: 56px;
-  color: var(--muted);
-}
-
-.faq-breadcrumbs a:hover {
-  color: var(--brand-blue);
 }
 
 .faq-hero-copy {
