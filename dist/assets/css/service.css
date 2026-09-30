@@ -15,7 +15,8 @@
 /* The five steps, each in one or two lines. */
 .sv-steps { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; margin: 40px 0 0; padding: 0; list-style: none; }
 .sv-steps li { min-width: 0; padding: 24px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); }
-.sv-steps h3, .sv-onboarding h3 { margin: 6px 0 8px; color: var(--brand-navy-deep); font-size: 1.125rem; line-height: 1.5; }
+.sv-steps h3, .sv-onboarding h3 { margin: 6px 0 8px; color: var(--brand-navy-deep); line-height: 1.5; }
+.sv-steps h3 { font-size: 1.125rem; }
 .sv-steps p, .sv-onboarding p { margin: 0; font-size: 1rem; line-height: 1.8; }
 
 /* Who does what. */

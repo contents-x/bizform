@@ -6,19 +6,16 @@
 }
 .examples-page :where(main) img { height: auto; }
 
-.examples-container, .examples-container-narrow { width: min(calc(100% - 48px),1200px); margin-inline: auto; }
-.examples-container-narrow { max-width: 1120px; }
-.examples-section { position: relative; overflow: hidden; padding: 106px 0; }
 .examples-heading { max-width: 830px; margin: 0 auto 54px; text-align: center; }
 
-.examples-heading h2, .examples-final-card h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.45rem,4.2vw,4rem); line-height: 1.35; letter-spacing: -.045em; }
+.examples-heading h2, .examples-final-card h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); line-height: 1.35; letter-spacing: -.045em; }
+.examples-heading h2 { font-size: clamp(2.45rem,4.2vw,4rem); }
 .examples-heading h2 em { color: var(--brand-blue); font-style: normal; }
 .examples-heading > p:last-child { margin: 20px 0 0; color: #566681; font-size: 1rem; line-height: 1.9; }
 .examples-heading-left { max-width: none; margin-inline: 0; text-align: left; }
 
-.examples-button { display: inline-flex; justify-content: center; align-items: center; min-height: 54px; padding: 13px 23px; border: 1px solid transparent; border-radius: 999px; font-size: .9rem; font-weight: 800; transition: transform .2s ease,box-shadow .2s ease,background .2s ease; }
-.examples-button:hover { transform: translateY(-2px); }
-.examples-button-primary { color: var(--white); background: var(--brand-blue); box-shadow: 0 12px 26px rgba(18,101,232,.22); }
+/* Buttons are the shared .showcase-button (site.css) with this padding and transition. */
+.examples-button { padding: 13px 23px; transition: transform .2s ease,box-shadow .2s ease,background .2s ease; }
 .examples-button-secondary { color: var(--brand-navy); border-color: #2b518d; background: var(--white); }
 
 .examples-hero { position: relative; min-height: 720px; overflow: hidden; background: linear-gradient(135deg,var(--white) 6%,#f8fafd 55%,#ecf1f9 100%); }
@@ -31,7 +28,6 @@
 .examples-kicker::before { content: ""; width: 33px; height: 2px; background: currentColor; }
 .examples-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(3.15rem,4.3vw,4rem); line-height: 1.24; letter-spacing: -.06em; }
 .examples-hero-copy h1 em { color: var(--brand-blue); font-style: normal; }
-.examples-heading-line { display: inline-block; white-space: nowrap; }
 .examples-hero-lead { margin: 25px 0 0; color: #596984; font-size: 1rem; line-height: 2; }
 .examples-hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 32px; }
 .examples-hero-visual { position: relative; display: grid; place-items: center; min-width: 0; }
@@ -148,10 +144,8 @@
 @media (max-width: 768px) {
   .examples-heading > p:last-child br { display: none; }
   .examples-hero { min-height: auto; }
-  .examples-heading-line { display: inline; white-space: normal; }
   .examples-hero-lead br { display: none; }
   .examples-hero-actions { flex-direction: column; gap: 10px; margin-top: 24px; }
-  .examples-button { width: 100%; min-height: 52px; min-width: 0; font-size: 1rem; }
 
   .examples-handnote-hero { right: 20px; bottom: 18px; }
   .examples-process-grid, .examples-sample-grid, .examples-operation-layout, .examples-faq-grid { grid-template-columns: 1fr; }
@@ -167,10 +161,8 @@
 
   .examples-final-card > div { flex-direction: column; }
 
-  .examples-container, .examples-container-narrow { width: calc(100% - 40px); }
-  .examples-section { padding: 56px 0; }
   .examples-heading h2, .examples-sample .examples-heading h2, .examples-final-card h2 { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
-  .examples-heading h2 br, .examples-final-card h2 br { display: none; }
+  .examples-heading h2 br { display: none; }
   .examples-hero-lead { font-size: 1rem; line-height: 1.85; }
 
   .examples-heading { margin-bottom: 28px; }
@@ -210,9 +202,6 @@
   .examples-insight-list > div { grid-template-columns: 42px 1fr; padding: 12px; }
   .examples-insight-list > div > span { width: 42px; height: 42px; }
   .examples-operation-flow { grid-template-columns: 1fr; }
-  .examples-operation-flow li::after { display: none !important; }
-}
-
-@media (max-width: 360px) {
-  .examples-container, .examples-container-narrow { width: calc(100% - 32px); }
+  /* One step per row: no arrows. nth-child(n) matches every step at the specificity of the rules above. */
+  .examples-operation-flow li:nth-child(n)::after { display: none; }
 }

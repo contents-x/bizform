@@ -7,8 +7,9 @@
    Base palette is docs/CONTENT-RULES.md: navy #071E45, blue #1265E8, orange #F5A623.
    The blue matches the illustrations in assets/images (hue ~215).
    Do not introduce page-specific colour palettes; add a token here instead.
-   site.css, home.css, service.css and pricing.css use tokens only (checked by
-   scripts/check_site.py). The illustrated pages (examples, use cases, FAQ) keep
+   site.css, home.css, service.css and pricing.css write every hex colour as a
+   token (checked by scripts/check_site.py); rgba() in shadows and overlays may
+   stay inline. The illustrated pages (examples, use cases, FAQ) keep
    their one-off tints next to the artwork they match; a tint needed a second
    time becomes a token here. */
 :root {
@@ -18,7 +19,6 @@
   --brand-navy-darkest: #041129;
   --brand-blue: #1265e8;          /* accents, links, fills, icons — AA 5.18:1 on white */
   --brand-blue-dark: #0d4fb8;     /* hover / gradient depth */
-  --brand-blue-bright: #3185f6;   /* highlights, gradient ends */
   --brand-orange: #f5a623;
   --brand-orange-dark: #d88719;
   --brand-orange-text: #9a5900;  /* 白 5.52:1。--brand-orange は 2.03:1 で文字に使えない */
@@ -39,7 +39,6 @@
 
   /* Lines & accents */
   --line: #dbe4f0;
-  --line-soft: #eaf0f8;
   --cyan: #8eafe3;
   --green: #0c7a62;
   --alert: #e0655f;
@@ -136,7 +135,8 @@ img { max-width: 100%; }
 /* Official logo (dist/assets/images/asset_logo_bizform.webp). Size it by height only.
    Scoped to the header and footer so page-wide `img` rules cannot resize it. */
 .logo { display: inline-flex; flex: none; align-items: center; }
-.site-header .logo img, .site-footer .logo img { display: block; width: auto; height: 32px; }
+.site-header .logo img, .site-footer .logo img { display: block; width: auto; }
+.site-header .logo img { height: 32px; }
 .global-nav { display: flex; align-items: center; gap: 25px; margin-left: auto; }
 .global-nav a { position: relative; padding: 8px 0; font-size: 14.4px; font-weight: 700; }
 .global-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 1px; height: 2px; background: var(--brand-blue); transition: right .2s ease; }
@@ -155,7 +155,6 @@ img { max-width: 100%; }
 .button-primary { color: var(--brand-navy); background: var(--brand-orange); box-shadow: 0 12px 24px rgba(245,166,35,.22); }
 .button-primary:hover { background: var(--brand-orange-dark); }
 .button-secondary { color: var(--brand-blue); border-color: var(--brand-blue); background: var(--white); }
-.button[aria-disabled="true"] { color: var(--muted); background: var(--surface-disabled); cursor: not-allowed; }
 .button-ghost { color: var(--white); border-color: rgba(255,255,255,.38); background: transparent; }
 /* Phone consultation next to the consultation CTA. Navy keeps it apart from the orange and blue CTAs. */
 .button-tel { color: var(--white); background: var(--brand-navy); }
@@ -200,7 +199,6 @@ img { max-width: 100%; }
    The menu and the floating bar still offer the phone. */
 .header-no-tel .header-actions .button-tel { display: none; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--brand-blue); font-weight: 800; }
-.guide-long-title { font-size: 1.1rem !important; }
 .text-link::after { content: "→"; transition: transform .2s ease; }
 .text-link:hover::after { transform: translateX(4px); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
@@ -222,22 +220,16 @@ img { max-width: 100%; }
 .source-row small { display: block; color: var(--muted); }
 .source-row strong { display: block; margin-top: 5px; }
 
-.cards-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 48px; }
-.info-card { position: relative; padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); transition: transform .2s ease, box-shadow .2s ease; }
+/* Card grid of the guide index. */
+.cards-3 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-top: 48px; }
+.info-card { position: relative; min-width: 0; padding: 30px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); transition: transform .2s ease, box-shadow .2s ease; }
 .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .card-num { color: var(--brand-blue); font-size: .75rem; font-weight: 900; letter-spacing: .12em; }
-.info-card h3 { margin: 18px 0 12px; font-size: 1.28rem; line-height: 1.45; }
 .info-card .text-link { margin-top: 22px; }
 .info-card p { margin: 0; color: var(--muted); }
-.guide-index-page .cards-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
-.guide-index-page .info-card { min-width: 0; }
-.guide-index-page .info-card h2 { white-space: normal; overflow-wrap: anywhere; font-size: 1.4rem; }
-@media (max-width: 1024px) {
-  .guide-index-page .cards-3 { grid-template-columns: repeat(2,minmax(0,1fr)); }
-}
-@media (max-width: 768px) {
-  .guide-index-page .cards-3 { grid-template-columns: minmax(0,1fr); }
-}
+.info-card h2 { overflow-wrap: anywhere; font-size: 1.4rem; }
+/* One card title is much longer than the others and is set smaller. */
+.info-card .guide-long-title { font-size: 1.1rem; }
 
 .faq-list { display: grid; gap: 12px; margin-top: 44px; }
 details { border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
@@ -279,12 +271,16 @@ details[open] summary::after { content: "−"; }
 .final-cta-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
 .final-cta-actions .button { min-width: 190px; border-radius: 999px; }
 .final-cta :focus-visible { outline-color: var(--white); }
-@media (max-width: 1024px) {
-  .block-title .heading-line { white-space: normal; }
-  /* Side by side, the heading and two buttons overflow just above 768px with larger text. */
-  .final-cta { grid-template-columns: minmax(0,1fr); gap: 28px; }
-  .final-cta-actions { justify-content: flex-start; }
-}
+
+/* Illustrated pages (examples, use cases): a 1200px column (1120px narrow),
+   sections that clip their decorations, and round buttons. The page files load
+   after this one and add each button's padding, transition and colour variant. */
+.showcase-container, .showcase-container-narrow { width: min(calc(100% - 48px),1200px); margin-inline: auto; }
+.showcase-container-narrow { max-width: 1120px; }
+.showcase-section { position: relative; overflow: hidden; padding: 106px 0; }
+.showcase-button { display: inline-flex; justify-content: center; align-items: center; min-height: 54px; border: 1px solid transparent; border-radius: 999px; font-size: .9rem; font-weight: 800; }
+.showcase-button:hover { transform: translateY(-2px); }
+.showcase-button-primary { color: var(--white); background: var(--brand-blue); box-shadow: 0 12px 26px rgba(18,101,232,.22); }
 
 .split { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; align-items: start; }
 .definition-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
@@ -297,8 +293,6 @@ details[open] summary::after { content: "−"; }
 .comparison tr:last-child td { border-bottom: 0; }
 .notice { padding: 22px 24px; border-left: 4px solid var(--brand-orange); border-radius: 0 14px 14px 0; background: var(--notice-surface); }
 .notice strong { display: block; margin-bottom: 5px; }
-/* site.js wraps table.comparison in .table-scroll, so match both shapes. */
-.table-scroll + .notice, .comparison + .notice { margin-top: 30px; }
 .notice + .section-title { margin-top: 55px; }
 .pending { display: inline-flex; padding: 5px 9px; border-radius: 99px; color: var(--pending-text); background: var(--pending-surface); font-size: .76rem; font-weight: 800; }
 
@@ -316,14 +310,13 @@ details[open] summary::after { content: "−"; }
 .narrow.form-shell { width: min(calc(100% - 40px), 640px); }
 form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
 .field { display: grid; gap: 8px; margin-bottom: 24px; }
-.field label, .field legend { font-weight: 800; }
+.field label { font-weight: 800; }
 .required { margin-left: 8px; color: var(--brand-orange-text); font-size: .75rem; }
 .field input, .field select, .field textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--field-border); border-radius: 8px; color: var(--ink); background: var(--white); line-height: 1.5; transition: border-color .2s ease; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brand-blue); }
 .field textarea { min-height: 140px; resize: vertical; }
 .field-help { margin: -2px 0 0; color: var(--muted); font-size: 1rem; }
-.form-card > button + .field-help,
-.form-card > .field-help + .field-help { margin-top: 14px; }
+.form-card > button + .field-help { margin-top: 14px; }
 .form-honeypot { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 .form-alert { margin-top: 18px; padding: 16px 18px; border-left: 4px solid var(--alert-text); border-radius: 0 10px 10px 0; color: var(--ink); background: var(--alert-surface); scroll-margin-block: calc(var(--header-height, 79px) + 16px) 24px; }
 .form-alert strong { display: block; margin-bottom: 4px; color: var(--alert-text); }
@@ -365,127 +358,10 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
-@media (max-width: 1040px) {
-  .global-nav.open { display: flex; }
-  .global-nav a { padding: 17px 4px; border-bottom: 1px solid var(--line); font-size: 1.05rem; }
-
-  .header-actions .button-secondary { display: none; }
-  .footer-grid { grid-template-columns: 1.3fr repeat(2,1fr); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
-  .reveal { opacity: 1; transform: none; }
-}
-
 .error-code { margin: 0 0 16px; color: var(--on-dark); font-size: 1.125rem; font-weight: 800; }
-
-/* Mobile layout for the shared parts. Each page file carries its own mobile rules. */
-@media (max-width: 1040px) {
-  .site-header { backdrop-filter: none; background: var(--white); }
-  .header-inner { gap: 16px; }
-  .header-actions { order: 1; margin-left: auto; }
-  .menu-button { display: block; order: 2; flex: none; margin-left: 0; cursor: pointer; }
-  .global-nav { display: none; position: fixed; inset: var(--header-height, 79px) 0 auto; background: rgba(255,255,255,.98); align-items: stretch; flex-direction: column; gap: 0; height: calc(100vh - var(--header-height, 79px)); height: calc(100dvh - var(--header-height, 79px)); overflow-y: auto; overscroll-behavior: contain; padding: 12px max(24px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); }
-  body .global-nav > a { flex: none; min-height: 56px; padding: 16px 4px; font-size: 1rem; }
-  .global-nav > a[aria-current="page"] { color: var(--brand-blue); }
-  .global-nav .nav-actions { display: grid; flex: none; gap: 12px; margin-top: 24px; padding-bottom: 12px; }
-  .global-nav .nav-actions .button { min-height: 52px; padding: 14px 20px; font-size: 1rem; }
-  .global-nav .nav-actions .button-primary { color: var(--brand-navy); }
-  .global-nav .nav-actions .button-tel { color: var(--white); }
-  .global-nav .nav-actions .button::after { display: none; }
-  body.nav-open { position: fixed; top: var(--nav-scroll-top); left: 0; right: 0; width: 100%; }
-}
-
-@media (max-width: 768px) {
-  html { -webkit-text-size-adjust: 100%; }
-  body { font-size: 16px; overflow-wrap: anywhere; }
-  .container, .narrow { width: calc(100% - 40px); }
-  .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 8px; }
-  .header-inner .logo img { height: 28px; }
-  .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: 14px; box-shadow: none; }
-  .desktop-label { display: none; }
-  .mobile-label { display: inline; }
-  .header-actions { gap: 6px; }
-  .header-actions .button-tel { width: 44px; min-height: 44px; padding: 0; border-radius: 999px; }
-  .header-actions .button-tel-text { display: none; }
-  .menu-button { width: 44px; height: 44px; border-radius: 10px; }
-  .section { padding: 56px 0; }
-  .section-sm { padding: 40px 0; }
-  .section-title { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
-  .section-title br { display: none; }
-  .section-lead, .page-hero p { font-size: 1rem; line-height: 1.85; }
-  .section-lead { margin-top: 16px; }
-  .breadcrumbs { flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 24px; line-height: 1.6; }
-  .breadcrumbs a { display: inline-flex; align-items: center; min-height: 44px; }
-  .button { min-height: 52px; min-width: 0; font-size: 1rem; }
-  .hero-actions { gap: 10px; margin-top: 24px; }
-  .hero-actions .button, .form-card > .button, .contact-tel-link { width: 100%; }
-  .text-link { min-height: 44px; }
-  .page-links { display: grid; grid-template-columns: 1fr; }
-  .block { padding: 56px 0; }
-  .more-links { flex-direction: column; gap: 4px; margin-top: 24px; }
-  .final-cta-block { padding: 40px 0 56px; }
-  .final-cta { padding: 30px 22px; border-radius: 18px; }
-  .final-cta-actions { flex-direction: column; }
-  .final-cta-actions .button { width: 100%; min-width: 0; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
-  .page-hero { padding: 28px 0 36px; }
-  .page-hero h1 { font-size: clamp(1.875rem, 7.5vw, 2.75rem); line-height: 1.5; letter-spacing: -.025em; }
-  .page-hero h1 br { display: none; }
-  .heading-line { display: inline; white-space: normal; }
-  .sample-shell, .cards-3, .split, .article-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .sample-shell, .cards-3, .faq-list { margin-top: 28px; }
-  .info-card, .source-card, .message-body, .form-card { padding: 22px; }
-  .message-bar { flex-wrap: wrap; gap: 6px 12px; padding: 14px 20px; font-size: .875rem; }
-  .message-body > p:first-child { margin-top: 0; }
-  .message-body > p:last-child { margin-bottom: 0; }
-  .form-shell > * { min-width: 0; }
-  .contact-tel { padding: 22px; }
-  .field input, .field select, .field textarea { min-width: 0; min-height: 50px; font-size: 1rem; }
-  .field textarea { min-height: 180px; }
-  .field-help, .required { font-size: 1rem; }
-  .field input, .field textarea { scroll-margin-block: 84px 24px; }
-  summary { min-height: 56px; padding: 18px 44px 18px 18px; line-height: 1.65; }
-  summary::after { right: 16px; top: 16px; }
-  .detail-body { padding: 0 18px 20px; font-size: 1rem; }
-  .toc { position: static; padding: 20px; }
-  .toc a { min-height: 44px; padding: 10px 0; font-size: 1rem; border-bottom: 1px solid var(--line); }
-  .toc a:last-child { border-bottom: 0; }
-  .prose h2 { margin-top: 44px; font-size: 1.5rem; }
-  .prose h3 { font-size: 1.25rem; }
-  .prose blockquote { padding: 20px; }
-  .prose ul, .prose ol { padding-left: 24px; }
-  .definition-row { grid-template-columns: minmax(0,1fr); gap: 8px; }
-  .table-scroll { margin-top: 28px; border: 1px solid var(--line); border-radius: 12px; }
-  .table-scroll .comparison { display: table; min-width: 560px; margin: 0; overflow: visible; box-shadow: none; }
-  /* Two-column key/value tables fit the screen by wrapping instead of scrolling. */
-  .table-scroll .comparison-compact { min-width: 0; }
-  .comparison-compact th { width: 6.5em; white-space: nowrap; }
-  .comparison th, .comparison td { padding: 14px 16px; }
-  .site-footer { padding-top: 40px; }
-  .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 20px; }
-  .footer-brand { grid-column: 1 / -1; }
-  .footer-column strong { margin-bottom: 8px; }
-  .footer-column a { display: flex; align-items: center; min-height: 44px; padding: 8px 0; font-size: .875rem; }
-  .footer-bottom { flex-direction: column; gap: 8px; margin-top: 28px; font-size: .75rem; }
-}
 
 .table-scroll-hint { margin: 0 0 12px; color: var(--muted); font-size: .875rem; }
 .table-scroll-hint[hidden] { display: none; }
-@media (max-width: 768px) {
-  .image-scroll { overflow-x: auto; overscroll-behavior-x: contain; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
-  .image-scroll img { min-width: 760px; }
-}
-
-@media (max-width: 390px) {
-  .page-hero .guide-how-to-title { word-break: normal; }
-}
-
-@media (max-width: 360px) {
-  .container, .narrow { width: calc(100% - 32px); }
-}
 
 /* Floating CTA. Injected by site.js on every page except the contact form,
    where a second "相談する" would only compete with the form itself. */
@@ -578,21 +454,136 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 /* Keep the footer clear of the bar so the last links stay clickable. */
 body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-height, 80px) + 16px); }
 
+/* Screen-size rules (max-width), widest first. The header's desktop ranges stay with
+   the header rules above. Page files add their own after this file. */
+@media (max-width: 1040px) {
+  .site-header { backdrop-filter: none; background: var(--white); }
+  .header-inner { gap: 16px; }
+  .header-actions { order: 1; margin-left: auto; }
+  .header-actions .button-secondary { display: none; }
+  .menu-button { display: block; order: 2; flex: none; margin-left: 0; cursor: pointer; }
+  .global-nav { display: none; position: fixed; inset: var(--header-height, 79px) 0 auto; background: rgba(255,255,255,.98); align-items: stretch; flex-direction: column; gap: 0; height: calc(100vh - var(--header-height, 79px)); height: calc(100dvh - var(--header-height, 79px)); overflow-y: auto; overscroll-behavior: contain; padding: 12px max(24px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); }
+  .global-nav.open { display: flex; }
+  .global-nav a { border-bottom: 1px solid var(--line); }
+  .global-nav > a { flex: none; min-height: 56px; padding: 16px 4px; font-size: 1rem; }
+  .global-nav > a[aria-current="page"] { color: var(--brand-blue); }
+  .global-nav .nav-actions { display: grid; flex: none; gap: 12px; margin-top: 24px; padding-bottom: 12px; }
+  .global-nav .nav-actions .button { min-height: 52px; padding: 14px 20px; font-size: 1rem; }
+  .global-nav .nav-actions .button-primary { color: var(--brand-navy); }
+  .global-nav .nav-actions .button-tel { color: var(--white); }
+  .global-nav .nav-actions .button::after { display: none; }
+  body.nav-open { position: fixed; top: var(--nav-scroll-top); left: 0; right: 0; width: 100%; }
+  .footer-grid { grid-template-columns: 1.3fr repeat(2,1fr); }
+}
+@media (max-width: 1024px) {
+  .cards-3 { grid-template-columns: repeat(2,minmax(0,1fr)); }
+
+  .block-title .heading-line { white-space: normal; }
+  /* Side by side, the heading and two buttons overflow just above 768px with larger text. */
+  .final-cta { grid-template-columns: minmax(0,1fr); gap: 28px; }
+  .final-cta-actions { justify-content: flex-start; }
+}
 @media (max-width: 768px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-size: 16px; overflow-wrap: anywhere; }
+  .container, .narrow { width: calc(100% - 40px); }
+  .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 8px; }
+  .header-inner .logo img { height: 28px; }
+  .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: 14px; box-shadow: none; }
+  .desktop-label { display: none; }
+  .mobile-label { display: inline; }
+  .header-actions { gap: 6px; }
+  .header-actions .button-tel { width: 44px; min-height: 44px; padding: 0; border-radius: 999px; }
+  .header-actions .button-tel-text { display: none; }
+  .menu-button { width: 44px; height: 44px; border-radius: 10px; }
+  .section { padding: 56px 0; }
+  .section-sm { padding: 40px 0; }
+  .section-title { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
+  .section-title br { display: none; }
+  .section-lead, .page-hero p { font-size: 1rem; line-height: 1.85; }
+  .section-lead { margin-top: 16px; }
+  .breadcrumbs { flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 24px; line-height: 1.6; }
+  .breadcrumbs a { display: inline-flex; align-items: center; min-height: 44px; }
+  .button { min-height: 52px; min-width: 0; font-size: 1rem; }
+  .hero-actions { gap: 10px; margin-top: 24px; }
+  .hero-actions .button, .form-card > .button, .contact-tel-link { width: 100%; }
+  .text-link { min-height: 44px; }
+  .page-links { display: grid; grid-template-columns: 1fr; }
+  .block { padding: 56px 0; }
+  .more-links { flex-direction: column; gap: 4px; margin-top: 24px; }
+  .final-cta-block { padding: 40px 0 56px; }
+  .final-cta { padding: 30px 22px; border-radius: 18px; }
+  .final-cta-actions { flex-direction: column; }
+  .final-cta-actions .button { width: 100%; min-width: 0; }
+  .showcase-container, .showcase-container-narrow { width: calc(100% - 40px); }
+  .showcase-section { padding: 56px 0; }
+  .showcase-button { width: 100%; min-height: 52px; min-width: 0; font-size: 1rem; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; }
+  .page-hero { padding: 28px 0 36px; }
+  .page-hero h1 { font-size: clamp(1.875rem, 7.5vw, 2.75rem); line-height: 1.5; letter-spacing: -.025em; }
+  .page-hero h1 br { display: none; }
+  .heading-line { display: inline; white-space: normal; }
+  .sample-shell, .cards-3, .split, .article-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .sample-shell, .cards-3, .faq-list { margin-top: 28px; }
+  .info-card, .source-card, .message-body, .form-card { padding: 22px; }
+  .message-bar { flex-wrap: wrap; gap: 6px 12px; padding: 14px 20px; font-size: .875rem; }
+  .message-body > p:first-child { margin-top: 0; }
+  .message-body > p:last-child { margin-bottom: 0; }
+  .form-shell > * { min-width: 0; }
+  .contact-tel { padding: 22px; }
+  .field input, .field select, .field textarea { min-width: 0; font-size: 1rem; }
+  .field input, .field select { min-height: 50px; }
+  .field textarea { min-height: 180px; }
+  .field-help, .required { font-size: 1rem; }
+  .field input, .field textarea { scroll-margin-block: 84px 24px; }
+  summary { min-height: 56px; padding: 18px 44px 18px 18px; line-height: 1.65; }
+  summary::after { right: 16px; top: 16px; }
+  .detail-body { padding: 0 18px 20px; font-size: 1rem; }
+  .toc { position: static; padding: 20px; }
+  .toc a { min-height: 44px; padding: 10px 0; font-size: 1rem; border-bottom: 1px solid var(--line); }
+  .toc a:last-child { border-bottom: 0; }
+  .prose h2 { margin-top: 44px; font-size: 1.5rem; }
+  .prose h3 { font-size: 1.25rem; }
+  .prose blockquote { padding: 20px; }
+  .prose ul, .prose ol { padding-left: 24px; }
+  .definition-row { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  .table-scroll { margin-top: 28px; border: 1px solid var(--line); border-radius: 12px; }
+  .table-scroll .comparison { display: table; min-width: 560px; margin: 0; overflow: visible; box-shadow: none; }
+  /* Two-column key/value tables fit the screen by wrapping instead of scrolling. */
+  .table-scroll .comparison-compact { min-width: 0; }
+  .comparison-compact th { width: 6.5em; white-space: nowrap; }
+  .comparison th, .comparison td { padding: 14px 16px; }
+  .site-footer { padding-top: 40px; }
+  .footer-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 20px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-column strong { margin-bottom: 8px; }
+  .footer-column a { display: flex; align-items: center; min-height: 44px; padding: 8px 0; font-size: .875rem; }
+  .footer-bottom { flex-direction: column; gap: 8px; margin-top: 28px; font-size: .75rem; }
+
+  .image-scroll { overflow-x: auto; overscroll-behavior-x: contain; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+  .image-scroll img { min-width: 760px; }
+
   .floating-cta { gap: 8px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
   .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: 14.4px; }
   .floating-cta .floating-cta-label-long { display: none; }
   .floating-cta .floating-cta-tel { flex: none; }
   .floating-cta-toggle { right: max(12px, env(safe-area-inset-right)); }
 }
-/* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
-@media (max-width: 374px) {
-  .floating-cta-secondary svg, .floating-cta-primary svg { display: none; }
+@media (max-width: 390px) {
+  .page-hero .guide-how-to-title { word-break: normal; }
 }
 /* Up to 389px the full-size logo leaves no room beside the phone button. */
 @media (max-width: 389px) {
   .header-inner .logo img { height: 24px; }
   .header-actions .button-primary { padding-inline: 12px; }
+}
+/* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
+@media (max-width: 374px) {
+  .floating-cta-secondary svg, .floating-cta-primary svg { display: none; }
+}
+@media (max-width: 360px) {
+  .container, .narrow, .showcase-container, .showcase-container-narrow { width: calc(100% - 32px); }
 }
 /* No room for a third header button; the phone stays in the menu and the floating bar. */
 @media (max-width: 349px) {
@@ -602,7 +593,6 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 @media (max-width: 319px) {
   .header-inner .logo img { height: 20px; }
 }
-
 /* Keep 44px touch targets and room for focus outlines in short landscape views. */
 @media (max-height: 480px) and (orientation: landscape) {
   .header-inner { min-height: 56px; }
@@ -612,6 +602,9 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+
   .floating-cta, .floating-cta .floating-cta-toggle svg { transition: none; }
 }
 
