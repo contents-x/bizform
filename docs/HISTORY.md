@@ -48,3 +48,15 @@
   - CSS・JS の `?v=` を内容のハッシュにし、`scripts/stamp_assets.py` で付けるようにした。
   - 公開前チェック `scripts/check_site.py` を GitHub Actions の公開手順に入れ、失敗したら公開しないようにした。表示崩れの確認 `scripts/layout_check.py` も追加した。
   - 旧ファイル（`assets/style.css`・`app.js`・`service.css`・`pricing.css`・`faq.css`・`faq.js`）は、キャッシュに残った古いページのためだけに残した。次の公開で削除する。
+
+## 2026-10-01
+
+- 続けて、見た目・動作を変えずにできる整理を行った（画面・CSSの効き方・動作の比較で確認）。
+  - 旧ファイル6つと、旧CSSだけが使っていた画像 `asset_pricing_hero_bg.webp` を削除した。
+  - どの要素にも当たらない指定（`.info-card h3`、`.field legend`、FAQの見出しや活用シーンのヒーローの注記・カードの一部など、HTMLから消えた部品の名残）と、未使用のトークン `--brand-blue-bright`・`--line-soft` を削除した。
+  - `site.css` の画面幅別（`max-width`）の指定を条件ごとに1つのブロックにまとめ、ファイル末尾へ移した（PCのヘッダーの `min-width` の指定はヘッダーのそばに残した）。メニューの `body .global-nav > a` のような優先度だけを上げる書き方と、`!important`（ガイド一覧の長い見出し、文面サンプルの矢印）をやめた。
+  - 文面サンプルと活用シーンで同じだった幅・帯・ボタンを `.showcase-*` にまとめた。
+  - FAQのCSSを他のファイルと同じ1ルール1行の書き方にした。
+  - `forms.js` で2か所にあった HubSpot への送信内容の組み立てを1つにし、JavaScriptの各ファイルを関数で包んで名前がファイルの外に出ないようにした。
+  - 公開前チェックに、同じ質問のFAQの回答が各ページで一致しているかの確認を加えた。チェック用スクリプトの共通部分を `scripts/site_files.py` にまとめた。
+  - GitHub Actions の各アクションを Node.js 24 で動く版に上げた。公開と表示崩れの確認は、Ubuntu 24.04 に固定した（`ubuntu-latest` は 2026-10-19 から順次 Ubuntu 26 に切り替わる。公開前チェックの Python と、Playwright が入れるブラウザの部品を変えないため）。
