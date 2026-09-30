@@ -7,16 +7,23 @@
 - 主要8ページ: トップ、サービス、料金、文面サンプル、活用シーン、FAQ、資料、導入相談
 - 営業ガイド: 基礎、代行、ツール比較、例文、料金相場、注意点、やり方
 - 補助ページ: 送信方針、送信停止窓口、運営会社
+- CSS は `dist/assets/css/`（全ページ共通の `site.css` とページ別のファイル）、JavaScript は `dist/assets/js/`（全ページの `site.js`、フォームのある2ページの `forms.js`、FAQ の `faq.js`）。詳しくは [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) の「CSS・JavaScriptの構成」
 
 ## 制作・更新ルール
 
-料金・件数・契約条件、サンプルと実例の区別、共通ヘッダー・追従CTA、スマートフォンの表示・操作、問い合わせフォームの送信と表示、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。
+料金・件数・契約条件、サンプルと実例の区別、共通ヘッダー・追従CTA、スマートフォンの表示・操作、問い合わせフォームの送信と表示、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。ルールが生まれた経緯は [docs/HISTORY.md](docs/HISTORY.md) にあります。
 
 HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `python scripts/format_html.py --check` で行います（Python 3.10以上、追加パッケージ不要）。本文やインライン要素間の空白を維持し、ブロック構造をスペース2つで揃えます。
 
+| スクリプト | 使うとき |
+|---|---|
+| `python scripts/stamp_assets.py` | `dist/assets/css`・`dist/assets/js` を変えたあと。HTMLの `?v=` を内容のハッシュに更新する |
+| `python scripts/check_site.py` | push の前。リンク・画像・サイトマップ・料金・色トークン・`?v=`・整形などを確認する（GitHub Actions でも公開前に実行し、失敗したら公開しない） |
+| `python scripts/layout_check.py` | 見た目を変えたあと。全ページを多数の画面幅・文字サイズ・機種で表示し、はみ出しや折り返しを確認する（Playwright が必要） |
+
 ## 外部連携
 
-導入相談フォーム（`/contact/`）と資料ダウンロードのフォーム（`/resources/#download`）の送信処理は `dist/assets/app.js` にある。
+導入相談フォーム（`/contact/`）と資料ダウンロードのフォーム（`/resources/#download`）の送信処理は `dist/assets/js/forms.js` にある。
 
 - **導入相談**: HubSpot を主、Contents X CRM を従として両方へ送る（BizManga・ContentsX・イチオシ採用と同じ構成）。画面の受付完了・失敗は HubSpot の応答だけで決め、CRM への送信が失敗しても送信者には見せない。
 - **資料ダウンロード**: HubSpot と CRM（受信箱の「資料DL」の箱）へ写しを送り、どの応答も待たずにPDFのダウンロードを始める。CRM 側の設定＞プラグイン＞ホームページ連携で「資料ダウンロード」がオンになっていないと、CRM は受け付けない（ダウンロード自体は動く）。
@@ -25,8 +32,8 @@ HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `
 
 | 送信先 | 内容 |
 |---|---|
-| HubSpot | Portal `48367061` / Form `b6da14d0-d60d-4357-89fc-0015ed32b704`（BizManga・ContentsX と同じフォーム。送信先は `app.js` 冒頭の `HUBSPOT_ENDPOINT`）。`pageName` は `ビズフォーム - お問い合わせ` / `ビズフォーム - 資料ダウンロード`。⚠️ **HubSpot 側で部署 `busyo` が必須**（空欄も拒否＝`REQUIRED_FIELD`。2026-09-29 に確認）。両フォームとも部署は任意なので、空なら `未入力` を送る（`app.js` の `hubspotDepartment`）。資料ダウンロードは電話番号と資料名を `message` に入れる |
-| Contents X CRM | CRM の埋め込みスクリプト `https://contentsx-crm.vercel.app/embed/inbound-v1.js` を、フォームのある `dist/contact/index.html` と `dist/resources/index.html` の `</body>` 直前で1回ずつ読み込み（公開キー `data-source-key`・`data-auto="false"`）、`app.js` が入力チェック後に `BizcarteInbound.sendForm(form)` を呼ぶ。資料ダウンロードのフォームには `data-crm-form="download"` と `data-crm-document`（資料名）を付けてある。受信箱 `/inbox` に入り、人が承認するまで顧客データにはならない |
+| HubSpot | Portal `48367061` / Form `b6da14d0-d60d-4357-89fc-0015ed32b704`（BizManga・ContentsX と同じフォーム。送信先は `forms.js` 冒頭の `HUBSPOT_ENDPOINT`）。`pageName` は `ビズフォーム - お問い合わせ` / `ビズフォーム - 資料ダウンロード`。⚠️ **HubSpot 側で部署 `busyo` が必須**（空欄も拒否＝`REQUIRED_FIELD`。2026-09-29 に確認）。両フォームとも部署は任意なので、空なら `未入力` を送る（`forms.js` の `hubspotDepartment`）。資料ダウンロードは電話番号と資料名を `message` に入れる |
+| Contents X CRM | CRM の埋め込みスクリプト `https://contentsx-crm.vercel.app/embed/inbound-v1.js` を、フォームのある `dist/contact/index.html` と `dist/resources/index.html` の `</body>` 直前で1回ずつ読み込み（公開キー `data-source-key`・`data-auto="false"`）、`forms.js` が入力チェック後に `BizcarteInbound.sendForm(form)` を呼ぶ。資料ダウンロードのフォームには `data-crm-form="download"` と `data-crm-document`（資料名）を付けてある。受信箱 `/inbox` に入り、人が承認するまで顧客データにはならない |
 
 - **公開キーは秘密ではない**（ブラウザに出る前提の値）。CRM 側はこのキーに登録したドメイン（`https://bizform.contentsx.jp`）からの送信だけを受け付ける。ドメインが変わる・別ドメインで開かれるようになったら、コードではなく CRM 側の許可ドメインを足してもらう。localhost からの送信は拒否されるのが正常。
 - `data-auto="false"` は外さない。外すと入力チェックで止まった送信まで拾う。同じページにスクリプトを2行入れない（二重に届く）。
@@ -42,4 +49,4 @@ HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `
 - GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
 - 公開ブランチは `main` とする。
 - 独自ドメインは `bizform.contentsx.jp`。正本は `dist/CNAME` とする。
-- `main` への反映前に、内部リンク、画像参照、JavaScript、サイトマップを検証する。
+- 公開の前に `scripts/check_site.py` が走り、失敗すると公開されない。`layout-check.yml` は表示崩れの確認を参考として実行する（公開は止めない）。

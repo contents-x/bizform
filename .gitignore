@@ -4,6 +4,7 @@
 /research_notes/
 /docs/*
 !/docs/CONTENT-RULES.md
+!/docs/HISTORY.md
 
 # Local environment files (keep reusable examples)
 .env
