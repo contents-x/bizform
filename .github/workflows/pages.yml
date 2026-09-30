@@ -25,6 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Links, anchors, images, sitemap, prices, colour tokens, asset stamps and
+      # formatting. A failure stops the deploy; run it locally before pushing.
+      - name: Check site
+        run: python3 scripts/check_site.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

@@ -1,0 +1,37 @@
+name: Layout check
+
+# A second opinion on layout in a real browser (scripts/layout_check.py). It never
+# blocks the deploy in pages.yml: the runner's fonts differ from Windows and macOS,
+# so treat a failure as a prompt to look and confirm locally.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'dist/**'
+      - 'scripts/layout_check.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install the browser and Japanese fonts
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+
+      - name: Check layout
+        run: python scripts/layout_check.py --browser chromium
