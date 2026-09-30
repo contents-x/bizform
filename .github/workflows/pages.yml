@@ -20,24 +20,27 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    # Pinned so the checks below run on a known Python (3.12); ubuntu-latest moves
+    # to Ubuntu 26 in a rollout starting 2026-10-19.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      # Links, anchors, images, sitemap, prices, colour tokens, asset stamps and
-      # formatting. A failure stops the deploy; run it locally before pushing.
+      # Links, anchors, images, sitemap, prices, FAQ answers, colour tokens, asset
+      # stamps, scripts and formatting. A failure stops the deploy; run it locally
+      # before pushing.
       - name: Check site
         run: python3 scripts/check_site.py
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

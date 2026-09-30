@@ -3,9 +3,10 @@
     python scripts/check_site.py
 
 Checks HTML formatting, asset version stamps, internal links and anchors,
-images, the sitemap and canonical URLs, colour tokens, plan prices, the phone
-number and mail address, and which pages load which scripts. Python 3.10+, no
-third-party packages. Exit status 1 when anything fails.
+images, the sitemap and canonical URLs, colour tokens, plan prices, answers to
+the same question on different pages, the phone number and mail address, which
+pages load which scripts, and that each script keeps its names to itself. Python 3.10+, no third-party packages. Exit
+status 1 when anything fails.
 """
 import html
 import re
@@ -16,9 +17,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import format_html  # noqa: E402
 import stamp_assets  # noqa: E402
+from site_files import DIST, html_files, url_of  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[1]
-DIST = ROOT / 'dist'
 SITE = 'https://bizform.contentsx.jp'
 TEL = '03-6261-0764'
 EMAIL = 'office@contentsx.jp'
@@ -78,13 +78,8 @@ class Page(HTMLParser):
         return re.sub(r'\s+', ' ', html.unescape(' '.join(self.text)))
 
 
-def url_of(path):
-    rel = path.relative_to(DIST).as_posix()
-    return '/' + rel[:-len('index.html')] if rel.endswith('index.html') else '/' + rel
-
-
 def load_pages():
-    return {url_of(p): Page(p) for p in sorted(DIST.rglob('*.html'))}
+    return {url_of(p): Page(p) for p in html_files()}
 
 
 def check_format(pages):
@@ -224,13 +219,39 @@ def check_scripts(pages):
             fail(f'{url}: the CRM embed script belongs once on each form page and nowhere else')
         if ('faq-accordion' in page.path.read_text(encoding='utf-8')) != ('/assets/js/faq.js' in srcs):
             fail(f'{url}: faq.js belongs on exactly the pages with .faq-accordion')
-    # Classic scripts share one global scope: a name declared twice stops the second file.
-    seen = {}
+    # Classic scripts share one global scope, so each file keeps its names inside one
+    # function. A top-level const, let or class declared in two files stops the second
+    # file; a function or var silently replaces the first one.
     for js in sorted((DIST / 'assets/js').glob('*.js')):
-        for name in re.findall(r'^(?:const|let|var|function|class)\s+([A-Za-z_$][\w$]*)', js.read_text(encoding='utf-8'), re.M):
-            if name in seen:
-                fail(f'assets/js/{js.name}: top-level {name} is also declared in {seen[name]}')
-            seen[name] = js.name
+        code = [line for line in js.read_text(encoding='utf-8').splitlines() if line.strip() and not line.startswith('//')]
+        if not code or code[0] != '(() => {' or code[-1] != '})();':
+            fail(f'assets/js/{js.name}: wrap the whole file in (() => {{ ... }})();')
+        for line in code:
+            if re.match(r'(?:const|let|var|function|class)\s', line):
+                fail(f'assets/js/{js.name}: top-level declaration outside the wrapper: {line.strip()[:60]}')
+
+
+def faq_entries(page):
+    """(question, answer) for each <details> on a page, without the 問/答 badges or any spacing."""
+    source = page.path.read_text(encoding='utf-8')
+    badge = r'<span[^>]*>\s*(?:問|答)?\s*</span>'
+
+    def text(fragment):
+        return re.sub(r'\s+', '', html.unescape(re.sub(r'<[^>]+>', '', re.sub(badge, '', fragment))))
+    for m in re.finditer(r'<details[^>]*>(.*?)</details>', source, re.S):
+        question, _, answer = m.group(1).partition('</summary>')
+        yield text(question), text(answer)
+
+
+def check_faq(pages):
+    # A question worded the same on two pages (FAQ, pricing, examples, top) must get the same answer.
+    # Reworded questions are not matched.
+    seen = {}
+    for url, page in pages.items():
+        for question, answer in faq_entries(page):
+            if question in seen and seen[question][1] != answer:
+                fail(f'{url}: the answer to 「{question}」 differs from {seen[question][0]}')
+            seen.setdefault(question, (url, answer))
 
 
 def main():
@@ -242,6 +263,7 @@ def main():
     check_sitemap(pages)
     check_colours()
     check_prices(pages)
+    check_faq(pages)
     check_scripts(pages)
     for e in errors:
         print('ERROR', e)

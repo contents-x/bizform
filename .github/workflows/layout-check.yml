@@ -10,6 +10,7 @@ on:
     paths:
       - 'dist/**'
       - 'scripts/layout_check.py'
+      - 'scripts/site_files.py'
   workflow_dispatch:
 
 permissions:
@@ -17,13 +18,15 @@ permissions:
 
 jobs:
   layout:
-    runs-on: ubuntu-latest
+    # Pinned: Playwright installs its browser dependencies for a known Ubuntu release,
+    # and ubuntu-latest moves to Ubuntu 26 in a rollout starting 2026-10-19.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 

@@ -16,12 +16,11 @@ import argparse
 import functools
 import http.server
 import threading
-from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-ROOT = Path(__file__).resolve().parents[1]
-DIST = ROOT / 'dist'
+from site_files import DIST, page_urls
+
 WIDTHS = [280, 320, 360, 375, 390, 414, 430, 540, 600, 700, 768, 769, 820, 900, 1024, 1025, 1040, 1041,
           1100, 1180, 1239, 1240, 1280, 1366, 1440, 1920]
 DEVICES = [('Galaxy Fold', 280, 653), ('iPhone SE', 375, 667), ('iPhone 14', 390, 844), ('Pixel 7', 412, 915),
@@ -57,18 +56,10 @@ CHECK = r"""() => {
       for (const s of a.querySelectorAll('span')) if (!s.hidden && getComputedStyle(s).display !== 'none' && lines(s) > 1) out.push('floating bar label wraps');
     }
   }
-  for (const b of document.querySelectorAll('main .button, main .button *')) if (shown(b) && b.scrollWidth > b.clientWidth + 1 && getComputedStyle(b).overflow !== 'visible') out.push('button label cut off: ' + b.textContent.trim().slice(0, 12));
+  for (const b of document.querySelectorAll('main :is(.button, .showcase-button), main :is(.button, .showcase-button) *')) if (shown(b) && b.scrollWidth > b.clientWidth + 1 && getComputedStyle(b).overflow !== 'visible') out.push('button label cut off: ' + b.textContent.trim().slice(0, 12));
   for (const img of document.images) if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) out.push('broken image: ' + img.getAttribute('src'));
   return [...new Set(out)];
 }"""
-
-
-def pages():
-    out = []
-    for p in sorted(DIST.rglob('*.html')):
-        rel = p.relative_to(DIST).as_posix()
-        out.append('/' + rel[:-len('index.html')] if rel.endswith('index.html') else '/' + rel)
-    return out
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -89,7 +80,7 @@ def main():
     ap.add_argument('--browser', default='chrome', help='"chrome" (installed Google Chrome) or "chromium" (Playwright\'s)')
     ap.add_argument('--pages', nargs='+', help='check only these paths, e.g. / /pricing/')
     args = ap.parse_args()
-    paths = args.pages or pages()
+    paths = args.pages or page_urls()
     base = args.base.rstrip('/') if args.base else serve()
     problems = {}
 

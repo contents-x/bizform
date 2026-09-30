@@ -5,9 +5,9 @@ Run with Python 3.10+; no third-party dependencies are required.
 import argparse
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_files import ROOT, html_files
+
 VOID = set('area base br col embed hr img input link meta param source track wbr'.split())
 STRUCTURAL = set('''html head body main header footer section article aside nav div p
     h1 h2 h3 h4 h5 h6 ul ol li dl dt dd blockquote figure figcaption table caption
@@ -161,7 +161,7 @@ def main():
     args = parser.parse_args()
     changes = []
     # Validate every page before writing any of them.
-    paths = sorted((ROOT / 'dist').rglob('*.html'))
+    paths = html_files()
     for path in paths:
         original = path.read_text(encoding='utf-8')
         formatted = format_html(original)
