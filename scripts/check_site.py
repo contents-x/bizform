@@ -26,7 +26,7 @@ EMAIL = 'office@contentsx.jp'
 PLANS = {'ライト': (30_000, 158_000), 'スタンダード': (50_000, 198_000), 'プレミアム': (80_000, 298_000)}
 SETUP_FEE = 198_000
 # These stylesheets take every colour from the tokens in site.css.
-TOKEN_ONLY_CSS = ['site.css', 'home.css', 'service.css', 'pricing.css']
+TOKEN_ONLY_CSS = ['site.css', 'home.css', 'service.css', 'pricing.css', 'examples.css']
 CRM_EMBED = 'https://contentsx-crm.vercel.app/embed/inbound-v1.js'
 
 errors = []
