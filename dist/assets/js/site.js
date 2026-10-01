@@ -1,6 +1,6 @@
 // Shared by every page: header and footer, the floating inquiry bar, focus
 // visibility under the fixed bars, the mobile menu, scroll hints for wide
-// tables and images, and reveal-on-scroll. The two forms are in forms.js,
+// tables, and reveal-on-scroll. The two forms are in forms.js,
 // which only /contact/ and /resources/ load.
 // Wrapped in a function so nothing here becomes a global shared with the other scripts.
 (() => {
@@ -343,14 +343,6 @@
       table.before(region);
       region.append(table);
       addScrollHint(region, '比較表');
-    });
-    document.querySelectorAll('.examples-dashboard > img').forEach(img => {
-      const region = document.createElement('div');
-      region.className = 'image-scroll';
-      img.before(region);
-      region.append(img);
-      addScrollHint(region, img.alt);
-      img.addEventListener('load', () => scrollRegions.find(item => item.region === region)?.update());
     });
     onResize(scrollRegions.map(item => item.region), () => scrollRegions.forEach(item => item.update()));
   }

@@ -6,6 +6,15 @@
 }
 .usecases-page :where(main) img { height: auto; }
 
+/* A 1200px column (1120px narrow), sections that clip their decorations, and round
+   buttons. The .showcase-* names are kept from when the examples page shared them. */
+.showcase-container, .showcase-container-narrow { width: min(calc(100% - 48px),1200px); margin-inline: auto; }
+.showcase-container-narrow { max-width: 1120px; }
+.showcase-section { position: relative; overflow: hidden; padding: 106px 0; }
+.showcase-button { display: inline-flex; justify-content: center; align-items: center; min-height: 54px; border: 1px solid transparent; border-radius: 999px; font-size: .9rem; font-weight: 800; }
+.showcase-button:hover { transform: translateY(-2px); }
+.showcase-button-primary { color: var(--white); background: var(--brand-blue); box-shadow: 0 12px 26px rgba(18,101,232,.22); }
+
 .uc-heading { max-width: 850px; margin: 0 auto 52px; text-align: center; }
 
 .uc-heading h2, .uc-final-copy h2 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-weight: 700; line-height: 1.35; letter-spacing: -.045em; }
@@ -108,7 +117,7 @@
 .uc-final-copy h2 { font-size: clamp(2.25rem,3.5vw,3.35rem); }
 .uc-final-copy > p { max-width: 520px; margin: 21px 0 0; color: var(--text-body); font-size: 1rem; line-height: 1.9; }
 .uc-final-copy > div { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 30px; }
-/* Buttons are the shared .showcase-button (site.css) with a minimum width, padding and transition. */
+/* Buttons are .showcase-button with a minimum width, padding and transition. */
 .uc-button { min-width: 178px; padding: 13px 24px; transition: transform .2s ease,box-shadow .2s ease; }
 .uc-button-secondary { color: var(--brand-blue); border-color: #1e4e9a; background: rgba(255,255,255,.94); }
 .uc-final-visual { position: relative; z-index: 2; align-self: end; display: grid; place-items: end center; min-width: 0; }
@@ -153,8 +162,9 @@
   .uc-final-card::after { inset: 45% 0 0; background: linear-gradient(180deg,#f2f5fb 0%,rgba(238,247,255,.25) 28%),url('/assets/images/asset_usecases_office_background.webp') center / cover no-repeat; }
 
   .uc-final-copy > div { flex-direction: column; }
-  /* The minimum width above loads after site.css's phone rule for .showcase-button, so clear it here. */
-  .uc-button { min-width: 0; }
+  .showcase-container, .showcase-container-narrow { width: calc(100% - 40px); }
+  .showcase-section { padding: 56px 0; }
+  .showcase-button { width: 100%; min-height: 52px; min-width: 0; font-size: 1rem; }
 
   .uc-heading h2, .uc-final-copy h2 { font-size: clamp(1.625rem, 6.6vw, 2.25rem); line-height: 1.5; letter-spacing: -.025em; }
   .uc-heading h2 br, .uc-final-copy h2 br { display: none; }
@@ -196,6 +206,7 @@
 }
 
 @media (max-width: 360px) {
+  .showcase-container, .showcase-container-narrow { width: calc(100% - 32px); }
   .uc-industry-grid article { grid-template-columns: minmax(0,1fr); }
   .uc-industry-image { grid-template: minmax(0,1fr) / minmax(0,1fr); height: 116px; }
   .uc-industry-image img { min-width: 0; min-height: 0; width: auto; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }

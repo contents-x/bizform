@@ -5,19 +5,8 @@
 .service-page { color: var(--text-body); background: var(--white); }
 .service-page :where(main) img { height: auto; }
 
-
 .sv-hero { padding: 48px 0 72px; background: linear-gradient(90deg, rgba(255,255,255,.97) 0%, rgba(255,255,255,.92) 45%, rgba(255,255,255,.55) 100%), var(--paper) url("/assets/images/asset_service_bg_office_city.webp") center / cover no-repeat; }
-.sv-hero h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.5rem,4.4vw,4rem); line-height: 1.25; letter-spacing: -.05em; }
 .sv-lead { max-width: 720px; margin: 24px 0 0; font-size: 1.125rem; line-height: 1.9; }
-.sv-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.sv-actions .button { min-width: 190px; border-radius: 999px; }
-
-/* The five steps, each in one or two lines. */
-.sv-steps { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; margin: 40px 0 0; padding: 0; list-style: none; }
-.sv-steps li { min-width: 0; padding: 24px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); }
-.sv-steps h3, .sv-onboarding h3 { margin: 6px 0 8px; color: var(--brand-navy-deep); line-height: 1.5; }
-.sv-steps h3 { font-size: 1.125rem; }
-.sv-steps p, .sv-onboarding p { margin: 0; font-size: 1rem; line-height: 1.8; }
 
 /* Who does what. */
 .sv-role { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
@@ -36,26 +25,19 @@
 .sv-details article > p { margin: 16px 0 0; }
 .sv-note { color: var(--muted); font-size: .875rem; line-height: 1.7; }
 
-/* Onboarding: five steps in a row, with when each fee starts. */
-.sv-onboarding { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; margin: 40px 0 0; padding: 0; list-style: none; }
-.sv-onboarding li { min-width: 0; padding: 22px 16px; border-radius: 16px; background: var(--white); }
+/* The five steps and the onboarding are the shared step cards (site.css); onboarding
+   drops the outline and uses smaller titles. */
+.sv-onboarding > li { padding: 22px 16px; border: 0; }
 .sv-onboarding h3 { font-size: 1.0625rem; }
 
 @media (max-width: 1024px) {
-  .sv-steps, .sv-onboarding { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .sv-details { grid-template-columns: minmax(0,1fr); }
 }
 
 @media (max-width: 768px) {
   .sv-hero { padding: 28px 0 48px; background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.9)), var(--paper) url("/assets/images/asset_service_bg_office_city.webp") 70% center / cover no-repeat; }
-  .sv-hero h1 { font-size: clamp(1.875rem, 8.5vw, 2.75rem); line-height: 1.4; }
   .sv-lead { margin-top: 16px; font-size: 1rem; }
-  .sv-actions { flex-direction: column; }
-  .sv-actions .button { width: 100%; min-width: 0; }
-  .sv-steps, .sv-onboarding { grid-template-columns: minmax(0,1fr); gap: 12px; margin-top: 28px; }
-  .sv-steps li, .sv-onboarding li { display: grid; grid-template-columns: 2.5em minmax(0,1fr); gap: 0 12px; padding: 18px 20px; }
-  .sv-steps .step-number, .sv-onboarding .step-number { grid-row: 1 / 3; padding-top: 3px; }
-  .sv-steps h3, .sv-onboarding h3 { margin: 0 0 4px; }
+  .sv-onboarding > li { padding: 18px 20px; }
   .sv-role { grid-template-columns: minmax(0,1fr); margin-top: 28px; }
   .sv-role > div, .sv-details article { padding: 22px; }
   .sv-role > div { grid-template-columns: minmax(0,1fr) 110px; }
