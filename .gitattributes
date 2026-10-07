@@ -1,0 +1,11 @@
+# Store and check out every text file with LF, as .editorconfig asks. Without this,
+# Git on Windows (core.autocrlf) writes CRLF into the working copy and warns on every
+# add. Images and PDFs are binary: say so rather than rely on detection.
+* text=auto eol=lf
+*.gif binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.pdf binary
+*.png binary
+*.webp binary

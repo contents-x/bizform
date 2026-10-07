@@ -11,6 +11,7 @@ on:
       - 'dist/**'
       - 'scripts/layout_check.py'
       - 'scripts/site_files.py'
+      - '.github/workflows/layout-check.yml'
   workflow_dispatch:
 
 permissions:
@@ -21,20 +22,27 @@ jobs:
     # Pinned: Playwright installs its browser dependencies for a known Ubuntu release,
     # and ubuntu-latest moves to Ubuntu 26 in a rollout starting 2026-10-19.
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Nothing here pushes, so do not leave the token in .git/config.
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
+      # Playwright is pinned too, so a new release (and its newer Chromium) cannot change
+      # the result between two runs on the same site. Raise it on purpose.
       - name: Install the browser and Japanese fonts
         run: |
-          pip install playwright
-          python -m playwright install --with-deps chromium
+          sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk
+          pip install playwright==1.63.0
+          python -m playwright install --with-deps chromium
 
       - name: Check layout
         run: python scripts/layout_check.py --browser chromium

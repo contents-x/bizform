@@ -6,32 +6,54 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+# Each job asks for what it needs: only the deploy job can publish.
+permissions: {}
 
+# Queue a new deploy instead of cancelling one that is publishing (as GitHub's own Pages
+# workflows do). A run that is still waiting is replaced by the newest push.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    # Pinned so the checks below run on a known Python (3.12); ubuntu-latest moves
-    # to Ubuntu 26 in a rollout starting 2026-10-19.
+  check:
+    # Pinned so the checks below run on a known Ubuntu release: its Python 3.12, and the
+    # runner image's Node.js (22 now) for the script syntax check. ubuntu-latest moves to
+    # Ubuntu 26 in a rollout starting 2026-10-19.
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Nothing here pushes, so do not leave the token in .git/config.
+          persist-credentials: false
 
       # Links, anchors, images, sitemap, prices, FAQ answers, colour tokens, asset
       # stamps, scripts and formatting. A failure stops the deploy; run it locally
       # before pushing.
       - name: Check site
         run: python3 scripts/check_site.py
+
+  deploy:
+    needs: check
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # Nothing here pushes, so do not leave the token in .git/config.
+          persist-credentials: false
 
       - name: Configure Pages
         uses: actions/configure-pages@v6
