@@ -24,23 +24,61 @@
 .home-campaign-band-link em { font-size: 1.3em; font-style: normal; }
 .home-campaign-band-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
 
-/* Hero: headline, one sentence, two buttons; the key facts sit in one strip below. */
-.home-hero { position: relative; overflow: hidden; background: var(--paper) url('/assets/images/asset_hero_wall.webp') center / cover no-repeat; }
-.home-hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.94) 40%, rgba(255,255,255,.3) 74%, rgba(255,255,255,.05) 100%); }
-.home-hero-inner { position: relative; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr); align-items: center; padding: 64px 0 44px; }
+/* Hero: kicker, headline, lead and two buttons on the left; the four steps we take over
+   as UI cards above the desk photo on the right; the key facts in one strip below.
+   Read in this order: h1 → consult button → kicker → lead → facts → note, so only the
+   h1 is serif and large, the kicker is small blue text and the lead is regular weight.
+   The copy side stays plain white; light, pale blue and one faint curve sit on the right. */
+.home-hero { position: relative; overflow: hidden; background: var(--white) url('/assets/images/asset_hero_wall.webp') right center / cover no-repeat; }
+.home-hero::before { content: ""; position: absolute; inset: 0; background:
+  radial-gradient(ellipse 55% 70% at 86% 34%, rgba(18,101,232,.09) 0%, rgba(18,101,232,0) 70%),
+  linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,.97) 44%, rgba(255,255,255,.6) 72%, rgba(255,255,255,.4) 100%); }
+.home-hero::after { content: ""; position: absolute; top: -48%; left: 54%; width: 90%; height: 170%; border: 1px solid rgba(18,101,232,.12); border-radius: 50%; pointer-events: none; }
+.home-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1.08fr) minmax(0,.92fr); column-gap: 48px; align-items: center; padding: 56px 0 40px; }
 .home-hero-copy { position: relative; z-index: 2; }
-.home-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(3rem,4.4vw,4.3rem); font-weight: 700; line-height: 1.2; letter-spacing: -.05em; }
-.home-hero-lead { max-width: 560px; margin: 24px 0 0; color: var(--text-body); font-size: 1.125rem; line-height: 1.9; }
+.home-hero-kicker { display: inline-block; margin: 0 0 20px; padding: 4px 16px; border: 1px solid var(--brand-blue); border-radius: 6px; color: var(--brand-blue); background: var(--white); font-size: .9375rem; font-weight: 700; line-height: 1.7; letter-spacing: .04em; }
+.home-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.25rem,3.8vw,3rem); font-weight: 700; line-height: 1.4; letter-spacing: -.04em; }
+.home-hero-lead { margin: 22px 0 0; color: var(--text-body); font-size: 1.125rem; line-height: 1.9; text-wrap: pretty; }
+/* One phrase per line as written; a phrase wider than the column wraps inside itself. */
+.home-hero-lead span { display: block; }
+@supports (word-break: auto-phrase) {
+  .home-hero-lead { word-break: auto-phrase; }
+}
 .home-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.home-hero-actions .button { min-width: 190px; border-radius: 999px; }
-.home-hero-visual { min-width: 0; align-self: end; }
-.home-hero-visual img { display: block; width: 100%; max-width: 620px; height: auto; margin-left: auto; filter: drop-shadow(0 28px 34px rgba(7,30,69,.12)); }
-.home-facts { position: relative; z-index: 2; grid-column: 1 / -1; margin-top: 36px; }
+.home-hero-actions .button { min-width: 200px; border-radius: 999px; }
+
+/* Service flow. The cards are HTML text in the normal flow, so the box grows with
+   enlarged text; the photo is pulled up under them into its blank wall, leaving the
+   laptop and plant visible below and to the right. The frame reserves the photo's box
+   before it loads. */
+.home-hero-visual { position: relative; min-width: 0; }
+.home-hero-flow { position: relative; z-index: 1; display: grid; gap: 12px; width: min(100%, 380px); margin: 0; padding: 0; list-style: none; }
+/* The dashed line that joins the four icons. */
+.home-hero-flow::before { content: ""; position: absolute; top: 36px; bottom: 36px; left: 36px; border-left: 2px dashed rgba(18,101,232,.32); }
+.home-hero-flow li { position: relative; display: grid; grid-template-columns: 40px minmax(0,1fr) auto; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(135deg, rgba(255,255,255,.97) 0%, rgba(239,245,255,.95) 100%); box-shadow: 0 14px 30px rgba(7,30,69,.09); }
+.home-hero-flow-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--on-brand-blue); background: var(--brand-blue); }
+.home-hero-flow svg, .home-facts svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.home-hero-flow-text { display: grid; min-width: 0; line-height: 1.45; }
+.home-hero-flow-text .step-number { font-size: .75rem; }
+.home-hero-flow-text strong { color: var(--brand-navy-deep); font-size: 1.0625rem; }
+.home-hero-flow-text small { color: var(--muted); font-size: .875rem; }
+/* A tiny picture of each step's screen (list, text, form, chart). Decorative. */
+.home-hero-flow-ui { width: 56px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background-color: var(--white); background-repeat: no-repeat; }
+.home-hero-flow-ui-lines { background-image: linear-gradient(var(--cyan), var(--cyan)), linear-gradient(var(--line), var(--line)), linear-gradient(var(--line), var(--line)); background-size: 22px 4px, 40px 4px, 30px 4px; background-position: 7px 9px, 7px 18px, 7px 27px; }
+.home-hero-flow-ui-text { background-image: linear-gradient(var(--line), var(--line)), linear-gradient(var(--highlight), var(--highlight)), linear-gradient(var(--line), var(--line)); background-size: 40px 4px, 34px 6px, 26px 4px; background-position: 7px 8px, 7px 17px, 7px 28px; }
+.home-hero-flow-ui-form { background-image: linear-gradient(var(--white), var(--white)), linear-gradient(var(--line), var(--line)), linear-gradient(var(--white), var(--white)), linear-gradient(var(--line), var(--line)), linear-gradient(var(--brand-blue), var(--brand-blue)); background-size: 38px 6px, 40px 8px, 38px 6px, 40px 8px, 16px 6px; background-position: 8px 7px, 7px 6px, 8px 17px, 7px 16px, 31px 28px; }
+.home-hero-flow-ui-chart { background-image: linear-gradient(var(--cyan), var(--cyan)), linear-gradient(var(--brand-blue), var(--brand-blue)), linear-gradient(var(--cyan), var(--cyan)), linear-gradient(var(--line), var(--line)); background-size: 7px 12px, 7px 22px, 7px 16px, 40px 1px; background-position: 13px 20px, 24px 10px, 35px 16px, 7px 32px; }
+.home-hero-photo-frame { position: relative; aspect-ratio: 4 / 3; margin-top: -46%; overflow: hidden; -webkit-mask-image: radial-gradient(ellipse 58% 56% at 58% 50%, black 52%, transparent 100%); mask-image: radial-gradient(ellipse 58% 56% at 58% 50%, black 52%, transparent 100%); }
+.home-hero-photo { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: right bottom; }
+
+.home-facts { position: relative; z-index: 2; grid-column: 1 / -1; margin-top: 32px; }
 .home-facts ul { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.94); box-shadow: var(--shadow); }
-.home-facts li { display: flex; flex-direction: column; gap: 2px; padding: 20px 24px; }
+.home-facts li { display: grid; grid-template-columns: 44px minmax(0,1fr); align-content: center; gap: 0 14px; padding: 18px 24px; }
 .home-facts li + li { border-left: 1px solid var(--line); }
-.home-facts strong { color: var(--brand-blue); font-size: 1.5rem; line-height: 1.3; }
-.home-facts span { color: var(--brand-navy); font-weight: 700; }
+/* Icon on the left; the blue figure leads, the plain phrase follows it smaller. */
+.home-facts-icon { display: grid; place-items: center; grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 50%; color: var(--brand-blue); background: var(--pale-blue); }
+.home-facts strong { color: var(--brand-blue); font-size: 1.5rem; font-weight: 800; line-height: 1.3; }
+.home-facts strong + span { color: var(--text-body); font-size: 1rem; font-weight: 500; line-height: 1.6; }
 .home-facts p { margin: 10px 0 0; color: var(--muted); font-size: .875rem; }
 
 /* Shared section type for the lower blocks. */
@@ -92,7 +130,12 @@
 .home-cta p { max-width: 620px; }
 
 @media (max-width: 1024px) {
-  .home-hero-inner { grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); }
+  .home-hero-inner { grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); column-gap: 32px; }
+  /* The narrow right column keeps the cards readable by dropping the small screen pictures. */
+  .home-hero-flow { width: 100%; }
+  .home-hero-flow-ui { display: none; }
+  .home-hero-flow li { grid-template-columns: 40px minmax(0,1fr); }
+  .home-hero-photo-frame { margin-top: -38%; }
   .home-flow-steps { gap: 20px; }
   .home-flow-steps img { height: 130px; }
   .home-page .section-title .heading-line { white-space: normal; }
@@ -102,18 +145,43 @@
   .home-campaign-link { font-size: .9375rem; }
   .home-campaign-band { padding: 20px 0; }
   .home-campaign-band-link { padding: 22px 20px; }
-  .home-hero::before { background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.94) 60%, rgba(255,255,255,.6) 100%); }
-  .home-hero-inner { grid-template-columns: minmax(0,1fr); padding: 36px 0 28px; }
-  .home-hero-copy h1 { font-size: clamp(2.25rem,10vw,3.5rem); line-height: 1.3; }
-  .home-hero-lead { margin-top: 16px; font-size: 1rem; }
+  /* Phones: one column in the order copy → two stacked buttons → flow → facts → note,
+     with type sized for the phone rather than the desktop sizes scaled down. */
+  .home-hero::before { background:
+    radial-gradient(ellipse 90% 40% at 80% 62%, rgba(18,101,232,.08) 0%, rgba(18,101,232,0) 70%),
+    linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,.96) 50%, rgba(255,255,255,.7) 100%); }
+  .home-hero::after { top: 34%; left: -30%; width: 190%; height: 60%; }
+  .home-hero-inner { grid-template-columns: minmax(0,1fr); padding: 32px 0 28px; }
+  .home-hero-kicker { margin-bottom: 14px; padding: 3px 12px; font-size: .875rem; }
+  .home-hero-copy h1 { font-size: clamp(1.5rem,7.6vw,2.5rem); line-height: 1.45; letter-spacing: -.03em; }
+  .home-hero-lead { margin-top: 14px; font-size: 1rem; line-height: 1.85; }
+  /* Phrases move to the next line whole (site.css makes .heading-line inline on phones);
+     one wider than the screen still wraps inside itself, so enlarged text cannot overflow. */
+  .home-hero-copy h1 .heading-line, .home-hero-lead span { display: inline-block; white-space: normal; }
   .home-hero-actions { flex-direction: column; gap: 10px; margin-top: 24px; }
   .home-hero-actions .button { width: 100%; min-width: 0; }
-  .home-hero-visual img { max-width: 240px; margin: 16px auto 0; }
-  .home-facts { margin-top: 20px; }
-  .home-facts ul { grid-template-columns: minmax(0,1fr); }
-  .home-facts li { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; padding: 14px 18px; }
-  .home-facts li + li { border-top: 1px solid var(--line); border-left: 0; }
+  /* Flow: four short cards down the screen, then a crop of the desk made for phones —
+     the photo enlarged so the laptop and plant fill the width, bleeding to both edges. */
+  .home-hero-visual { margin-top: 32px; }
+  .home-hero-flow { gap: 10px; }
+  .home-hero-flow::before { left: 32px; }
+  .home-hero-flow li { grid-template-columns: 36px minmax(0,1fr) auto; gap: 12px; padding: 10px 14px; }
+  .home-hero-flow-ui { display: block; }
+  .home-hero-flow-icon { width: 36px; height: 36px; }
+  .home-hero-flow svg { width: 18px; height: 18px; }
+  .home-hero-flow-text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+  .home-hero-flow-text strong { font-size: 1rem; }
+  .home-hero-flow-text small { display: none; }
+  .home-hero-photo-frame { aspect-ratio: auto; height: clamp(200px,62vw,340px); margin: -36px -20px 0; -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 28%, black 74%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, black 28%, black 74%, transparent 100%); }
+  .home-hero-photo { inset: auto -8% 0 auto; width: auto; max-width: none; height: 165%; object-fit: fill; }
+  /* Facts: three separate low cards, icon beside the blue figure and its phrase. */
+  .home-facts { margin-top: 24px; }
+  .home-facts ul { grid-template-columns: minmax(0,1fr); gap: 10px; border: 0; border-radius: 0; background: none; box-shadow: none; }
+  .home-facts li { grid-template-columns: 40px minmax(0,1fr); gap: 0 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.96); box-shadow: 0 8px 20px rgba(7,30,69,.06); }
+  .home-facts li + li { border-left: 1px solid var(--line); }
+  .home-facts-icon { width: 40px; height: 40px; }
   .home-facts strong { font-size: 1.25rem; }
+  .home-facts strong + span { font-size: .9375rem; }
   .home-flow-steps { grid-template-columns: minmax(0,1fr); gap: 20px; margin-top: 28px; }
   .home-flow-steps li { display: grid; grid-template-columns: 72px minmax(0,1fr); align-items: start; gap: 2px 16px; }
   .home-flow-steps img { grid-row: 1 / 4; width: 72px; height: 72px; margin: 0; }
@@ -137,8 +205,10 @@
 @media (max-height: 480px) and (orientation: landscape) {
   .home-campaign-link { min-height: 40px; padding-block: 6px; }
   .home-hero-inner { grid-template-columns: minmax(0,1fr); padding: 20px 0 24px; }
-  .home-hero-copy h1 { font-size: 2.25rem; line-height: 1.25; }
-  .home-hero-lead { margin-top: 12px; font-size: 1rem; line-height: 1.8; }
+  .home-hero-copy h1 { font-size: 2rem; line-height: 1.3; }
+  .home-hero-kicker { margin-bottom: 8px; padding: 1px 10px; font-size: .8125rem; }
+  .home-hero-lead { margin-top: 10px; font-size: 1rem; line-height: 1.8; }
+  .home-page .home-hero-lead span { display: inline; }
   /* .home-page keeps these ahead of the 768px rules above, whatever the order. */
   .home-page .home-hero-actions { flex-direction: row; margin-top: 18px; }
   .home-page .home-hero-actions .button { width: auto; min-height: 44px; }
