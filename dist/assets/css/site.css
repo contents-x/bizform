@@ -1,15 +1,18 @@
 /* Shared styles for every page: tokens, base elements, header, buttons, shared
-   components, forms, guides, footer, the floating inquiry bar and their mobile
-   rules. Page-specific styles live in the page files (home.css, service.css,
-   pricing.css, examples.css, use-cases.css, faq.css), which load after this one.
+   components, guides, footer, the floating inquiry bar and their mobile rules.
+   Page-specific styles live in the page files (home.css, service.css, pricing.css,
+   examples.css, use-cases.css, faq.css, and forms.css for the two form pages), which
+   load after this one. Pages without a file of their own (guides, company, policy,
+   stop, 404) keep their few rules here. Until the next deploy this file also keeps a
+   copy of the form and sample-card rules for cached pages (marked below).
 
    Brand tokens. Single source of truth for colour across every page.
    Base palette is docs/CONTENT-RULES.md: navy #071E45, blue #1265E8, orange #F5A623.
    The blue matches the illustrations in assets/images (hue ~215).
    Do not introduce page-specific colour palettes; add a token here instead.
-   site.css, home.css, service.css, pricing.css and examples.css write every hex
-   colour as a token (checked by scripts/check_site.py); rgba() in shadows and
-   overlays may stay inline. The illustrated pages (use cases, FAQ) keep
+   site.css, home.css, service.css, pricing.css, examples.css and forms.css write
+   every hex colour as a token (checked by scripts/check_site.py); rgba() in shadows
+   and overlays may stay inline. The illustrated pages (use cases, FAQ) keep
    their one-off tints next to the artwork they match; a tint needed a second
    time becomes a token here. */
 :root {
@@ -45,7 +48,6 @@
   --alert-text: #b3261e;         /* 白背景 6.54:1。--alert は 3.39:1 で本文には使えない */
   --alert-surface: #fff4f3;      /* 送信失敗の案内の背景。--alert-text 6.07:1・--brand-blue 4.81:1 */
   --on-brand-blue: #f7faff;      /* --brand-blue の上に載る文字。4.95:1 */
-  --surface-disabled: #eef1f5;
 
   /* Supporting colours of shared components */
   --on-ink: #d7e0ef;             /* 文面サンプルの見出し帯。--ink の上で 12.34:1 */
@@ -56,6 +58,12 @@
   --pending-text: #8a3b20;       /* .pending ラベル。--pending-surface の上で 6.5:1 */
   --pending-surface: #ffe7dd;
   --field-border: #bbc2cf;       /* 入力欄の枠 */
+
+  /* Tints of the use-cases page that it uses in more than one place */
+  --surface-cool: #f2f5fb;        /* 帯・カード・最後の導線の背景のグラデーション */
+  --surface-cool-light: #fafbfd;  /* それより淡い色。帯とカードの背景のグラデーション */
+  --picture-surface: #f1f5fb;     /* イラストの背景のグラデーションの始まり */
+  --picture-surface-light: #fcfdfe; /* 同じグラデーションの終わり */
 
   /* Typography. Single source of truth for type across every page.
      明朝(--font-serif) はページ見出しh1、セクション見出しh2、添え書きのキーコピーだけ。
@@ -199,23 +207,30 @@ img { max-width: 100%; }
    The menu and the floating bar still offer the phone. */
 .header-no-tel .header-actions .button-tel { display: none; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--brand-blue); font-weight: 800; }
-.text-link::after { content: "→"; transition: transform .2s ease; }
+/* Symbols drawn with content are decoration: the text after "/" is their alternative
+   text, empty so screen readers skip them. Browsers without that syntax drop the second
+   declaration and keep the first. */
+.text-link::after { content: "→"; content: "→" / ""; transition: transform .2s ease; }
 .text-link:hover::after { transform: translateX(4px); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 .check-list { display: grid; gap: 14px; padding: 0; margin: 0; list-style: none; }
 .check-list li { display: grid; grid-template-columns: 24px 1fr; gap: 9px; align-items: start; }
-.check-list li::before { content: "✓"; display: grid; place-items: center; width: 21px; height: 21px; margin-top: 3px; border-radius: 50%; color: var(--green); background: var(--check-surface); font-size: .75rem; font-weight: 900; }
+.check-list li::before { content: "✓"; content: "✓" / ""; display: grid; place-items: center; width: 21px; height: 21px; margin-top: 3px; border-radius: 50%; color: var(--green); background: var(--check-surface); font-size: .75rem; font-weight: 900; }
 .section-title + .check-list { margin-top: 28px; }
 .check-list + p { margin-top: 30px; }
 
+/* Marks the part of a sample message written from research (top and examples pages). */
+.highlight { padding: 1px 4px; border-radius: 4px; color: inherit; background: var(--highlight); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* Kept for one deploy: the top page's sample cards moved to home.css, but pages cached
+   before that deploy load only this file and an old home.css. Delete this block (down to
+   .source-row strong) and the matching 768px lines on the next deploy. */
 .sample-shell { display: grid; grid-template-columns: .78fr 1.22fr; gap: 24px; margin-top: 48px; }
 .source-card, .message-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); }
 .source-card { padding: 28px; }
 .message-card { overflow: hidden; }
 .message-bar { display: flex; justify-content: space-between; gap: 18px; padding: 16px 22px; color: var(--on-ink); background: var(--ink); font-size: .8rem; }
 .message-body { padding: 30px; }
-/* Marks the part of a sample message written from research (top and examples pages). */
-.highlight { padding: 1px 4px; border-radius: 4px; color: inherit; background: var(--highlight); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .source-row { padding: 16px 0; border-bottom: 1px solid var(--line); }
 .source-row:last-child { border: 0; }
 .source-row small { display: block; color: var(--muted); }
@@ -236,8 +251,8 @@ img { max-width: 100%; }
 details { border: 1px solid var(--line); border-radius: 15px; background: var(--white); }
 summary { position: relative; padding: 21px 54px 21px 22px; font-weight: 800; cursor: pointer; list-style: none; }
 summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; position: absolute; right: 22px; top: 18px; color: var(--brand-blue); font-size: 1.4rem; }
-details[open] summary::after { content: "−"; }
+summary::after { content: "+"; content: "+" / ""; position: absolute; right: 22px; top: 18px; color: var(--brand-blue); font-size: 1.4rem; }
+details[open] summary::after { content: "−"; content: "−" / ""; }
 .detail-body { padding: 0 22px 22px; color: var(--muted); }
 
 .page-hero { padding: 94px 0 72px; color: var(--white); background: var(--ink); }
@@ -287,7 +302,6 @@ details[open] summary::after { content: "−"; }
 .final-cta-actions .button { min-width: 190px; border-radius: 999px; }
 .final-cta :focus-visible { outline-color: var(--white); }
 
-
 .split { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; align-items: start; }
 .definition-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .definition-row { display: grid; grid-template-columns: 190px 1fr; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--line); }
@@ -302,6 +316,9 @@ details[open] summary::after { content: "−"; }
 .notice + .section-title { margin-top: 55px; }
 .pending { display: inline-flex; padding: 5px 9px; border-radius: 99px; color: var(--pending-text); background: var(--pending-surface); font-size: .76rem; font-weight: 800; }
 
+/* Kept for one deploy: the form rules moved to forms.css, but pages cached before that
+   deploy load only this file. Delete this block and the matching lines in the 768px block
+   on the next deploy. */
 .form-shell { display: grid; gap: 24px; }
 .contact-tel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 24px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--pale-blue); }
 .contact-tel p { margin: 4px 0 0; color: var(--muted); }
@@ -361,6 +378,8 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .footer-column a:hover { color: var(--white); }
 .footer-bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 54px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.12); font-size: .78rem; }
 
+/* Fades in when scrolled into view (site.js). Without scripts and in print it is shown
+   as is: see the scripting and print rules at the end. */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
@@ -419,6 +438,8 @@ form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-
 .floating-cta .floating-cta-tel { color: var(--white); background: var(--brand-navy); }
 .floating-cta .floating-cta-tel:hover { background: var(--brand-blue-dark); transform: translateY(-2px); }
 .floating-cta svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* 資料DL・無料相談・電話 replace the full labels at 768px and below. */
+.floating-cta-label-short { display: none; }
 
 /* The tab on the bar's top edge tucks the bar away. Tucked, the bar slides below the
    screen (the home-indicator strip stays) and only the tab is left to bring it back. */
@@ -513,6 +534,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   .breadcrumbs a { display: inline-flex; align-items: center; min-height: 44px; }
   .button { min-height: 52px; min-width: 0; font-size: 1rem; }
   .hero-actions { gap: 10px; margin-top: 24px; }
+  /* .form-card > .button and .contact-tel-link: kept for one deploy, like the lines below. */
   .hero-actions .button, .form-card > .button, .contact-tel-link { width: 100%; }
   .text-link { min-height: 44px; }
   .page-links { display: grid; grid-template-columns: 1fr; }
@@ -535,6 +557,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   .page-hero h1 { font-size: clamp(1.875rem, 7.5vw, 2.75rem); line-height: 1.5; letter-spacing: -.025em; }
   .page-hero h1 br { display: none; }
   .heading-line { display: inline; white-space: normal; }
+  /* Kept for one deploy: the form and sample-card selectors in these lines (see above). */
   .sample-shell, .cards-3, .split, .article-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
   .sample-shell, .cards-3, .faq-list { margin-top: 28px; }
   .info-card, .source-card, .message-body, .form-card { padding: 22px; }
@@ -576,6 +599,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   .floating-cta { gap: 8px; padding: 10px max(12px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
   .floating-cta a { flex: 1 1 0; gap: 6px; min-height: 50px; padding: 10px 12px; font-size: 14.4px; }
   .floating-cta .floating-cta-label-long { display: none; }
+  .floating-cta .floating-cta-label-short { display: inline; }
   .floating-cta .floating-cta-tel { flex: none; }
   .floating-cta-toggle { right: max(12px, env(safe-area-inset-right)); }
 }
@@ -617,6 +641,13 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   .floating-cta, .floating-cta .floating-cta-toggle svg { transition: none; }
 }
 
+/* With scripts off nothing would ever reveal the content. */
+@media (scripting: none) {
+  .reveal { opacity: 1; transform: none; }
+}
+
 @media print {
   .floating-cta { display: none; }
+  /* Print everything, including parts never scrolled into view. */
+  .reveal { opacity: 1; transform: none; transition: none; }
 }

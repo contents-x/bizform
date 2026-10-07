@@ -10,47 +10,47 @@
     const answerId = `faq-answer-${index + 1}`;
     answer.id = answerId;
     summary.setAttribute('aria-controls', answerId);
-    summary.setAttribute('aria-expanded', String(details.open));
+    // Follow every way a question opens or closes, including the browser's find in page.
+    const syncExpanded = () => summary.setAttribute('aria-expanded', String(details.open));
+    syncExpanded();
+    details.addEventListener('toggle', syncExpanded);
 
-    if (!Element.prototype.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      details.addEventListener('toggle', () => summary.setAttribute('aria-expanded', String(details.open)));
-      return;
-    }
+    if (!Element.prototype.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let animation = null;
-
-    const finish = (open) => {
-      details.open = open;
-      details.style.height = '';
-      details.style.overflow = '';
-      summary.setAttribute('aria-expanded', String(open));
-      animation = null;
-    };
+    let closing = false;
 
     const animateHeight = (open, startHeight, endHeight, timing) => {
+      closing = !open;
       details.style.overflow = 'hidden';
-      animation = details.animate({ height: [`${startHeight}px`, `${endHeight}px`] }, timing);
-      animation.onfinish = () => finish(open);
-      animation.oncancel = () => { animation = null; };
-    };
-
-    const expand = () => {
-      details.open = true;
-      summary.setAttribute('aria-expanded', 'true');
-      animateHeight(true, summary.offsetHeight, details.offsetHeight,
-        { duration: 260, easing: 'cubic-bezier(.2,.7,.2,1)' });
-    };
-
-    const collapse = () => {
-      animateHeight(false, details.offsetHeight, summary.offsetHeight,
-        { duration: 220, easing: 'cubic-bezier(.4,0,.2,1)' });
+      const current = details.animate({ height: [`${startHeight}px`, `${endHeight}px`] }, timing);
+      animation = current;
+      current.onfinish = () => {
+        if (animation !== current) return;
+        details.open = open;
+        details.style.overflow = '';
+        animation = null;
+        closing = false;
+      };
     };
 
     summary.addEventListener('click', (event) => {
       event.preventDefault();
-      if (animation) animation.cancel();
-      if (details.open) collapse();
-      else expand();
+      // A click during an animation turns it around from the height reached so far.
+      const opening = !details.open || closing;
+      const reached = animation ? details.offsetHeight : null;
+      if (animation) {
+        animation.cancel();
+        animation = null;
+      }
+      if (opening) {
+        details.open = true;
+        animateHeight(true, reached ?? summary.offsetHeight, details.offsetHeight,
+          { duration: 260, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      } else {
+        animateHeight(false, reached ?? details.offsetHeight, summary.offsetHeight,
+          { duration: 220, easing: 'cubic-bezier(.4,0,.2,1)' });
+      }
     });
   });
 })();

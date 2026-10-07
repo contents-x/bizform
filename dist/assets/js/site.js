@@ -4,8 +4,11 @@
 // which only /contact/ and /resources/ load.
 // Wrapped in a function so nothing here becomes a global shared with the other scripts.
 (() => {
-  const path = window.location.pathname;
-  const active = (segment) => path.includes(segment) ? ' aria-current="page"' : '';
+  // The page's folder, the same with or without index.html: /service/, /contact/. An exact
+  // match, so a 404 page served at /contact/foo is not taken for the contact page.
+  const page = window.location.pathname.replace(/index\.html$/, '');
+  const isPage = (folder) => page === folder;
+  const active = (folder) => isPage(folder) ? ' aria-current="page"' : '';
 
   // Phone consultation uses the same number as BizManga.
   const TEL = '03-6261-0764';
@@ -126,18 +129,16 @@
       link.className = className;
       link.href = href;
       link.append(icon);
-      labels.forEach(({ text, className: labelClass, hidden }) => {
+      labels.forEach(({ text, className: labelClass }) => {
         const span = document.createElement('span');
         span.textContent = text;
-        if (labelClass) span.className = labelClass;
-        if (hidden) span.hidden = true;
+        span.className = labelClass;
         link.append(span);
       });
       return link;
     };
 
-    const isContactPage = /\/contact\/?$/.test(path.replace(/index\.html$/, ''));
-    if (isContactPage || document.querySelector('.floating-cta')) return;
+    if (isPage('/contact/') || document.querySelector('.floating-cta')) return;
 
     const cta = document.createElement('aside');
     cta.className = 'floating-cta';
@@ -147,19 +148,19 @@
         svgIcon(['M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z', 'M14 3v5h5']),
         [
           { text: '資料ダウンロード', className: 'floating-cta-label-long' },
-          { text: '資料DL', className: 'floating-cta-label-short', hidden: true }
+          { text: '資料DL', className: 'floating-cta-label-short' }
         ]),
       ctaLink('floating-cta-primary', '/contact/',
         svgIcon(['M3 6h18v12H3z', 'm3 7 9 6 9-6']),
         [
           { text: '無料で相談する', className: 'floating-cta-label-long' },
-          { text: '無料相談', className: 'floating-cta-label-short', hidden: true }
+          { text: '無料相談', className: 'floating-cta-label-short' }
         ]),
       ctaLink('floating-cta-tel', `tel:${TEL}`,
         svgIcon(['M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z']),
         [
           { text: `電話で相談 ${TEL}`, className: 'floating-cta-label-long' },
-          { text: '電話', className: 'floating-cta-label-short', hidden: true }
+          { text: '電話', className: 'floating-cta-label-short' }
         ])
     );
     // On /resources/ the download form is already on screen; a second way to it
@@ -201,6 +202,9 @@
     document.body.append(cta);
     document.body.classList.add('has-floating-cta');
 
+    // Kept for one deploy: a page cached before it can pair this file with the old site.css,
+    // which does not hide the short labels yet. The CSS does that now; delete this on the
+    // next deploy.
     const shortLabels = cta.querySelectorAll('.floating-cta-label-short');
     const narrow = window.matchMedia('(max-width: 768px)');
     const syncLabel = () => shortLabels.forEach(label => { label.hidden = !narrow.matches; });

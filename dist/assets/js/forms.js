@@ -102,7 +102,10 @@
     const sendToHubSpot = (payload) => {
       const controller = 'AbortController' in window ? new AbortController() : null;
       const timer = controller && setTimeout(() => controller.abort(), HUBSPOT_TIMEOUT_MS);
-      return postToHubSpot(payload, controller?.signal).then((res) => {
+      // Started inside a promise: a fetch wrapped by an extension or in-app browser can
+      // throw before it returns one, and that must end as a failure the form reports,
+      // not leave the button stuck on 送信中….
+      return Promise.resolve().then(() => postToHubSpot(payload, controller?.signal)).then((res) => {
         if (res.ok) return undefined;
         return hubspotErrors(res).then((details) => {
           const error = new Error(`HubSpot responded ${res.status}`);
@@ -210,6 +213,8 @@
       const lines = [`【資料ダウンロード】${documentName}`];
       const tel = formField(data, 'tel');
       if (tel) lines.push(`電話番号: ${tel}`);
+      // The browser's fetch never throws here, but an extension or in-app browser that
+      // wraps fetch can; the PDF must still download, so keep the try.
       try {
         postToHubSpot(hubspotPayload(data,
           `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズフォーム経由の資料ダウンロード]')}`,

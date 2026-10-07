@@ -16,7 +16,7 @@
 .sv-role h3 { margin: 0 0 14px; color: var(--brand-navy-deep); font-size: 1.25rem; }
 .sv-role ul, .sv-details ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .sv-role li, .sv-details li { position: relative; padding-left: 26px; line-height: 1.7; }
-.sv-role li::before, .sv-details li::before { content: "✓"; position: absolute; left: 0; color: var(--brand-blue); font-weight: 900; }
+.sv-role li::before, .sv-details li::before { content: "✓"; content: "✓" / ""; position: absolute; left: 0; color: var(--brand-blue); font-weight: 900; }
 
 /* What each step covers. */
 .sv-details { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 40px; }

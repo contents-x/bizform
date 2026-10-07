@@ -36,7 +36,7 @@
 .pr-setup-price small { display: block; color: var(--on-dark); font-size: .9375rem; font-weight: 500; }
 .pr-setup ul { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 16px; margin: 0; padding: 18px 0 0; border-top: 1px solid rgba(255,255,255,.18); list-style: none; }
 .pr-setup li { position: relative; padding-left: 24px; line-height: 1.6; }
-.pr-setup li::before { content: "✓"; position: absolute; left: 0; color: var(--on-dark); font-weight: 900; }
+.pr-setup li::before { content: "✓"; content: "✓" / ""; position: absolute; left: 0; color: var(--on-dark); font-weight: 900; }
 .pr-conditions { display: grid; gap: 0; margin: 0; padding: 8px 28px; border-radius: 18px; background: var(--white); }
 .pr-conditions > div { padding: 16px 0; border-bottom: 1px solid var(--line); }
 .pr-conditions > div:last-child { border-bottom: 0; }
@@ -62,7 +62,7 @@
 .pr-vs-tool { color: var(--muted); }
 .pr-vs-us { color: var(--brand-navy-deep); background: var(--pale-blue); font-weight: 800; }
 .pr-check { display: inline-flex; align-items: center; gap: 8px; }
-.pr-check::before { content: "✓"; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: var(--white); background: var(--brand-blue); font-size: .75rem; font-weight: 900; }
+.pr-check::before { content: "✓"; content: "✓" / ""; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: var(--white); background: var(--brand-blue); font-size: .75rem; font-weight: 900; }
 
 /* Bar charts on white cards. */
 .pr-chart { margin-top: 32px; padding: 28px 32px 32px; border-radius: 18px; background: var(--white); box-shadow: 0 0 0 1px var(--line); }

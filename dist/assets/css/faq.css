@@ -18,7 +18,7 @@
 
 .faq-jump-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
 .faq-jump-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 9px 15px; border: 1px solid #bfd5f2; border-radius: 999px; color: #173f78; background: rgba(255,255,255,.9); font-size: .875rem; font-weight: 800; box-shadow: 0 6px 18px rgba(39,94,164,.05); transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
-.faq-jump-links a::after { content: "↓"; margin-left: 8px; color: var(--brand-blue); }
+.faq-jump-links a::after { content: "↓"; content: "↓" / ""; margin-left: 8px; color: var(--brand-blue); }
 .faq-jump-links a:hover { color: var(--white); border-color: var(--brand-blue); background: var(--brand-blue); transform: translateY(-2px); }
 .faq-jump-links a:hover::after { color: var(--white); }
 
@@ -50,7 +50,9 @@
 
 .faq-accordion { display: grid; gap: 12px; }
 
-.faq-page .faq-accordion details { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.98); box-shadow: 0 9px 28px rgba(27,67,119,.045); transition: border-color .2s ease, box-shadow .2s ease; }
+/* No overflow: hidden here: it would clip the focus ring drawn outside the question.
+   faq.js clips the box only while the height animates. */
+.faq-page .faq-accordion details { border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.98); box-shadow: 0 9px 28px rgba(27,67,119,.045); transition: border-color .2s ease, box-shadow .2s ease; }
 .faq-page .faq-accordion details:hover, .faq-page .faq-accordion details[open] { border-color: #aeccee; box-shadow: 0 12px 30px rgba(27,67,119,.08); }
 .faq-page .faq-accordion summary { display: grid; grid-template-columns: 38px minmax(0, 1fr) 34px; align-items: center; gap: 14px; min-height: 82px; padding: 18px 22px; color: var(--brand-navy); font-size: 1rem; font-weight: 800; line-height: 1.65; }
 .faq-page .faq-accordion summary::after { content: none; }

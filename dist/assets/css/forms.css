@@ -1,0 +1,50 @@
+/* The two form pages: 導入相談 (/contact/) and 資料ダウンロード (/resources/).
+   Loaded after site.css on those pages only, like forms.js. */
+.form-shell { display: grid; gap: 24px; }
+.contact-tel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 24px 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--pale-blue); }
+.contact-tel p { margin: 4px 0 0; color: var(--muted); }
+.contact-tel .contact-tel-label { margin: 0; color: var(--ink); font-size: 1.25rem; font-weight: 800; }
+.contact-tel-link { font-size: 1.375rem; letter-spacing: .02em; }
+.contact-tel-link svg { width: 22px; height: 22px; fill: currentColor; }
+.form-card { padding: 34px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); }
+.form-card button:disabled { opacity: .55; cursor: not-allowed; }
+/* Input forms (導入相談・資料ダウンロード) sit on the page without a card, in a
+   640px column, after the BizManga contact form. The completion panel keeps
+   its card so the finished state stands out. */
+.narrow.form-shell { width: min(calc(100% - 40px), 640px); }
+form.form-card { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.field { display: grid; gap: 8px; margin-bottom: 24px; }
+.field label { font-weight: 800; }
+.required { margin-left: 8px; color: var(--brand-orange-text); font-size: .75rem; }
+.field input, .field select, .field textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--field-border); border-radius: 8px; color: var(--ink); background: var(--white); line-height: 1.5; transition: border-color .2s ease; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brand-blue); }
+.field textarea { min-height: 140px; resize: vertical; }
+.field-help { margin: -2px 0 0; color: var(--muted); font-size: 1rem; }
+.form-card > button + .field-help { margin-top: 14px; }
+.form-honeypot { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.form-alert { margin-top: 18px; padding: 16px 18px; border-left: 4px solid var(--alert-text); border-radius: 0 10px 10px 0; color: var(--ink); background: var(--alert-surface); scroll-margin-block: calc(var(--header-height, 79px) + 16px) 24px; }
+.form-alert strong { display: block; margin-bottom: 4px; color: var(--alert-text); }
+.form-alert .text-link { display: inline; overflow-wrap: anywhere; }
+.form-complete { scroll-margin-block: calc(var(--header-height, 79px) + 16px) 24px; }
+.form-complete h2 { margin: 0 0 12px; color: var(--brand-navy-deep); font-size: 1.5rem; line-height: 1.5; }
+.form-complete p { margin: 0 0 16px; }
+.form-complete-steps { margin: 0 0 18px; padding-left: 1.4em; }
+.form-complete-steps li + li { margin-top: 6px; }
+.form-complete .text-link { display: inline; overflow-wrap: anywhere; }
+.field.field-check label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.field.field-check input { flex: none; width: 22px; height: 22px; min-width: 0; min-height: 0; margin: 3px 0 0; padding: 0; accent-color: var(--brand-blue); }
+.field.field-check .text-link { display: inline; }
+
+@media (max-width: 768px) {
+  .form-card > .button, .contact-tel-link { width: 100%; }
+  /* On phones the phone link takes the 1rem of every .button (site.css), as before the move. */
+  .contact-tel-link { font-size: 1rem; }
+  .form-card { padding: 22px; }
+  .form-shell > * { min-width: 0; }
+  .contact-tel { padding: 22px; }
+  .field input, .field select, .field textarea { min-width: 0; font-size: 1rem; }
+  .field input, .field select { min-height: 50px; }
+  .field textarea { min-height: 180px; }
+  .field-help, .required { font-size: 1rem; }
+  .field input, .field textarea { scroll-margin-block: 84px 24px; }
+}
