@@ -13,13 +13,16 @@
 
 料金・件数・契約条件、サンプルと実例の区別、共通ヘッダー・追従CTA、スマートフォンの表示・操作、問い合わせフォームの送信と表示、公開前確認事項は [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) を参照してください。ルールが生まれた経緯は [docs/HISTORY.md](docs/HISTORY.md) にあります。
 
-HTMLの整形は `python scripts/format_html.py`、整形済みかの確認は `python scripts/format_html.py --check` で行います（Python 3.10以上、追加パッケージ不要）。本文やインライン要素間の空白を維持し、ブロック構造をスペース2つで揃えます。
+スクリプトは Python 3.10 以上で動き、`layout_check.py` のほかは追加パッケージ不要です。`check_site.py` の JavaScript の構文の確認には Node.js を使います（無い環境ではその確認だけを飛ばして NOTE を出し、GitHub Actions では必ず確認します）。HTMLの整形は、本文やインライン要素間の空白を維持し、ブロック構造をスペース2つで揃えます。
 
 | スクリプト | 使うとき |
 |---|---|
+| `python scripts/format_html.py` | HTMLを変えたあと。整形する（`--check` で整形済みかだけを確認） |
 | `python scripts/stamp_assets.py` | `dist/assets/css`・`dist/assets/js` を変えたあと。HTMLの `?v=` を内容のハッシュに更新する |
 | `python scripts/check_site.py` | push の前。リンク・画像・サイトマップ・料金・色トークン・`?v=`・整形などを確認する（GitHub Actions でも公開前に実行し、失敗したら公開しない） |
 | `python scripts/layout_check.py` | 見た目を変えたあと。全ページを多数の画面幅・文字サイズ・機種で表示し、はみ出しや折り返しを確認する（Playwright が必要） |
+
+手元で表示するには `python -m http.server 8000 --bind 127.0.0.1 --directory dist` を実行し、`http://127.0.0.1:8000/` を開きます（ルートからのパスで書いているため、HTMLファイルを直接開くと画像やCSSが読み込まれません）。手元で開いたページからフォームを送信すると、共用の HubSpot フォームに実際に届きます（CRM は手元からの送信を受け付けません）。動作確認では送信しないでください。
 
 ## 外部連携
 
