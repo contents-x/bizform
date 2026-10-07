@@ -39,10 +39,10 @@
 /* A faint ring behind the desk and one long curve through the right half. */
 .home-hero::before { top: 50%; left: 74%; width: 620px; aspect-ratio: 1; transform: translate(-50%,-50%); border: 1px solid rgba(255,255,255,.95); background: radial-gradient(circle, rgba(255,255,255,.5) 0%, rgba(255,255,255,0) 70%); box-shadow: 0 0 0 1px rgba(18,101,232,.05); }
 .home-hero::after { top: -70%; left: 48%; width: 120%; height: 240%; border: 1px solid rgba(18,101,232,.08); }
-.home-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1.04fr) minmax(0,.96fr); grid-template-areas: "copy visual" "facts visual"; column-gap: 40px; padding: 56px 0 48px; }
+.home-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-areas: "copy visual" "facts visual"; column-gap: 40px; padding: 56px 0 48px; }
 .home-hero-copy { grid-area: copy; align-self: end; position: relative; z-index: 2; }
 .home-hero-kicker { display: inline-block; margin: 0 0 20px; padding: 4px 16px; border: 1px solid var(--brand-blue); border-radius: 6px; color: var(--brand-blue); background: var(--white); font-size: .9375rem; font-weight: 700; line-height: 1.7; letter-spacing: .04em; }
-.home-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.125rem,3.4vw,2.875rem); font-weight: 700; line-height: 1.4; letter-spacing: -.04em; }
+.home-hero-copy h1 { margin: 0; color: var(--brand-navy-deep); font-family: var(--font-serif); font-size: clamp(2.125rem,3.4vw,2.75rem); font-weight: 700; line-height: 1.4; letter-spacing: -.04em; }
 .home-hero-lead { margin: 20px 0 0; color: var(--text-body); font-size: 1.125rem; line-height: 1.9; text-wrap: pretty; }
 /* One phrase per line as written; a phrase wider than the column wraps inside itself. */
 .home-hero-lead span { display: block; }
@@ -52,37 +52,15 @@
 .home-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 .home-hero-actions .button { min-width: 200px; border-radius: 999px; }
 
-/* Visual. It reaches past the container to the window's right edge (--hero-bleed), where
-   the desk is cut off; its left and bottom edges fade out. Above the desk 19% of the width
-   is left open for the top cards. The img has width/height, so its box is reserved before
-   it loads. Cards, arrows and their type scale with the visual's width (cqw), so they keep
-   their places around the laptop at every desktop width. */
-.home-hero-visual { --hero-bleed: max(20px, calc((100vw - var(--max)) / 2)); grid-area: visual; align-self: center; position: relative; min-width: 0; margin-right: calc(-1 * var(--hero-bleed)); padding-top: 19%; container-type: inline-size; }
-.home-hero-desk { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 16%), linear-gradient(180deg, black 72%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, black 16%), linear-gradient(180deg, black 72%, transparent 100%); mask-composite: intersect; }
-.home-hero-cards { margin: 0; padding: 0; list-style: none; }
-.home-hero-card { position: absolute; z-index: 2; display: flex; align-items: center; gap: .8em; padding: .75em 1.1em .75em .75em; border: 1px solid var(--line); border-radius: 1em; background: rgba(255,255,255,.97); box-shadow: 0 .8em 2em rgba(18,101,232,.13); font-size: clamp(.8125rem,2.3cqw,1rem); white-space: nowrap; }
-.home-hero-card-icon { display: grid; flex: none; place-items: center; width: 2.75em; height: 2.75em; border-radius: .75em; color: var(--brand-blue); background: var(--pale-blue); }
-.home-hero-card svg, .home-facts svg { width: 1.375em; height: 1.375em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.home-hero-card-body { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: .25em .5em; }
-.home-hero-card-body .step-number { grid-column: 1 / -1; font-size: .75em; line-height: 1; }
-.home-hero-card-body strong { grid-column: 1 / -1; color: var(--brand-navy-deep); font-size: 1em; font-weight: 800; line-height: 1.3; }
-/* Grey placeholder lines, a sent tick and a small bar chart, as on the source cards. Decorative. */
-.home-hero-card-lines { grid-column: 1 / -1; display: block; width: 8em; height: 1.1em; background: linear-gradient(var(--line), var(--line)) 0 0 / 100% .4em no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 60% .4em no-repeat; }
-.home-hero-card-check { display: grid; place-items: center; width: 1.6em; height: 1.6em; border-radius: 50%; color: var(--white); background: var(--green); }
-.home-hero-card-check svg { width: 1em; height: 1em; stroke-width: 3; }
-.home-hero-card-check + .home-hero-card-lines { grid-column: 2; width: 6.4em; }
-.home-hero-card-chart { grid-column: 1 / -1; order: 1; display: block; width: 8em; height: 2.2em; background-repeat: no-repeat; background-image: linear-gradient(rgba(18,101,232,.25), rgba(18,101,232,.25)), linear-gradient(rgba(18,101,232,.4), rgba(18,101,232,.4)), linear-gradient(rgba(18,101,232,.3), rgba(18,101,232,.3)), linear-gradient(rgba(18,101,232,.5), rgba(18,101,232,.5)), linear-gradient(rgba(18,101,232,.7), rgba(18,101,232,.7)), linear-gradient(var(--brand-blue), var(--brand-blue)); background-size: 12% 30%, 12% 52%, 12% 36%, 12% 64%, 12% 80%, 12% 100%; background-position: 0 100%, 20% 100%, 40% 100%, 60% 100%, 80% 100%, 100% 100%; }
-.home-hero-card-research { top: 3%; left: 0; }
-.home-hero-card-writing { top: 0; right: calc(var(--hero-bleed) + 2%); }
-.home-hero-card-sent { top: 46%; right: max(12px, calc(var(--hero-bleed) - 4%)); }
-.home-hero-card-report { bottom: 9%; left: 1%; }
-/* Dotted arcs from each card to the next. */
-.home-hero-arrow { position: absolute; z-index: 1; overflow: visible; fill: none; }
-.home-hero-arrow > path { stroke: var(--brand-blue); stroke-width: 2.5; stroke-dasharray: 0 7; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.home-hero-arrow marker path { fill: var(--brand-blue); }
-.home-hero-arrow-1 { top: 3%; left: 31%; width: 17%; }
-.home-hero-arrow-2 { top: 17%; right: calc(var(--hero-bleed) + 3%); width: 8%; }
-.home-hero-arrow-3 { top: 57%; left: 32%; width: 17%; }
+/* Visual: one generated picture of the four steps (research → writing → form sent → report)
+   floating over a desk, cropped from the supplied artwork; the phone crop comes from a
+   separate portrait version (<picture>). The step names are in the alt text. It reaches past
+   the container to the window's right edge (--hero-bleed) and its left, top and bottom edges
+   fade into the CSS background. width/height on img and source reserve the box before load. */
+.home-hero-visual { --hero-bleed: max(20px, calc((100vw - var(--max)) / 2)); grid-area: visual; align-self: center; min-width: 0; margin-right: calc(-1 * var(--hero-bleed)); margin-left: -4%; }
+.home-hero-visual picture { display: block; }
+.home-hero-flow { display: block; width: min(100%, 920px); height: auto; margin-left: auto; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 18%), linear-gradient(180deg, transparent 0%, black 8%, black 86%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, black 18%), linear-gradient(180deg, transparent 0%, black 8%, black 86%, transparent 100%); mask-composite: intersect; }
+.home-facts svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .home-facts { grid-area: facts; align-self: start; position: relative; z-index: 2; margin-top: 32px; }
 .home-facts ul { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.94); box-shadow: 0 12px 32px rgba(7,30,69,.07); }
@@ -90,7 +68,7 @@
 .home-facts li + li { border-left: 1px solid var(--line); }
 /* The blue figure leads; the plain phrase follows it smaller and lighter. Icons only on phones. */
 .home-facts-icon { display: none; place-items: center; grid-row: 1 / 3; width: 40px; height: 40px; border-radius: 50%; color: var(--brand-blue); background: var(--pale-blue); }
-.home-facts strong { color: var(--brand-blue); font-size: clamp(1rem,1.35vw,1.25rem); font-weight: 800; line-height: 1.35; }
+.home-facts strong { color: var(--brand-blue); font-size: clamp(1rem,1.3vw,1.1875rem); font-weight: 800; line-height: 1.35; }
 .home-facts strong + span { color: var(--text-body); font-size: .9375rem; font-weight: 500; line-height: 1.6; }
 .home-facts p { margin: 10px 0 0; color: var(--muted); font-size: .875rem; }
 
@@ -143,9 +121,10 @@
 .home-cta p { max-width: 620px; }
 
 @media (max-width: 1024px) {
-  /* Tablets: the facts move under both columns; the cards drop their placeholder lines. */
-  .home-hero-inner { grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr); grid-template-areas: "copy visual" "facts facts"; column-gap: 24px; }
-  .home-hero-card-lines, .home-hero-card-check, .home-hero-card-chart { display: none; }
+  /* Tablets: one column, so the picture is wide enough for the text inside it to be read. */
+  .home-hero-inner { grid-template-columns: minmax(0,1fr); grid-template-areas: "copy" "visual" "facts"; }
+  .home-hero-visual { margin: 24px 0 0; }
+  .home-hero-flow { width: min(100%, 640px); margin-inline: auto; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%), linear-gradient(180deg, transparent 0%, black 8%, black 86%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%), linear-gradient(180deg, transparent 0%, black 8%, black 86%, transparent 100%); }
   .home-flow-steps { gap: 20px; }
   .home-flow-steps img { height: 130px; }
   .home-page .section-title .heading-line { white-space: normal; }
@@ -155,7 +134,7 @@
   .home-campaign-link { font-size: .9375rem; }
   .home-campaign-band { padding: 20px 0; }
   .home-campaign-band-link { padding: 22px 20px; }
-  /* Phones: one column in the order copy → two stacked buttons → desk → steps → facts → note,
+  /* Phones: one column in the order copy → two stacked buttons → steps picture → facts → note,
      with type sized for the phone rather than the desktop sizes scaled down, and a plainer
      background: white fading to pale blue, no ring or curve. */
   .home-hero { background:
@@ -171,18 +150,9 @@
   .home-hero-copy h1 .heading-line, .home-hero-lead span { display: inline-block; white-space: normal; }
   .home-hero-actions { flex-direction: column; gap: 10px; margin-top: 24px; }
   .home-hero-actions .button { width: 100%; min-width: 0; }
-  /* The desk centred at a size that leads the block without filling the screen, both cut
-     edges faded; under it the four steps as one short list joined by a dashed line. */
-  .home-hero-visual { margin: 28px 0 0; padding-top: 0; container-type: normal; }
-  .home-hero-desk { width: min(100%, 460px); margin-inline: auto; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%), linear-gradient(180deg, black 70%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%), linear-gradient(180deg, black 70%, transparent 100%); }
-  .home-hero-arrow { display: none; }
-  .home-hero-cards { position: relative; display: grid; gap: 8px; margin-top: -12px; }
-  .home-hero-cards::before { content: ""; position: absolute; top: 28px; bottom: 28px; left: 32px; border-left: 2px dashed rgba(18,101,232,.32); }
-  .home-hero-card { position: relative; inset: auto; padding: 10px 14px; border-radius: 14px; box-shadow: 0 8px 20px rgba(18,101,232,.08); font-size: 1rem; white-space: normal; }
-  .home-hero-card-icon { width: 36px; height: 36px; border-radius: 10px; }
-  .home-hero-card svg { width: 20px; height: 20px; }
-  .home-hero-card-body { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
-  .home-hero-card-body .step-number { font-size: .75rem; }
+  /* The portrait picture, edge to edge, its top fading into the background under the buttons. */
+  .home-hero-visual { margin: 20px -20px 0; }
+  .home-hero-flow { width: 100%; -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 14%, black 88%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, black 14%, black 88%, transparent 100%); }
   /* Facts: three separate low cards, icon beside the blue figure and its phrase. */
   .home-facts { margin-top: 24px; }
   .home-facts ul { grid-template-columns: minmax(0,1fr); gap: 10px; border: 0; border-radius: 0; background: none; box-shadow: none; }
