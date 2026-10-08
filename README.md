@@ -53,6 +53,13 @@
 - 所有権確認には `dist/index.html` の `google-site-verification` メタタグを使う。確認状態を維持するため削除しない。
 - サイトマップは `https://bizform.contentsx.jp/sitemap.xml`。Search Consoleへ送信済み。`dist/robots.txt` にも同じURLを記載している。
 
+## Google アナリティクス
+
+- 会社用アカウント `391407567` のGA4プロパティ「ビズフォーム」。ウェブストリームは `16068302797`、測定IDは `G-1CXY4Z85C6`（2026-10-08 作成）。
+- 全ページのheadでGoogleタグと `dist/assets/js/analytics.js` を読み込む。公開ホスト `bizform.contentsx.jp` だけで計測し、ローカルプレビューは計測しない。
+- Google シグナル・広告パーソナライズはコードで無効化。拡張計測のフォーム操作・サイト内検索も無効。フォームの入力内容をGA4へ送らない。
+- Cookieのドメインを `bizform.contentsx.jp` に限定。プライバシーポリシーの「10. Cookie・アクセス解析」に利用目的・送信情報・停止方法を記載。
+
 ## 公開
 
 - GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
