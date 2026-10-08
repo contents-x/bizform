@@ -47,6 +47,12 @@
 - CRM に独自ドメイン `crm.contentsx.jp` が割り当てられたら、`dist/contact/index.html` と `dist/resources/index.html` のスクリプトの読み込み元（と CSP があればその送信先）を差し替える。
 - HubSpot のトラッキングコード（Cookie）は読み込んでいない。入れる場合は先にプライバシーポリシーの「10. Cookie・アクセス解析」を改定する。
 
+## Search Console
+
+- URLプレフィックスのプロパティは `https://bizform.contentsx.jp/`（2026-10-08 に所有権確認済み）。
+- 所有権確認には `dist/index.html` の `google-site-verification` メタタグを使う。確認状態を維持するため削除しない。
+- サイトマップは `https://bizform.contentsx.jp/sitemap.xml`。Search Consoleへ送信済み。`dist/robots.txt` にも同じURLを記載している。
+
 ## 公開
 
 - GitHub Pagesは `.github/workflows/pages.yml` から `dist/` を公開する。
