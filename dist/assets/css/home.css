@@ -25,11 +25,11 @@
 .home-campaign-band-cta { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px; border-radius: 999px; color: var(--brand-navy-deep); background: var(--white); font-weight: 800; }
 
 /* Hero: kicker, headline, lead, two buttons and the three facts on the left; on the right
-   the desk (a transparent cut-out) with the four steps we take over as HTML cards around it.
+   one picture of the four steps we take over (the visual below).
    Read in this order: h1 → consult button → kicker → lead → facts → note, so only the h1 is
    serif and large, the kicker is small blue text, the lead regular weight, the note muted.
    The background is CSS only: white behind the copy, pale blue, a soft ring and light orbs
-   on the right behind the desk. */
+   on the right behind the picture. */
 .home-hero { position: relative; overflow: hidden; background:
   linear-gradient(180deg, rgba(255,255,255,0) 82%, var(--white) 100%),
   radial-gradient(circle at 94% 2%, rgba(142,175,227,.32) 0, rgba(142,175,227,.16) 150px, rgba(142,175,227,0) 260px),
@@ -120,8 +120,6 @@
 .home-plan-note { margin: 20px 0 0; color: var(--muted); font-size: 1rem; }
 
 .home-faq { background: var(--pale-blue); }
-.home-faq details { border-color: var(--line); box-shadow: none; }
-.home-faq summary::after { color: var(--brand-blue); }
 
 /* The final CTA is the shared .final-cta (site.css) with a narrower lead and, side by
    side, a text column that may grow past its share (1fr rather than minmax(0,1fr),
@@ -152,7 +150,7 @@
     radial-gradient(ellipse 110% 32% at 50% 58%, rgba(18,101,232,.08) 0%, rgba(18,101,232,0) 70%),
     linear-gradient(180deg, var(--white) 0%, var(--white) 38%, var(--pale-blue-2) 62%, var(--pale-blue) 100%); }
   .home-hero::before, .home-hero::after { display: none; }
-  .home-hero-inner { grid-template-columns: minmax(0,1fr); grid-template-areas: "copy" "visual" "facts"; padding: 32px 0 28px; }
+  .home-hero-inner { padding: 32px 0 28px; }
   .home-hero-kicker { margin-bottom: 14px; padding: 3px 12px; font-size: .875rem; }
   .home-hero-copy h1 { font-size: clamp(1.5rem,7.6vw,2.5rem); line-height: 1.45; letter-spacing: -.03em; }
   .home-hero-lead { margin-top: 14px; font-size: 1rem; line-height: 1.85; }
@@ -168,10 +166,9 @@
   .home-facts { margin-top: 24px; }
   .home-facts ul { grid-template-columns: minmax(0,1fr); gap: 10px; border: 0; border-radius: 0; background: none; box-shadow: none; }
   .home-facts li { display: grid; grid-template-columns: 40px minmax(0,1fr); gap: 0 14px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.96); box-shadow: 0 8px 20px rgba(7,30,69,.06); }
-  .home-facts li + li { border-left: 1px solid var(--line); }
   .home-facts-icon { display: grid; }
   .home-facts strong { font-size: 1.25rem; }
-  .home-flow-steps { grid-template-columns: minmax(0,1fr); gap: 20px; margin-top: 28px; }
+  .home-flow-steps { grid-template-columns: minmax(0,1fr); margin-top: 28px; }
   .home-flow-steps li { display: grid; grid-template-columns: 72px minmax(0,1fr); align-items: start; gap: 2px 16px; }
   .home-flow-steps img { grid-row: 1 / 4; width: 72px; height: 72px; margin: 0; }
   .home-flow-steps h3 { margin: 2px 0 4px; font-size: 1.125rem; }

@@ -96,16 +96,19 @@
 
 /* The final CTA is the shared .final-cta (site.css); its long heading wraps freely. */
 .final-cta h2 .heading-line { white-space: normal; }
-.pr-setup :focus-visible { outline-color: var(--white); }
 
 @media (max-width: 1024px) {
   .pr-plans { gap: 14px; }
   .pr-bars li { grid-template-columns: 9.5em minmax(0,1fr); }
   .pr-plan { padding: 24px 18px; }
-  /* Three cards side by side: keep "スタンダードを相談する" on one line. */
+  .pr-terms { grid-template-columns: minmax(0,1fr); }
+}
+
+/* Three cards side by side (tablets only; phones stack them, with full-size buttons and text):
+   keep "スタンダードを相談する" on one line. */
+@media (min-width: 768.02px) and (max-width: 1024px) {
   .pr-plan .button { padding-inline: 8px; font-size: clamp(14px, 1.9vw, 16px); }
   .pr-plan-specs dt { font-size: .9375rem; }
-  .pr-terms { grid-template-columns: minmax(0,1fr); }
 }
 
 @media (max-width: 768px) {

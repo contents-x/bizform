@@ -57,13 +57,30 @@
   // Hand a form to the CRM embed script, which loads async (data-auto="false").
   // A visitor on a slow connection can submit before it arrives, so wait for it
   // rather than dropping the copy; the form keeps its values after it is hidden.
+  // The script is external and unversioned: if it ever throws, the HubSpot send and
+  // the download that follow must still run, so its call is guarded.
+  const sendFormToCrm = (form) => {
+    try {
+      window.BizcarteInbound?.sendForm(form);
+    } catch (err) {
+      console.warn('CRM copy failed (ignored):', err);
+    }
+  };
+  // One wait per form: a resend while the script is still loading must not queue a
+  // second copy (each would send the form's latest values, so the CRM got two).
+  const waitingForCrm = new Set();
   const copyToCrm = (form) => {
     if (window.BizcarteInbound) {
-      window.BizcarteInbound.sendForm(form);
+      sendFormToCrm(form);
       return;
     }
-    document.querySelector('script[src*="/embed/inbound-v1.js"]')?.addEventListener('load', () => {
-      window.BizcarteInbound?.sendForm(form);
+    if (waitingForCrm.has(form)) return;
+    const script = document.querySelector('script[src*="/embed/inbound-v1.js"]');
+    if (!script) return;
+    waitingForCrm.add(form);
+    script.addEventListener('load', () => {
+      waitingForCrm.delete(form);
+      sendFormToCrm(form);
     }, { once: true });
   };
 
@@ -74,7 +91,7 @@
 
     // HubSpot is the system of record: its answer alone decides what the visitor
     // sees. The Contents X CRM inbox gets a copy through the CRM's embed script
-    // (loaded on the contact page with data-auto="false"), which never throws,
+    // (loaded on the contact page with data-auto="false"), whose call is guarded,
     // never waits for a reply and cannot block the HubSpot submission. Same
     // arrangement as BizManga, ContentsX and イチオシ採用 (README: 外部連携).
     const HUBSPOT_TIMEOUT_MS = 20000;
@@ -99,23 +116,26 @@
     // corrected resend still goes through as a new copy.
     let copiedToCrm = '';
 
-    const sendToHubSpot = (payload) => {
-      const controller = 'AbortController' in window ? new AbortController() : null;
-      const timer = controller && setTimeout(() => controller.abort(), HUBSPOT_TIMEOUT_MS);
-      // Started inside a promise: a fetch wrapped by an extension or in-app browser can
-      // throw before it returns one, and that must end as a failure the form reports,
-      // not leave the button stuck on 送信中….
-      return Promise.resolve().then(() => postToHubSpot(payload, controller?.signal)).then((res) => {
-        if (res.ok) return undefined;
-        return hubspotErrors(res).then((details) => {
-          const error = new Error(`HubSpot responded ${res.status}`);
-          // A 4xx is a definite refusal (HubSpot validates before storing), so
-          // nothing arrived and resending is safe. Anything else may have landed.
-          error.rejected = res.status >= 400 && res.status < 500;
-          error.details = details;
-          throw error;
-        });
-      }).finally(() => clearTimeout(timer));
+    // An async function: a fetch wrapped by an extension or in-app browser can throw
+    // before it returns a promise, and that must end as a failure the form reports,
+    // not leave the button stuck on 送信中…. The timeout uses AbortController rather than
+    // AbortSignal.timeout, which Safari only has from 16 (AbortController is in every
+    // browser that can run this file).
+    const sendToHubSpot = async (payload) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), HUBSPOT_TIMEOUT_MS);
+      try {
+        const res = await postToHubSpot(payload, controller.signal);
+        if (res.ok) return;
+        const error = new Error(`HubSpot responded ${res.status}`);
+        // A 4xx is a definite refusal (HubSpot validates before storing), so
+        // nothing arrived and resending is safe. Anything else may have landed.
+        error.rejected = res.status >= 400 && res.status < 500;
+        error.details = await hubspotErrors(res);
+        throw error;
+      } finally {
+        clearTimeout(timer);
+      }
     };
 
     const showComplete = () => {
@@ -138,26 +158,21 @@
 
       const data = new FormData(contactForm);
       const message = `【相談内容】${formField(data, 'topic') || '未選択'}\n\n${formField(data, 'message')}`;
-      const honeypot = formField(data, 'website');
+      // Only bots fill the off-screen field. Pretend it worked and keep them out
+      // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
+      const sending = formField(data, 'website') ? Promise.resolve() : sendToHubSpot(hubspotPayload(data,
+        `${message}\n\n${hubspotTrackingNote('[ビズフォーム経由のお問い合わせ]')}`,
+        'ビズフォーム - お問い合わせ'
+      ));
 
-      // CRM の受信箱へも送る（失敗しても HubSpot の受付・完了表示には影響しない）
+      // CRM の受信箱へも送る（HubSpot の送信を始めてから。失敗しても受付・完了表示には影響しない）
       const answers = JSON.stringify([...data.entries()]);
       if (answers !== copiedToCrm) {
         copiedToCrm = answers;
         copyToCrm(contactForm);
       }
 
-      // Only bots fill the off-screen field. Pretend it worked and keep them out
-      // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
-      if (honeypot) {
-        showComplete();
-        return;
-      }
-
-      sendToHubSpot(hubspotPayload(data,
-        `${message}\n\n${hubspotTrackingNote('[ビズフォーム経由のお問い合わせ]')}`,
-        'ビズフォーム - お問い合わせ'
-      )).then(showComplete).catch((err) => {
+      sending.then(showComplete).catch((err) => {
         console.error('HubSpot submission error:', err, err?.details || []);
         submitting = false;
         contactSubmit.disabled = false;
@@ -209,22 +224,17 @@
     // leaves a console warning. The form has no message field, so the message
     // property carries what was downloaded (and the phone number, which is not
     // a field on the shared HubSpot form).
-    const copyToHubSpot = (data) => {
+    // An async function, so a fetch wrapped by an extension or in-app browser that throws
+    // at once still ends in the catch below and the PDF downloads.
+    const copyToHubSpot = async (data) => {
       const lines = [`【資料ダウンロード】${documentName}`];
       const tel = formField(data, 'tel');
       if (tel) lines.push(`電話番号: ${tel}`);
-      // The browser's fetch never throws here, but an extension or in-app browser that
-      // wraps fetch can; the PDF must still download, so keep the try.
-      try {
-        postToHubSpot(hubspotPayload(data,
-          `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズフォーム経由の資料ダウンロード]')}`,
-          'ビズフォーム - 資料ダウンロード'
-        )).then((res) => {
-          if (!res.ok) hubspotErrors(res).then((details) => console.warn('HubSpot download copy refused (ignored):', res.status, details));
-        }).catch((err) => console.warn('HubSpot download copy failed (ignored):', err));
-      } catch (err) {
-        console.warn('HubSpot download copy skipped:', err);
-      }
+      const res = await postToHubSpot(hubspotPayload(data,
+        `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズフォーム経由の資料ダウンロード]')}`,
+        'ビズフォーム - 資料ダウンロード'
+      ));
+      if (!res.ok) console.warn('HubSpot download copy refused (ignored):', res.status, await hubspotErrors(res));
     };
 
     downloadForm.addEventListener('submit', (event) => {
@@ -238,11 +248,12 @@
       const data = new FormData(downloadForm);
       // Only bots fill the off-screen field; keep them out of HubSpot. The embed
       // script sends it as hp and the CRM drops that copy.
-      if (!formField(data, 'website')) copyToHubSpot(data);
-      // CRM の受信箱（資料DL）へも送る。失敗してもダウンロードは止めない
-      copyToCrm(downloadForm);
-
+      if (!formField(data, 'website')) {
+        copyToHubSpot(data).catch((err) => console.warn('HubSpot download copy failed (ignored):', err));
+      }
       startDownload();
+      // CRM の受信箱（資料DL）へも送る。ダウンロードを始めてから呼ぶので、失敗しても止めない
+      copyToCrm(downloadForm);
       if (retryLink) retryLink.href = fileUrl;
       downloadForm.hidden = true;
       if (complete) {
