@@ -7,7 +7,8 @@
 - 主要8ページ: トップ、サービス、料金、文面サンプル、活用シーン、FAQ、資料、導入相談
 - 営業ガイド: 基礎、代行、ツール比較、例文、料金相場、注意点、やり方
 - 補助ページ: 送信方針、送信停止窓口、運営会社
-- CSS は `dist/assets/css/`（全ページ共通の `site.css` とページ別のファイル）、JavaScript は `dist/assets/js/`（全ページの `site.js`、フォームのある2ページの `forms.js`、FAQ の `faq.js`）。詳しくは [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) の「CSS・JavaScriptの構成」
+- CSS は `dist/assets/css/`（全ページ共通の `site.css` とページ別のファイル）、JavaScript は `dist/assets/js/`（全ページの `site.js` と `analytics.js`、フォームのある2ページの `forms.js`、FAQ の `faq.js`）。詳しくは [docs/CONTENT-RULES.md](docs/CONTENT-RULES.md) の「CSS・JavaScriptの構成」
+- `docs/` でリポジトリに入るのは `CONTENT-RULES.md` と `HISTORY.md` だけ。ほかの調査・作業メモは `.gitignore` で手元に留める
 
 ## 制作・更新ルール
 
@@ -41,10 +42,10 @@
 - **公開キーは秘密ではない**（ブラウザに出る前提の値）。CRM 側はこのキーに登録したドメイン（`https://bizform.contentsx.jp`）からの送信だけを受け付ける。ドメインが変わる・別ドメインで開かれるようになったら、コードではなく CRM 側の許可ドメインを足してもらう。localhost からの送信は拒否されるのが正常。
 - `data-auto="false"` は外さない。外すと入力チェックで止まった送信まで拾う。同じページにスクリプトを2行入れない（二重に届く）。
 - 項目は欄の名前とラベルから自動で判別される（会社名・氏名・メール・相談内容＝件名・詳しい内容＝本文）。判別を指定したい欄だけ `data-crm-field` を付ける。ハニーポット `#bfWebsite`（`name="website"`・`tabindex="-1"`）は自動で認識され、値が入っていれば CRM 側で捨てられる。
-- CRM への送信はスクリプトが応答を待たずに行い、失敗しても例外を出さない。CRM に届かなくても HubSpot には届くので、変更時は受信箱で届いたかを確認する。
+- CRM への送信はスクリプトが応答を待たずに行う。`forms.js` は呼び出しを `try`／`catch` で囲み、HubSpot への送信（資料ダウンロードではダウンロード）を始めてから呼ぶので、スクリプトが例外を出しても送信とダウンロードは止まらない。CRM に届かなくても HubSpot には届くので、変更時は受信箱で届いたかを確認する。
 - `/stop/`（送信停止窓口）はどちらにもつないでいない。
-- 今はどのページにも CSP が無い。CSP を足すときは `connect-src` に `https://api.hsforms.com` と `https://contentsx-crm.vercel.app`、`script-src` に `https://contentsx-crm.vercel.app` を必ず入れる（漏れると HubSpot 送信が失敗表示になる、または CRM に届かなくなる）。
-- CRM に独自ドメイン `crm.contentsx.jp` が割り当てられたら、`dist/contact/index.html` と `dist/resources/index.html` のスクリプトの読み込み元（と CSP があればその送信先）を差し替える。
+- 今はどのページにも CSP が無い。CSP を足すときは `connect-src` に `https://api.hsforms.com` と `https://contentsx-crm.vercel.app`、`script-src` に `https://contentsx-crm.vercel.app` を必ず入れる（漏れると HubSpot 送信が失敗表示になる、または CRM に届かなくなる）。Google アナリティクスのため、`script-src` に `https://*.googletagmanager.com`、`connect-src` に `https://*.google-analytics.com`・`https://*.analytics.google.com`・`https://*.googletagmanager.com`、`img-src` に `https://*.google-analytics.com`・`https://*.googletagmanager.com` も入れる（漏れると計測が止まる）。
+- CRM に独自ドメイン `crm.contentsx.jp` が割り当てられたら、`dist/contact/index.html` と `dist/resources/index.html` のスクリプトの読み込み元（と CSP があればその送信先）、`scripts/check_site.py` の `CRM_EMBED`、`scripts/layout_check.py` の名前解決させないホストを差し替える（`forms.js` はパス `/embed/inbound-v1.js` でスクリプトを探すので、パスが変わらなければそのまま）。
 - HubSpot のトラッキングコード（Cookie）は読み込んでいない。入れる場合は先にプライバシーポリシーの「10. Cookie・アクセス解析」を改定する。
 
 ## Search Console
@@ -57,7 +58,7 @@
 ## Google アナリティクス
 
 - 会社用アカウント `391407567` のGA4プロパティ「ビズフォーム」`558125303`。ウェブストリームは `16068302797`、測定IDは `G-1CXY4Z85C6`（2026-10-08 作成）。
-- 全ページのheadでGoogleタグと `dist/assets/js/analytics.js` を読み込む。公開ホスト `bizform.contentsx.jp` だけで計測し、ローカルプレビューは計測しない。
+- 全ページのheadでGoogleタグと `dist/assets/js/analytics.js` を読み込む（公開前チェックが、全ページにあることと測定IDが `analytics.js` と同じことを確かめる）。公開ホスト `bizform.contentsx.jp` だけで計測し、ローカルプレビューは計測しない。
 - Google シグナル・広告パーソナライズはコードで無効化。拡張計測のフォーム操作・サイト内検索も無効。フォームの入力内容をGA4へ送らない。
 - Cookieのドメインを `bizform.contentsx.jp` に限定。プライバシーポリシーの「10. Cookie・アクセス解析」に利用目的・送信情報・停止方法を記載。
 - GA4側のインストールテストで公開サイトのGoogleタグ検出を確認。Search Consoleの同サイトのプロパティともリンク済み。
