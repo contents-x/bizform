@@ -37,41 +37,86 @@ SCREENS = [320, 360, 375, 390, 414, 430, 540, 600, 700, 768, 820, 900, 1024, 110
 DEVICES = [('Galaxy Fold', 280, 653), ('iPhone SE', 375, 667), ('iPhone 14', 390, 844), ('Pixel 7', 412, 915),
            ('iPad mini', 768, 1024), ('iPad Air', 820, 1180), ('iPhone SE 横', 667, 375), ('iPhone 14 横', 844, 390),
            ('iPhone 15 Pro Max 横', 932, 430), ('iPad mini 横', 1024, 768)]
-# Wait two animation frames: resize observers run before a frame is drawn, and site.js
-# fits the header in one. A fixed wait can measure first while the browser is busy.
-SETTLE = '() => new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done)))'
+# Wait two animation frames, then for the transitions and animations under way (the
+# floating bar sliding in, the header refitting): resize observers run before a frame is
+# drawn, and site.js fits the header in one. A fixed wait can measure first while the
+# browser is busy. Endless animations are not waited for.
+SETTLE = """async () => {
+  const frame = () => new Promise(done => requestAnimationFrame(done));
+  await frame();
+  await frame();
+  const finite = document.getAnimations().filter(a => a.effect?.getComputedTiming().endTime !== Infinity);
+  await Promise.all(finite.map(a => a.finished.catch(() => {})));
+}"""
+SCROLL_TO_END = "window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })"
 
 CHECK = r"""() => {
-  const r = e => e.getBoundingClientRect(), shown = e => e.getClientRects().length > 0, out = [];
-  const lines = el => { const tops = new Set(); const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
-    while ((n = w.nextNode())) { if (!n.textContent.trim() || !shown(n.parentElement)) continue;
-      const g = document.createRange(); g.selectNodeContents(n); for (const q of g.getClientRects()) if (q.width > .5) tops.add(Math.round(q.top)); }
-    return tops.size; };
-  const cw = document.documentElement.clientWidth;
-  if (document.documentElement.scrollWidth > cw) out.push('page scrolls sideways');
+  const out = [];
+  const box = el => el.getBoundingClientRect();
+  const shown = el => el.getClientRects().length > 0;
+  // How many lines the visible text inside el takes up.
+  const lineCount = el => {
+    const tops = new Set();
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (!node.textContent.trim() || !shown(node.parentElement)) continue;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      for (const rect of range.getClientRects()) if (rect.width > .5) tops.add(Math.round(rect.top));
+    }
+    return tops.size;
+  };
+
+  const clientWidth = document.documentElement.clientWidth;
+  if (document.documentElement.scrollWidth > clientWidth) out.push('page scrolls sideways');
+
+  // Header: each label on one line, the items side by side inside the row, and the menu
+  // button showing exactly when the menu is a panel (position: fixed) rather than inline.
   const row = document.querySelector('.header-inner');
   if (row) {
     const navFixed = getComputedStyle(document.querySelector('.global-nav')).position === 'fixed';
-    const items = [...row.querySelectorAll(':scope > .logo, :scope > .menu-button, .header-actions > a' + (navFixed ? '' : ', .global-nav > a'))].filter(shown);
-    for (const el of items) {
-      const parts = el.matches('.button-tel') ? [...el.querySelectorAll('.button-tel-text small, .button-tel-text span')] : [el];
-      for (const p of parts) if (shown(p) && getComputedStyle(p).display !== 'none' && lines(p) > 1) out.push('header label wraps: ' + p.textContent.trim().slice(0, 10));
+    const selector = ':scope > .logo, :scope > .menu-button, .header-actions > a' + (navFixed ? '' : ', .global-nav > a');
+    const items = [...row.querySelectorAll(selector)].filter(shown);
+    for (const item of items) {
+      const labels = item.matches('.button-tel') ? [...item.querySelectorAll('.button-tel-text small, .button-tel-text span')] : [item];
+      for (const label of labels) {
+        if (shown(label) && getComputedStyle(label).display !== 'none' && lineCount(label) > 1) {
+          out.push('header label wraps: ' + label.textContent.trim().slice(0, 10));
+        }
+      }
     }
-    const sorted = [...items].sort((a, b) => r(a).left - r(b).left);
-    for (let i = 1; i < sorted.length; i++) if (r(sorted[i]).left < r(sorted[i - 1]).right - .5) out.push('header items overlap');
-    if (Math.max(...items.map(e => r(e).right)) > r(row).right + .5) out.push('header runs off the row');
+    const byLeft = [...items].sort((a, b) => box(a).left - box(b).left);
+    for (let i = 1; i < byLeft.length; i++) {
+      if (box(byLeft[i]).left < box(byLeft[i - 1]).right - .5) out.push('header items overlap');
+    }
+    if (Math.max(...items.map(el => box(el).right)) > box(row).right + .5) out.push('header runs off the row');
     if (shown(document.querySelector('.menu-button')) === !navFixed) out.push('menu button and inline menu disagree');
   }
-  const cta = [...document.querySelectorAll('.floating-cta.is-visible:not(.is-minimized) a')];
-  if (cta.length) {
-    if (Math.max(...cta.map(a => r(a).right)) > cw - 4 || Math.min(...cta.map(a => r(a).left)) < 4) out.push('floating bar runs off screen');
-    for (const a of cta) {
+
+  // Floating bar, when open: inside the screen, each label whole and on one line.
+  const ctaLinks = [...document.querySelectorAll('.floating-cta.is-visible:not(.is-minimized) a')];
+  if (ctaLinks.length) {
+    const right = Math.max(...ctaLinks.map(a => box(a).right));
+    const left = Math.min(...ctaLinks.map(a => box(a).left));
+    if (right > clientWidth - 4 || left < 4) out.push('floating bar runs off screen');
+    for (const a of ctaLinks) {
       if (a.scrollWidth > a.clientWidth + 1) out.push('floating bar label cut off');
-      for (const s of a.querySelectorAll('span')) if (getComputedStyle(s).display !== 'none' && lines(s) > 1) out.push('floating bar label wraps');
+      for (const span of a.querySelectorAll('span')) {
+        if (getComputedStyle(span).display !== 'none' && lineCount(span) > 1) out.push('floating bar label wraps');
+      }
     }
   }
-  for (const b of document.querySelectorAll('main :is(.button, .showcase-button), main :is(.button, .showcase-button) *')) if (shown(b) && b.scrollWidth > b.clientWidth + 1 && getComputedStyle(b).overflow !== 'visible') out.push('button label cut off: ' + b.textContent.trim().slice(0, 12));
-  for (const img of document.images) if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) out.push('broken image: ' + img.getAttribute('src'));
+
+  // Buttons in the page whose label is clipped.
+  for (const el of document.querySelectorAll('main :is(.button, .showcase-button), main :is(.button, .showcase-button) *')) {
+    if (shown(el) && el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflow !== 'visible') {
+      out.push('button label cut off: ' + el.textContent.trim().slice(0, 12));
+    }
+  }
+  for (const img of document.images) {
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) out.push('broken image: ' + img.getAttribute('src'));
+  }
   return [...new Set(out)];
 }"""
 
@@ -137,10 +182,13 @@ def main():
     with sync_playwright() as p:
         launch = {'channel': 'chrome'} if args.browser == 'chrome' else {}
         # Show scrollbars: Windows gives them 15-17px of the window, which the CSS has to fit around.
-        # The CRM script on the form pages is not ours: the browser cannot resolve its host (blocking
-        # it with page.route would also turn off the HTTP cache and refetch every file on every page).
+        # The CRM script on the form pages and the Google Analytics library on every page are not
+        # ours: the browser cannot resolve their hosts, so the check neither waits for them nor
+        # counts as a visit (blocking them with page.route would also turn off the HTTP cache and
+        # refetch every file on every page).
+        hosts = ['contentsx-crm.vercel.app', 'www.googletagmanager.com']
         browser = p.chromium.launch(**launch, ignore_default_args=['--hide-scrollbars'],
-                                    args=['--host-resolver-rules=MAP contentsx-crm.vercel.app ~NOTFOUND'])
+                                    args=['--host-resolver-rules=' + ', '.join(f'MAP {h} ~NOTFOUND' for h in hosts)])
         # Every page, desktop-style resizing, at the default and an enlarged text size.
         scrollbar = None
         for size in (16, 20):
@@ -154,7 +202,7 @@ def main():
                     scrollbar = page.evaluate('innerWidth - document.documentElement.clientWidth')
                 # Scrolled down, so the floating bar shows and is measured at every width; the
                 # header and the buttons are measured the same anywhere on the page.
-                page.evaluate("window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })")
+                page.evaluate(SCROLL_TO_END)
                 for w in screen_widths:
                     page.set_viewport_size({'width': w, 'height': 900})
                     page.evaluate(SETTLE)
@@ -173,10 +221,12 @@ def main():
                     where['now'] = label
                     page.goto(base + path)
                     page.add_style_tag(content=f'html {{ font-size: {size}px; }}')
-                    page.wait_for_timeout(150)
+                    page.evaluate(SETTLE)
                     note(label, page.evaluate(CHECK))
-                    page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
-                    page.wait_for_timeout(350)
+                    # Instant: the page scrolls smoothly (scroll-behavior), which would still be
+                    # under way when the floating bar is measured.
+                    page.evaluate(SCROLL_TO_END)
+                    page.evaluate(SETTLE)
                     note(f'{label} bottom', page.evaluate(CHECK))
             ctx.close()
         browser.close()

@@ -5,12 +5,13 @@
 Checks HTML formatting, asset version stamps, internal links and anchors (also in
 the header, footer and floating bar that site.js writes, the PDF behind the
 download form and the images the stylesheets use; paths must match letter case,
-as on GitHub Pages), images, the sitemap and canonical URLs, colour tokens, plan
+as on GitHub Pages), duplicate ids, images, the sitemap and canonical URLs, the
+share-card tags, Google Analytics and the Search Console tags, colour tokens, plan
 prices and send counts, answers to the same question on different pages, the phone
-number and mail address, which pages load which scripts and forms.css, and that
-each script keeps its names to itself and parses (with Node.js when it is
-installed; GitHub Actions always checks). Images that nothing uses are listed as
-notes without failing. Python 3.10+, no third-party packages. Exit status 1 when
+number and mail address, which pages load which scripts and stylesheets (and the
+CRM embed's settings), and that each script keeps its names to itself and parses
+(with Node.js when it is installed; GitHub Actions always checks). Images that
+nothing uses are listed as notes without failing. Python 3.10+, no third-party packages. Exit status 1 when
 anything fails.
 """
 import functools
@@ -38,6 +39,8 @@ SETUP_FEE = 198_000
 # These stylesheets take every colour from the tokens in site.css.
 TOKEN_ONLY_CSS = ['site.css', 'home.css', 'service.css', 'pricing.css', 'examples.css', 'forms.css']
 CRM_EMBED = 'https://contentsx-crm.vercel.app/embed/inbound-v1.js'
+ANALYTICS = '/assets/js/analytics.js'
+SEARCH_CONSOLE_TAGS = 2     # one per verified account, on the top page
 
 errors = []
 notes = []
@@ -51,15 +54,22 @@ class Page(HTMLParser):
     def __init__(self, path):
         super().__init__(convert_charrefs=True)
         self.path = path
-        self.ids, self.links, self.images, self.scripts, self.text = set(), [], [], [], []
+        self.source = path.read_text(encoding='utf-8')
+        self.ids, self.duplicate_ids = set(), set()
+        self.links, self.images, self.scripts, self.stylesheets, self.text = [], [], [], [], []
+        self.meta = {}      # name or property -> every content given for it
+        self.title = ''
         self.canonical = None
         self.forms = set()
         self._skip = 0
-        self.feed(path.read_text(encoding='utf-8'))
+        self._in_title = False
+        self.feed(self.source)
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if 'id' in a:
+            if a['id'] in self.ids:
+                self.duplicate_ids.add(a['id'])
             self.ids.add(a['id'])
         # data-download-url: the PDF the download form hands out. An attribute without a
         # value counts as an empty link.
@@ -69,12 +79,18 @@ class Page(HTMLParser):
         if tag == 'img':
             self.images.append(a)
         if tag == 'script':
-            self.scripts.append(a.get('src'))
+            self.scripts.append(a)
             self._skip += 1
         if tag == 'style':
             self._skip += 1
+        if tag == 'title':
+            self._in_title = True
+        if tag == 'meta' and ('name' in a or 'property' in a):
+            self.meta.setdefault(a.get('name') or a.get('property'), []).append(a.get('content') or '')
         if tag == 'link' and a.get('rel') == 'canonical':
             self.canonical = a.get('href')
+        if tag == 'link' and a.get('rel') == 'stylesheet':
+            self.stylesheets.append(local_path(a.get('href') or ''))
         for key in ('data-contact-form', 'data-download-form'):
             if key in a:
                 self.forms.add(key)
@@ -82,13 +98,26 @@ class Page(HTMLParser):
     def handle_endtag(self, tag):
         if tag in ('script', 'style'):
             self._skip -= 1
+        if tag == 'title':
+            self._in_title = False
 
     def handle_data(self, data):
+        if self._in_title:
+            self.title += data
         if not self._skip:
             self.text.append(data)
 
     def plain_text(self):
         return re.sub(r'\s+', ' ', html.unescape(' '.join(self.text)))
+
+    def script_srcs(self):
+        """The src of each external script, local ones without their ?v= stamp."""
+        return [local_path(a['src']) for a in self.scripts if a.get('src')]
+
+
+def local_path(url):
+    """A site path without its ?v= stamp; other URLs as they are."""
+    return url.split('?')[0] if url.startswith('/') else url
 
 
 def load_pages():
@@ -97,13 +126,12 @@ def load_pages():
 
 def check_format(pages):
     for url, page in pages.items():
-        text = page.path.read_text(encoding='utf-8')
         try:
-            formatted = format_html.format_html(text)
+            formatted = format_html.format_html(page.source)
         except ValueError as e:     # unmatched or unclosed tags
             fail(f'{url}: {e}')
             continue
-        if formatted != text.replace('\r\n', '\n'):
+        if formatted != page.source.replace('\r\n', '\n'):
             fail(f'{url}: not formatted (python scripts/format_html.py)')
 
 
@@ -179,19 +207,24 @@ def check_link(pages, where, page_url, tag, value):
         fail(f'{where}: {value} points to a missing id')
 
 
+def site_js():
+    return (DIST / 'assets/js/site.js').read_text(encoding='utf-8')
+
+
 def check_links(pages):
-    # The header, footer and floating bar come from site.js: its href/src templates and the
-    # ctaLink() targets are checked once, and its skip link (#main) on every page. Its tel:
-    # links (header, menu, floating bar) are built from the TEL constant.
-    site_js = (DIST / 'assets/js/site.js').read_text(encoding='utf-8')
-    template_links = [('a' if attr == 'href' else 'img', value)
-                      for attr, value in re.findall(r'(href|src)="([^"$]+)"', site_js)]
-    targets = [value for _, value in re.findall(r"ctaLink\(\s*'[^']*',\s*(['`])(.*?)\1", site_js, flags=re.S)]
-    if len(targets) != site_js.count('ctaLink('):
-        fail('assets/js/site.js: could not read the link of every ctaLink() call')
-    template_links += [('a', value) for value in targets if '${' not in value]    # tel:${TEL}: see TEL
+    # The header, footer and floating bar come from site.js. Every quoted root-relative path
+    # in it (the menu list, the templates' href and src, the page tests) is checked once, and
+    # its skip link (#main) on every page. Its tel: links (header, menu, floating bar) are
+    # built from the TEL constant. A path runs to the closing quote; < and > keep the end of
+    # a tag ("/>) from passing for one.
+    source = site_js()
+    template_links = [('img' if value.startswith('/assets/images/') else 'a', value)
+                      for value in re.findall(r'[\'"`](/[^\'"`<>\s$]*)[\'"`]', source)]
+    template_links += [('a', value) for value in re.findall(r'href="(#[^"$]+)"', source)]
+    if ('a', '/contact/') not in template_links:
+        fail('assets/js/site.js: found no link to /contact/; the link check cannot read site.js')
     template_links = list(dict.fromkeys(template_links))
-    tels = re.findall(r"const TEL = '([^']*)'", site_js)
+    tels = re.findall(r"const TEL = '([^']*)'", source)
     if tels != [TEL]:
         fail(f'assets/js/site.js: TEL is {" and ".join(tels) or "missing"} (expected {TEL}, once)')
     for tag, value in template_links:
@@ -203,6 +236,15 @@ def check_links(pages):
         for tag, value in template_links:
             if value.startswith('#'):
                 check_link(pages, url, url, tag, value)
+
+
+def check_ids(pages):
+    # A repeated id breaks links to it and the labels and aria references that use it. The
+    # header site.js adds (id="global-nav") must not repeat one on the page either.
+    template_ids = set(re.findall(r'\sid="([^"$]+)"', site_js()))
+    for url, page in pages.items():
+        for duplicate in sorted(page.duplicate_ids | (page.ids & template_ids)):
+            fail(f'{url}: id="{duplicate}" is used more than once')
 
 
 def check_css_urls():
@@ -231,8 +273,9 @@ def check_images(pages):
                 fail(f'{url}: <img src="{src}"> has no width/height')
     # A note, not a failure: a renamed or dropped image stays for one deploy so pages
     # still in visitors' caches can load it (docs/CONTENT-RULES.md), then goes.
-    used = ' '.join(re.sub(r'<!--.*?-->', '', p.read_text(encoding='utf-8'), flags=re.S)
-                    for p in DIST.rglob('*') if p.suffix in ('.html', '.css', '.js'))
+    sources = [page.source for page in pages.values()]
+    sources += [p.read_text(encoding='utf-8') for p in DIST.rglob('*') if p.suffix in ('.css', '.js')]
+    used = ' '.join(re.sub(r'<!--.*?-->', '', text, flags=re.S) for text in sources)
     for image in sorted(p for p in (DIST / 'assets/images').iterdir() if p.is_file()):
         if image.name not in used:
             notes.append(f'assets/images/{image.name} is not used by any page, stylesheet or script')
@@ -251,6 +294,36 @@ def check_sitemap(pages):
             fail(f'sitemap.xml: {url} is missing')
         if page.canonical != SITE + url:
             fail(f'{url}: canonical is {page.canonical}, expected {SITE + url}')
+
+
+def check_head(pages):
+    # Share cards repeat the page's own title, description and canonical URL.
+    for url, page in pages.items():
+        if url == '/404.html':
+            continue
+        for key, expected in (('description', None), ('og:title', page.title), ('og:url', SITE + url),
+                              ('og:description', (page.meta.get('description') or [''])[0])):
+            values = page.meta.get(key, [])
+            if len(values) != 1 or not values[0].strip():
+                fail(f'{url}: needs one non-empty <meta> {key}')
+            elif expected is not None and values[0] != expected:
+                fail(f'{url}: {key} is 「{values[0]}」, expected 「{expected}」')
+    # Google Analytics: analytics.js sets up gtag with the measurement ID and the gtag
+    # library loads with the same ID, both on every page (404 included).
+    ids = re.findall(r"gtag\('config', '([^']+)'", (DIST / ANALYTICS.lstrip('/')).read_text(encoding='utf-8'))
+    if len(ids) != 1:
+        fail(f'{ANALYTICS}: expected one gtag config, found {len(ids)}')
+        return
+    gtag = f'https://www.googletagmanager.com/gtag/js?id={ids[0]}'
+    for url, page in pages.items():
+        srcs = page.script_srcs()
+        if srcs.count(ANALYTICS) != 1 or srcs.count(gtag) != 1:
+            fail(f'{url}: must load {ANALYTICS} and {gtag} once each')
+    # Search Console reads its ownership tags on the top page; losing one loses that account's
+    # ownership (README: Search Console).
+    found = len(pages['/'].meta.get('google-site-verification', [])) if '/' in pages else 0
+    if found < SEARCH_CONSOLE_TAGS:
+        fail(f'/: {found} google-site-verification tags (expected {SEARCH_CONSOLE_TAGS})')
 
 
 def check_colours():
@@ -311,23 +384,33 @@ def check_prices(pages):
 
 
 def check_scripts(pages):
+    source_keys = set()
     for url, page in pages.items():
-        srcs = [s.split('?')[0] for s in page.scripts if s]
+        srcs = page.script_srcs()
         if srcs.count('/assets/js/site.js') != 1:
             fail(f'{url}: must load /assets/js/site.js once')
+        if page.stylesheets[:1] != ['/assets/css/site.css'] or page.stylesheets.count('/assets/css/site.css') != 1:
+            fail(f'{url}: must load /assets/css/site.css once, before the other stylesheets')
         has_form = bool(page.forms)
         if has_form != ('/assets/js/forms.js' in srcs):
             fail(f'{url}: forms.js belongs on exactly the pages with a form')
-        styles = [value.split('?')[0] for tag, value in page.links if tag == 'link']
-        if has_form != ('/assets/css/forms.css' in styles):
+        if has_form != ('/assets/css/forms.css' in page.stylesheets):
             fail(f'{url}: forms.css belongs on exactly the pages with a form')
         if ('/assets/js/forms.js' in srcs and '/assets/js/site.js' in srcs
                 and srcs.index('/assets/js/forms.js') < srcs.index('/assets/js/site.js')):
             fail(f'{url}: forms.js must come after site.js')
         if srcs.count(CRM_EMBED) != (1 if has_form else 0):
             fail(f'{url}: the CRM embed script belongs once on each form page and nowhere else')
-        if ('faq-accordion' in page.path.read_text(encoding='utf-8')) != ('/assets/js/faq.js' in srcs):
+        # forms.js hands each form to the embed itself; with the embed's own automatic
+        # sending on (no data-auto="false"), every submission would reach the CRM twice.
+        for embed in (a for a in page.scripts if a.get('src') == CRM_EMBED):
+            if embed.get('data-auto') != 'false' or 'async' not in embed or not embed.get('data-source-key'):
+                fail(f'{url}: the CRM embed script needs data-source-key, data-auto="false" and async')
+            source_keys.add(embed.get('data-source-key') or '')
+        if ('faq-accordion' in page.source) != ('/assets/js/faq.js' in srcs):
             fail(f'{url}: faq.js belongs on exactly the pages with .faq-accordion')
+    if len(source_keys) > 1:
+        fail(f'the CRM embed script uses different source keys on different pages: {", ".join(sorted(source_keys))}')
     # Classic scripts share one global scope, so each file keeps its names inside one
     # function. A top-level const, let or class declared in two files stops the second
     # file; a function or var silently replaces the first one.
@@ -361,7 +444,7 @@ def check_scripts(pages):
 
 def faq_entries(page):
     """(question, answer) for each <details> on a page, without the 問/答 badges or any spacing."""
-    source = page.path.read_text(encoding='utf-8')
+    source = page.source
     badge = r'<span[^>]*>\s*(?:問|答)?\s*</span>'
 
     def text(fragment):
@@ -385,8 +468,9 @@ def check_faq(pages):
 def main():
     names_in.cache_clear()
     pages = load_pages()
-    checks = [(check_format, pages), (check_stamps,), (check_links, pages), (check_css_urls,), (check_images, pages),
-              (check_sitemap, pages), (check_colours,), (check_prices, pages), (check_faq, pages), (check_scripts, pages)]
+    checks = [(check_format, pages), (check_stamps,), (check_links, pages), (check_ids, pages), (check_css_urls,),
+              (check_images, pages), (check_sitemap, pages), (check_head, pages), (check_colours,),
+              (check_prices, pages), (check_faq, pages), (check_scripts, pages)]
     for check, *args in checks:
         # A check that breaks is a failure too, reported with everything found so far.
         try:

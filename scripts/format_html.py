@@ -80,7 +80,7 @@ def render(node, depth=0):
     indent = '  ' * depth
     if isinstance(node, str):
         return indent + node.strip()
-    is_field = 'field' in node.attrs.get('class', '').split()
+    is_field = 'field' in (node.attrs.get('class') or '').split()     # <div class> has the value None
     def structural(child):
         return (isinstance(child, Element) and
                 (child.tag in STRUCTURAL or node.tag == 'form' or is_field)) or (
