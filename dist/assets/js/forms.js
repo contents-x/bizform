@@ -161,8 +161,8 @@
       // Only bots fill the off-screen field. Pretend it worked and keep them out
       // of HubSpot; the embed script sends it as hp and the CRM drops that copy.
       const sending = formField(data, 'website') ? Promise.resolve() : sendToHubSpot(hubspotPayload(data,
-        `${message}\n\n${hubspotTrackingNote('[ビズフォーム経由のお問い合わせ]')}`,
-        'ビズフォーム - お問い合わせ'
+        `${message}\n\n${hubspotTrackingNote('[ビズアプローチ経由のお問い合わせ]')}`,
+        'ビズアプローチ - お問い合わせ'
       ));
 
       // CRM の受信箱へも送る（HubSpot の送信を始めてから。失敗しても受付・完了表示には影響しない）
@@ -231,8 +231,8 @@
       const tel = formField(data, 'tel');
       if (tel) lines.push(`電話番号: ${tel}`);
       const res = await postToHubSpot(hubspotPayload(data,
-        `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズフォーム経由の資料ダウンロード]')}`,
-        'ビズフォーム - 資料ダウンロード'
+        `${lines.join('\n')}\n\n${hubspotTrackingNote('[ビズアプローチ経由の資料ダウンロード]')}`,
+        'ビズアプローチ - 資料ダウンロード'
       ));
       if (!res.ok) console.warn('HubSpot download copy refused (ignored):', res.status, await hubspotErrors(res));
     };

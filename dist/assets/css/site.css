@@ -143,7 +143,8 @@ img { max-width: 100%; }
 [data-site-header] { height: var(--header-height); }
 .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97); backdrop-filter: blur(14px); }
 .header-inner { min-height: 78px; display: flex; align-items: center; gap: 28px; }
-/* Official logo (dist/assets/images/asset_logo_bizform.webp). Size it by height only.
+/* Logo (dist/assets/images/asset_logo.webp, provisional until the official one arrives:
+   docs/CONTENT-RULES.md). Size it by height only.
    Scoped to the header and footer so page-wide `img` rules cannot resize it. */
 .logo { display: inline-flex; flex: none; align-items: center; }
 .site-header .logo img, .site-footer .logo img { display: block; width: auto; }
@@ -467,7 +468,8 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
   html { -webkit-text-size-adjust: 100%; }
   body { font-size: 16px; overflow-wrap: anywhere; }
   .header-inner { width: calc(100% - 32px); min-height: 64px; gap: 8px; }
-  .header-inner .logo img { height: 28px; }
+  /* The logo is as wide as the old one was at 28px (same for 20px and 17px below), so the row fits as before. */
+  .header-inner .logo img { height: 24px; }
   .header-actions .button-primary { display: inline-flex; min-height: 44px; padding: 10px 16px; border-radius: 999px; font-size: 14px; box-shadow: none; }
   .desktop-label { display: none; }
   .mobile-label { display: inline; }
@@ -546,7 +548,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 }
 /* Up to 389px the full-size logo leaves no room beside the phone button. */
 @media (max-width: 389px) {
-  .header-inner .logo img { height: 24px; }
+  .header-inner .logo img { height: 20px; }
   .header-actions .button-primary { padding-inline: 12px; }
 }
 /* Three buttons stop fitting with icons; the phone keeps its icon so the short label stays clear. */
@@ -562,7 +564,7 @@ body.has-floating-cta .site-footer { padding-bottom: calc(var(--floating-cta-hei
 }
 /* Folded phones such as the Galaxy Fold cover screen (280px): a smaller logo keeps the row on screen. */
 @media (max-width: 319px) {
-  .header-inner .logo img { height: 20px; }
+  .header-inner .logo img { height: 17px; }
 }
 /* Keep 44px touch targets and room for focus outlines in short landscape views. */
 @media (max-height: 480px) and (orientation: landscape) {

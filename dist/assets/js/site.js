@@ -52,8 +52,8 @@
   <a class="skip-link" href="#main">本文へ移動</a>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="logo" href="/" aria-label="ビズフォーム トップ">
-        <img src="/assets/images/asset_logo_bizform.webp" width="634" height="128" alt="ビズフォーム">
+      <a class="logo" href="/" aria-label="ビズアプローチ トップ">
+        <img src="/assets/images/asset_logo.webp" width="747" height="128" alt="ビズアプローチ">
       </a>
       <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
         ${MENU.map(([folder, label]) => `<a href="${folder}"${active(folder)}>${label}</a>`).join('\n        ')}
@@ -77,7 +77,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo logo-plate" href="/"><img src="/assets/images/asset_logo_bizform.webp" width="634" height="128" alt="ビズフォーム" loading="lazy"></a>
+          <a class="logo logo-plate" href="/"><img src="/assets/images/asset_logo.webp" width="747" height="128" alt="ビズアプローチ" loading="lazy"></a>
           <p>企業調査・文章作成から問い合わせフォームへの送信・管理まで。初回接点を増やす新規開拓の一括運用サービスです。</p>
         </div>
         <div class="footer-column"><strong>検討する</strong><a href="/service/">サービス内容</a><a href="/pricing/">料金・契約条件</a><a href="/examples/">文面・運用サンプル</a><a href="/use-cases/">活用シーン</a></div>
@@ -182,7 +182,7 @@
 
     // Visitors can tuck the bar away; its tab stays at the bottom edge to bring
     // it back. Remembered for the visit so the bar does not return on every page.
-    const minimizedKey = 'bizform-floating-cta-minimized';
+    const minimizedKey = 'floating-cta-minimized';
     const setMinimized = (minimized) => {
       cta.classList.toggle('is-minimized', minimized);
       toggle.setAttribute('aria-expanded', String(!minimized));

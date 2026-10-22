@@ -52,8 +52,8 @@
 .pr-vs-head { background: var(--pale-blue-2); }
 .pr-vs-head > span { padding: 16px 20px; color: var(--brand-navy-deep); font-weight: 800; line-height: 1.4; }
 .pr-vs-head small { display: block; margin-top: 2px; color: var(--muted); font-size: .8125rem; font-weight: 500; }
-.pr-vs-head .is-bizform { color: var(--white); background: var(--brand-blue); }
-.pr-vs-head .is-bizform small { color: var(--on-brand-blue); }
+.pr-vs-head .is-ours { color: var(--white); background: var(--brand-blue); }
+.pr-vs-head .is-ours small { color: var(--on-brand-blue); }
 .pr-vs-rows { margin: 0; padding: 0; list-style: none; }
 .pr-vs-rows li { border-top: 1px solid var(--line); }
 .pr-vs-rows li > span { display: flex; align-items: center; min-height: 60px; padding: 12px 20px; font-size: 1rem; line-height: 1.5; }
@@ -78,18 +78,18 @@
 .pr-bar-track { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .pr-bar { flex: 0 1 auto; min-width: 3px; width: var(--w); height: 16px; border-radius: 0 4px 4px 0; background: color-mix(in srgb, var(--muted) 65%, var(--white)); }
 .pr-bar-value { flex: none; color: var(--brand-navy-deep); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.pr-bars .is-bizform { background: var(--pale-blue); }
-.pr-bars .is-bizform .pr-bar-label { color: var(--brand-navy-deep); font-weight: 800; }
-.pr-bars .is-bizform .pr-bar { background: var(--brand-blue); }
-.pr-bars .is-bizform .pr-bar-value { font-weight: 800; }
+.pr-bars .is-ours { background: var(--pale-blue); }
+.pr-bars .is-ours .pr-bar-label { color: var(--brand-navy-deep); font-weight: 800; }
+.pr-bars .is-ours .pr-bar { background: var(--brand-blue); }
+.pr-bars .is-ours .pr-bar-value { font-weight: 800; }
 
 /* Extra costs: company on the left, cost on the right. */
 .pr-extra { display: grid; margin: 20px 0 0; }
 .pr-extra > div { display: grid; grid-template-columns: 9em minmax(0,1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
 .pr-extra dt { color: var(--brand-navy-deep); font-weight: 700; }
 .pr-extra dd { margin: 0; color: var(--text-body); line-height: 1.7; }
-.pr-extra .is-bizform { margin-top: 10px; padding: 14px 16px; border-top: 0; border-radius: 10px; background: var(--pale-blue); }
-.pr-extra .is-bizform dt, .pr-extra .is-bizform dd { color: var(--brand-navy-deep); font-weight: 800; }
+.pr-extra .is-ours { margin-top: 10px; padding: 14px 16px; border-top: 0; border-radius: 10px; background: var(--pale-blue); }
+.pr-extra .is-ours dt, .pr-extra .is-ours dd { color: var(--brand-navy-deep); font-weight: 800; }
 
 .pr-basis { margin-top: 28px; }
 .pr-basis ol { display: grid; gap: 6px; margin: 10px 0 0; padding-left: 1.4em; color: var(--muted); font-size: .9375rem; line-height: 1.75; }
