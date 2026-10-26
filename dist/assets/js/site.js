@@ -60,14 +60,14 @@
         <div class="nav-actions">
           <a class="button button-secondary" href="/resources/#download">資料ダウンロード</a>
           <a class="button button-primary" href="/contact/">無料で相談する</a>
-          <a class="button button-tel" href="tel:${TEL}">${ICONS.telFilled}電話で相談（${TEL}）</a>
+          <a class="button button-tel" href="tel:${TEL}">${ICONS.telFilled}電話で相談</a>
         </div>
       </nav>
       <button class="menu-button" type="button" aria-label="メニューを開く" aria-controls="global-nav" aria-expanded="false"><span></span></button>
       <div class="header-actions">
         <a class="button button-secondary" href="/resources/#download"><span class="header-dl-long">資料ダウンロード</span><span class="header-dl-short">資料DL</span></a>
         <a class="button button-primary" href="/contact/"><span class="desktop-label">無料で相談する</span><span class="mobile-label">無料相談</span></a>
-        <a class="button button-tel" href="tel:${TEL}" aria-label="電話で相談 ${TEL}" title="電話で相談 ${TEL}">${ICONS.telFilled}<span class="button-tel-text"><small>電話で相談</small><span>${TEL}</span></span></a>
+        <a class="button button-tel" href="tel:${TEL}" aria-label="電話で相談" title="電話で相談">${ICONS.telFilled}<span class="button-tel-text"><span>電話で相談</span></span></a>
       </div>
     </div>
   </header>`;
@@ -96,7 +96,7 @@
   <aside class="floating-cta" aria-label="お問い合わせ">
     ${withDownload ? `<a class="floating-cta-secondary" href="/resources/#download">${ICONS.document}<span class="floating-cta-label-long">資料ダウンロード</span><span class="floating-cta-label-short">資料DL</span></a>` : ''}
     <a class="floating-cta-primary" href="/contact/">${ICONS.mail}<span class="floating-cta-label-long">無料で相談する</span><span class="floating-cta-label-short">無料相談</span></a>
-    <a class="floating-cta-tel" href="tel:${TEL}" aria-label="電話で相談 ${TEL}">${ICONS.tel}<span class="floating-cta-label-long">電話で相談 ${TEL}</span><span class="floating-cta-label-short">電話</span></a>
+    <a class="floating-cta-tel" href="tel:${TEL}" aria-label="電話で相談">${ICONS.tel}<span class="floating-cta-label-long">電話で相談</span><span class="floating-cta-label-short">電話</span></a>
     <button class="floating-cta-toggle" type="button"><span></span>${ICONS.chevron}</button>
   </aside>`;
 
